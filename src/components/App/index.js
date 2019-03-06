@@ -13,7 +13,7 @@ import HomePage from '../Home';
 import AccountPage from '../Account';
 //import AdminPage from '../Admin';
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../Constants/routes';
 import { withAuthentication } from '../Session';
 
 const App = () => (

@@ -25,16 +25,8 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-<<<<<<< HEAD
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-=======
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
->>>>>>> redo .git stuff
   "devDependencies": {},
   "repository": {
     "type": "git",
