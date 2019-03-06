@@ -9,7 +9,8 @@ import Home from './components/Home';
 import Test from './components/Test';
 import Authenticated from './components/Authenticated';
 import NotAuthenticated from './components/NotAuthenticated';
-import { HOME, TEST, AUTHENTICATED, NOT_AUTHENTICATED } from './Constants/Routes';
+import NewDream from './components/NewDream'
+import { HOME, TEST, AUTHENTICATED, NOT_AUTHENTICATED, NEW_DREAM } from './Constants/Routes';
 import Firebase from './components/Firebase/firebase';
 
 class App extends Component {
@@ -27,9 +28,11 @@ class App extends Component {
             <Route path={TEST} component={Test}></Route>
             <Route path={AUTHENTICATED} component={Authenticated}></Route>
             <Route path={NOT_AUTHENTICATED} component={NotAuthenticated}></Route>
+            <Route path={NEW_DREAM} component={NewDream}></Route>
           </div>
         </div>
       </BrowserRouter>
+
     );
   }
 }
