@@ -31,6 +31,7 @@ class App extends Component {
             <Route path={NEW_DREAM} component={NewDream}></Route>
           </div>
         </div>
+
       </BrowserRouter>
 
     );
