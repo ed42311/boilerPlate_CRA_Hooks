@@ -4,6 +4,41 @@ import styled from "styled-components";
 import { withAuthorization } from '../Session';
 
 class NewDreamPage extends Component {
+  state = {
+    dreams: [],
+    title:'',
+    content:'',
+    _id: ''
+  }
+
+  handleChange = (event) => {
+    console.log("handlechange")
+    event.preventDefault();
+    event.stopPropagation();
+    this.setState({[event.target.name]: event.target.value});
+  }
+
+  addDream = (e) => {
+    e.preventDefault();
+    const { title, content } = this.state;
+    if (!title || !content) {
+      return;
+    }
+    if(title){
+      fetch('http://localhost:3001/dreams', {
+        method: "POST",
+        body: JSON.stringify({ title, content }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then((newDream) => {
+        console.log(newDream);
+      });
+    }
+  }
+
   render () {
     return(
       <div>
@@ -14,6 +49,8 @@ class NewDreamPage extends Component {
           type="text"
           id="DreamTitle"
           name="title"
+          value={this.state.title}
+          onChange={this.handleChange}
           placeholder="Enter Dream Title"
         />
         <br/>
@@ -24,15 +61,16 @@ class NewDreamPage extends Component {
           name="content"
           id="DreamText"
           placeholder="Enter New Dream"
+          value={this.state.content}
+          onChange={this.handleChange}
         />
         <br/>
-        <SaveButton>Save</SaveButton>
+        <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
         </form>
       </div>
     );
   }
 }
-
 
 const DreamTextarea = styled.textarea`
   padding: 15px;
