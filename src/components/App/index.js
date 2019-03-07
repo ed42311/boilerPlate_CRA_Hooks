@@ -12,7 +12,7 @@ import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 //import AdminPage from '../Admin';
-import NewDreamPage from '../NewDream/NeedToRefactor';
+import NewDreamPage from '../NewDream';
 
 import * as ROUTES from '../../Constants/routes';
 import { withAuthentication } from '../Session';
