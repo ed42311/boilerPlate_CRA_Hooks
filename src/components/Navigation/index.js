@@ -30,6 +30,9 @@ const NavigationAuth = () => (
       <Link to={ROUTES.NEW_DREAM}>New Dream</Link>
     </li>
     <li>
+      <Link to={ROUTES.DREAM_ARCHIVE}>Dream Archive</Link>
+    </li>
+    <li>
       <SignOutButton />
     </li>
   </ul>
