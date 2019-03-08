@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 
 import { AuthUserContext, withAuthorization } from '../Session';
-
+const { REACT_APP_BACKEND_URL } = process.env;
 
 const ArchivePage = () => (
   
   useEffect(() => {
-    fetch('http://localhost:3001/test')
+    fetch(`${REACT_APP_BACKEND_URL}/test`)
       .then(response => response.json())
       .then((myJson) => {
         console.log(myJson);
