@@ -14,6 +14,7 @@ import AccountPage from '../Account';
 //import AdminPage from '../Admin';
 import NewDreamPage from '../NewDream';
 import ArchivePage from '../DreamArchive';
+import EditDreamPage from '../EditDream';
 
 import * as ROUTES from '../../Constants/routes';
 import { withAuthentication } from '../Session';
@@ -34,6 +35,7 @@ const App = () => (
       <Route path={ROUTES.NEW_DREAM} component={NewDreamPage} />
       <Route path={ROUTES.DREAM_ARCHIVE} component={ArchivePage} />
       {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
+      <Route path={ROUTES.EDIT_DREAM} component={EditDreamPage} />
     </div>
   </Router>
 );

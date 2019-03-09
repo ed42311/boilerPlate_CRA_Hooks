@@ -8,3 +8,4 @@ export const ADMIN = '/admin';
 export const ADMIN_DETAILS = '/admin/:id';
 export const NEW_DREAM = '/newdream';
 export const DREAM_ARCHIVE = '/dreamArchive';
+export const EDIT_DREAM = '/EditDream';

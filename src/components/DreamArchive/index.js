@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 import { AuthUserContext, withAuthorization } from '../Session';
 
@@ -21,7 +22,6 @@ class ArchivePage extends Component {
       })
   }
   render() {
-    console.log("dreams in state: ", this.state.dreams);
     return(
       <AuthUserContext.Consumer>
         {authUser => (
@@ -29,9 +29,10 @@ class ArchivePage extends Component {
             <h1>Dream Archive for {authUser.email}</h1>
             {this.state.dreams.map( (dream) => 
               <DreamDiv key={dream._id} > 
+                <Link to={{ pathname: './editDream', state: { title: dream.title, content: dream.content, _id: dream._id} }}>Edit Dream</Link>
                 <h2>{dream.title}</h2>
                 <p>{dream.content}</p>
-              </ DreamDiv>
+              </DreamDiv>
             )}
           </div>
         )}
