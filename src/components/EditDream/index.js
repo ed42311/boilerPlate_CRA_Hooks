@@ -41,6 +41,24 @@ class EditDreamPage extends Component {
     }
   }
 
+  deleteDream = (e) => {
+    e.preventDefault();
+    const { _id } = this.state;
+    if(_id){
+      fetch('http://localhost:3001/dreams', {
+        method: "DELETE",
+        body: JSON.stringify({ _id }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
+      })
+    }
+  }
+
   render () {
     return(
       <AuthUserContext.Consumer>
@@ -70,6 +88,7 @@ class EditDreamPage extends Component {
           />
           <br/>
           <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
+          <SaveButton name="deleteDream" onClick={ (e) => {this.deleteDream(e)}}>Delete</SaveButton>
           </form>
         </div>
         )}
