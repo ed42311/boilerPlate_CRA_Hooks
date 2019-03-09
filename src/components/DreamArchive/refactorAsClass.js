@@ -21,18 +21,12 @@ class ArchivePage extends Component {
       })
   }
   render() {
-    console.log("dreams in state: ", this.state.dreams);
     return(
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
             <h1>Dream Archive for {authUser.email}</h1>
-            {this.state.dreams.map( (dream) => 
-              <DreamDiv key={dream._id} > 
-                <h2>{dream.title}</h2>
-                <p>{dream.content}</p>
-              </ DreamDiv>
-            )}
+            <DreamsDiv id='container'></DreamsDiv>
           </div>
         )}
       </AuthUserContext.Consumer>
@@ -40,7 +34,22 @@ class ArchivePage extends Component {
   }
 }
 
-const DreamDiv = styled.div`
+function resolveCall(data) {
+  console.log(data)
+  for (let i = 0; i<data.length;i++ ){
+    const h2Tag = document.createElement('h2');
+    h2Tag.textContent = data[i].title;
+
+    const pTag =  document.createElement('p');
+    pTag.textContent = data[i].content;
+
+    const hrTag = document.createElement('hr');
+   
+    document.getElementById('container').append(h2Tag, pTag, hrTag);
+  }
+};
+
+const DreamsDiv = styled.div`
   width: 75%;
   padding: 15px;
   border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
