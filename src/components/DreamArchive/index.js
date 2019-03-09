@@ -29,9 +29,9 @@ class ArchivePage extends Component {
             <h1>Dream Archive for {authUser.email}</h1>
             {this.state.dreams.map( (dream) => 
               <DreamDiv key={dream._id} > 
-                <Link to={{ pathname: './editDream', state: { title: dream.title, content: dream.content, _id: dream._id} }}>Edit Dream</Link>
                 <h2>{dream.title}</h2>
                 <p>{dream.content}</p>
+                <Link to={{ pathname: './editDream', state: { title: dream.title, content: dream.content, _id: dream._id} }}>Edit Dream</Link>
               </DreamDiv>
             )}
           </div>
