@@ -41,12 +41,12 @@ function resolveCall(data) {
   }
 };
 
-
 const DreamsDiv = styled.div`
   width: 75%;
   padding: 15px;
   border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
   margin-bottom: 25px;
+  margin-left: 25px;
   font-size: small;
   border-style: double;
   border-width: 4px;
