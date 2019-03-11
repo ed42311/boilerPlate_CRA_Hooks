@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
+//import { auth } from 'firebase';
 
 class EditDreamPage extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class EditDreamPage extends Component {
       title: this.props.location.state.title,
       content: this.props.location.state.content,
       _id: this.props.location.state._id,
+      userId: this.props.firebase.auth.O,
     };
   }
   
@@ -22,14 +24,14 @@ class EditDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content, _id } = this.state;
+    const { title, content, _id, userId } = this.state;
     if (!title || !content) {
       return;
     }
     if(title){
       fetch('http://localhost:3001/dreams', {
         method: "PUT",
-        body: JSON.stringify({ title, content, _id }),
+        body: JSON.stringify({ title, content, _id, userId }),
         headers: {
           "Content-Type": "application/json"
         }
@@ -63,7 +65,7 @@ class EditDreamPage extends Component {
     return(
       <AuthUserContext.Consumer>
         {authUser => (
-          <div>
+          <EditStyles>
           <h1>Edit Dream Page</h1>
           <p>The Edit Dream Page is accessible by {authUser.email}.</p>
           <form onSubmit={ (e) => {e.preventDefault()} }>
@@ -88,14 +90,18 @@ class EditDreamPage extends Component {
           />
           <br/>
           <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
-          <SaveButton name="deleteDream" onClick={ (e) => {this.deleteDream(e)}}>Delete</SaveButton>
+          <DeleteButton name="deleteDream" onClick={ (e) => {this.deleteDream(e)}}>Delete</DeleteButton>
           </form>
-        </div>
+        </EditStyles>
         )}
       </AuthUserContext.Consumer>
     );
   }
 }
+
+const EditStyles = styled.div`
+  margin-left: 25px;
+`
 
 const DreamTextarea = styled.textarea`
   padding: 15px;
@@ -123,6 +129,20 @@ const SaveButton = styled.button`
   padding: 15px;
   border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
   margin-bottom: 25px;
+  font-size: x-large;
+  border-style: double;
+  border-width: 4px;
+  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+`
+const DeleteButton = styled.button`
+  color: white;
+  background: black;
+  padding: 15px;
+  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
+  margin-bottom: 25px;
+  margin-left: 10px;
   font-size: x-large;
   border-style: double;
   border-width: 4px;
