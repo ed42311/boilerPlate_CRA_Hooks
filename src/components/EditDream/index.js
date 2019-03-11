@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
-//import { auth } from 'firebase';
+
+const { REACT_APP_BACKEND_URL } = process.env;
 
 class EditDreamPage extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class EditDreamPage extends Component {
       return;
     }
     if(title){
-      fetch('http://localhost:3001/dreams', {
+      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "PUT",
         body: JSON.stringify({ title, content, _id, userId }),
         headers: {
@@ -47,7 +48,7 @@ class EditDreamPage extends Component {
     e.preventDefault();
     const { _id } = this.state;
     if(_id){
-      fetch('http://localhost:3001/dreams', {
+      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "DELETE",
         body: JSON.stringify({ _id }),
         headers: {
