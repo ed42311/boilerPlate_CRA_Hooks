@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import styled from "styled-components";
 
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
@@ -55,29 +56,35 @@ class SignInFormBase extends Component {
     const isInvalid = password === '' || email === '';
 
     return(
-      <form onSubmit={this.onSubmit}>
-        <input 
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input 
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
-        {error && <p>{error.message}</p>}
-      </form>
+      <PageStyle>
+        <form onSubmit={this.onSubmit}>
+          <input 
+            name="email"
+            value={email}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Email Address"
+          />
+          <input 
+            name="password"
+            value={password}
+            onChange={this.onChange}
+            type="password"
+            placeholder="Password"
+          />
+          <button disabled={isInvalid} type="submit">
+            Sign In
+          </button>
+          {error && <p>{error.message}</p>}
+        </form>
+      </PageStyle>
     );
   }
 } 
+
+const PageStyle = styled.div`
+  margin-left: 25px;
+`
 
 const SignInForm = compose(
   withRouter,

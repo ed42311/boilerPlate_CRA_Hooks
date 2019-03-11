@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 import { AuthUserContext, withAuthorization } from '../Session';
+//import { auth } from 'firebase';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -10,22 +11,27 @@ class ArchivePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: this.props.firebase.auth.O,
       dreams: []
     };
   }
-  
   componentDidMount() {
-    fetch(`${REACT_APP_BACKEND_URL}/dreams`)
+    const { userId } = this.state;
+    fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
       .then(response => response.json())
       .then((myJson) => {
         this.setState({dreams: myJson});
       })
   }
+  
   render() {
+    
     return(
       <AuthUserContext.Consumer>
+        
         {authUser => (
-          <div>
+          <PageStyle>
+            <h1>user ID: {authUser.uid}</h1>
             <h1>Dream Archive for {authUser.email}</h1>
             {this.state.dreams.map( (dream) => 
               <DreamDiv key={dream._id} > 
@@ -36,24 +42,30 @@ class ArchivePage extends Component {
                   state: { 
                     title: dream.title, 
                     content: dream.content, 
-                    _id: dream._id
+                    _id: dream._id,
+                    userId: dream.userId,
                   }
                 }}>Edit Dream</Link>
               </DreamDiv>
             )}
-          </div>
+          </PageStyle>
         )}
       </AuthUserContext.Consumer>
     )
+    
   }
+  
 }
+
+const PageStyle = styled.div`
+  margin-left: 25px;
+`
 
 const DreamDiv = styled.div`
   width: 75%;
   padding: 15px;
   border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
   margin-bottom: 25px;
-  margin-left: 25px;
   font-size: small;
   border-style: double;
   border-width: 4px;

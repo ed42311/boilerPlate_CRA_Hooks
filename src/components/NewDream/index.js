@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 
 import { withAuthorization } from '../Session';
+import * as ROUTES from '../../Constants/routes';
+//import { auth } from 'firebase';
 
 class NewDreamPage extends Component {
   state = {
     dreams: [],
     title:'',
     content:'',
-    _id: ''
+    _id: '',
+    userId: this.props.firebase.auth.O,
+
   }
 
   handleChange = (event) => {
-    console.log("handlechange")
+    
     event.preventDefault();
     event.stopPropagation();
     this.setState({[event.target.name]: event.target.value});
@@ -20,14 +24,14 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content } = this.state;
+    const { title, content, userId } = this.state;
     if (!title || !content) {
       return;
     }
     if(title){
       fetch('http://localhost:3001/dreams', {
         method: "POST",
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, userId }),
         headers: {
           "Content-Type": "application/json"
         }
@@ -35,13 +39,16 @@ class NewDreamPage extends Component {
       .then(response => response.json())
       .then((newDream) => {
         console.log(newDream);
+      })
+      .then(() => {
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
   }
 
   render () {
     return(
-      <div>
+      <PageStyle>
         <h1>New Dream Page</h1>
         <p>The New Dream Page is accessible by every signed in user.</p>
         <form onSubmit={ (e) => {e.preventDefault()} }>
@@ -67,10 +74,14 @@ class NewDreamPage extends Component {
         <br/>
         <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
         </form>
-      </div>
+      </PageStyle>
     );
   }
 }
+
+const PageStyle = styled.div`
+  margin-left: 25px;
+`
 
 const DreamTextarea = styled.textarea`
   padding: 15px;

@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from "styled-components";
 
 import { AuthUserContext, withAuthorization } from '../Session';
 import { PasswordForgetForm } from '../PasswordForget';
@@ -8,14 +9,18 @@ const AccountPage = () => (
 
   <AuthUserContext.Consumer>
     {authUser => (
-      <div>
+      <PageStyle>
         <h1>Account: {authUser.email}</h1>
         <PasswordForgetForm />
         <PasswordChangeForm />
-      </div>
+      </PageStyle>
     )}
   </AuthUserContext.Consumer>
 );
+
+const PageStyle = styled.div`
+  margin-left: 25px;
+`
 
 const condition = authUser => !!authUser;
 
