@@ -3,7 +3,8 @@ import styled from "styled-components";
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
-//import { auth } from 'firebase';
+
+const { REACT_APP_BACKEND_URL } = process.env;
 
 class NewDreamPage extends Component {
   state = {
@@ -12,11 +13,9 @@ class NewDreamPage extends Component {
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
-
   }
 
-  handleChange = (event) => {
-    
+  handleChange = (event) => {  
     event.preventDefault();
     event.stopPropagation();
     this.setState({[event.target.name]: event.target.value});
@@ -29,7 +28,7 @@ class NewDreamPage extends Component {
       return;
     }
     if(title){
-      fetch('http://localhost:3001/dreams', {
+      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "POST",
         body: JSON.stringify({ title, content, userId }),
         headers: {
@@ -37,9 +36,6 @@ class NewDreamPage extends Component {
         }
       })
       .then(response => response.json())
-      .then((newDream) => {
-        console.log(newDream);
-      })
       .then(() => {
         this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });

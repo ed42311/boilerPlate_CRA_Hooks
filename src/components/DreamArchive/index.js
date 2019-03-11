@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 import { AuthUserContext, withAuthorization } from '../Session';
-//import { auth } from 'firebase';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -25,10 +24,8 @@ class ArchivePage extends Component {
   }
   
   render() {
-    
     return(
       <AuthUserContext.Consumer>
-        
         {authUser => (
           <PageStyle>
             <h1>user ID: {authUser.uid}</h1>
@@ -52,9 +49,7 @@ class ArchivePage extends Component {
         )}
       </AuthUserContext.Consumer>
     )
-    
-  }
-  
+  } 
 }
 
 const PageStyle = styled.div`
