@@ -29,8 +29,9 @@ describe('user signup test', () => {
     }
     const title = await page.$eval('#test-landing-h1', e => e.innerHTML);
     console.log("GOT PAST eval ");
+    console.log(title);
     expect(title).toBe('Landing');
-  }, 16000);
+  }, 32000);
 
   test('user can click Sign In link', async () => {
     await page.goto(ROOT_URL);
