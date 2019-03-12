@@ -7,6 +7,7 @@ const testUser = {
   password: faker.internet.password(),
 }
 const debug = false;
+const local = process.env.REACT_APP_TESTING_ENV === "local" ? true : false
 const options = debug ? {headless: false, slowMo: 150} : {};
 const ROOT_URL = `http://localhost:${process.env.REACT_APP_TESTING_PORT}`;
 const SCREEN_DIR = 'src/test/screenshots/';
@@ -21,7 +22,9 @@ describe('user signup test', () => {
 
   test('user can see landing page', async () => {
     await page.goto(ROOT_URL);
-    await page.screenshot({path: `${SCREEN_DIR}landing.png`});
+    if (local) {
+      await page.screenshot({path: `${SCREEN_DIR}landing.png`});
+    }
     const title = await page.$eval('#test-landing-h1', e => e.innerHTML);
     expect(title).toBe('Landing');
   }, 16000);
@@ -29,7 +32,9 @@ describe('user signup test', () => {
   test('user can click Sign In link', async () => {
     await page.goto(ROOT_URL);
     await page.click('#test-nav-signin');
-    await page.screenshot({path: `${SCREEN_DIR}signIn.png`});
+    if (local) {
+      await page.screenshot({path: `${SCREEN_DIR}signIn.png`});
+    }
     const title = await page.$eval('#test-signin-h1', e => e.innerHTML);
     expect(title).toBe('SignIn');
   }, 16000);
@@ -37,7 +42,9 @@ describe('user signup test', () => {
   test('user can click Sign Up link', async () => {
     await page.goto(`${ROOT_URL}/signin`);
     await page.click('#test-link-signup');
-    await page.screenshot({path: `${SCREEN_DIR}signUp.png`});
+    if (local) {
+      await page.screenshot({path: `${SCREEN_DIR}signUp.png`});
+    }
     const title = await page.$eval('#test-title-signup', e => e.innerHTML);
     expect(title).toBe('SignUp');
   }, 16000);
@@ -49,7 +56,9 @@ describe('user signup test', () => {
     await page.type('#test-input-passwordone', testUser.password);
     await page.type('#test-input-passwordtwo', testUser.password);
     await page.click('#test-button-signup-submit');
-    await page.screenshot({path: `${SCREEN_DIR}signUpSubmit.png`});
+    if (local) {
+      await page.screenshot({path: `${SCREEN_DIR}signUpSubmit.png`});
+    }
     await page.waitForSelector('#test-dreamarchive-user-h1');
     const title = await page.$eval('#test-dreamarchive-user-h1', e => e.innerHTML);
     expect(title).toBe(`Dream Archive for ${testUser.email}`);
