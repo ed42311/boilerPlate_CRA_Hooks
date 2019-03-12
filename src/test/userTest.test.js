@@ -21,6 +21,10 @@ describe('user signup test', () => {
   });
 
   test('user can see landing page', async () => {
+    page.on('domcontentloaded', async function(){
+      const content = await page.content()
+      console.log("page test loaded ", content);
+    })
     await page.goto(ROOT_URL);
     if (local) {
       await page.screenshot({path: `${SCREEN_DIR}landing.png`});
