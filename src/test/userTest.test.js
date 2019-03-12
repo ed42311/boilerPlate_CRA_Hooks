@@ -63,7 +63,7 @@ describe('user signup test', () => {
     if (local) {
       await page.screenshot({path: `${SCREEN_DIR}signUpSubmit.png`});
     }
-    setTimeout(function(){
+    setTimeout(async function(){
       const content = await page.content();
       console.log(content);
     }, 60000)
