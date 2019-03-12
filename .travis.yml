@@ -6,7 +6,7 @@ sudo: false
 addons:
   chrome: stable
 before_script:
-  npm run start
+  npm run dev &
 before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 cache:
