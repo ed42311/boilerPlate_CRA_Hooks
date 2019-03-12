@@ -21,15 +21,11 @@ describe('user signup test', () => {
   });
 
   test('user can see landing page', async () => {
-    console.log("ROOT URL: ", ROOT_URL)
     await page.goto(ROOT_URL);
-    console.log("GOT PAST GOTO URL ", local);
     if (local) {
       await page.screenshot({path: `${SCREEN_DIR}landing.png`});
     }
     const title = await page.$eval('#test-landing-h1', e => e.innerHTML);
-    console.log("GOT PAST eval ");
-    console.log(title);
     expect(title).toBe('Landing');
   }, 32000);
 
@@ -63,10 +59,6 @@ describe('user signup test', () => {
     if (local) {
       await page.screenshot({path: `${SCREEN_DIR}signUpSubmit.png`});
     }
-    setTimeout(async function(){
-      const content = await page.content();
-      console.log(content);
-    }, 60000)
     await page.waitForSelector('#test-dreamarchive-user-h1', {timeout: 60000});
     const title = await page.$eval('#test-dreamarchive-user-h1', e => e.innerHTML);
     expect(title).toBe(`Dream Archive for ${testUser.email}`);
