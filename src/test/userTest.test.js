@@ -8,7 +8,7 @@ const testUser = {
 }
 const debug = false;
 const options = debug ? {headless: false, slowMo: 150} : {};
-const ROOT_URL = 'http://localhost:3000';
+const ROOT_URL = `http://localhost:${process.env.REACT_APP_TESTING_PORT}`;
 const SCREEN_DIR = 'src/test/screenshots/';
 let browser;
 let page;
@@ -59,6 +59,3 @@ describe('user signup test', () => {
     await browser.close();
   });
 })
-
-
-
