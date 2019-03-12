@@ -22,23 +22,23 @@ class ArchivePage extends Component {
         this.setState({dreams: myJson});
       })
   }
-  
+
   render() {
     return(
       <AuthUserContext.Consumer>
         {authUser => (
           <PageStyle>
             <h1>user ID: {authUser.uid}</h1>
-            <h1>Dream Archive for {authUser.email}</h1>
-            {this.state.dreams.map( (dream) => 
-              <DreamDiv key={dream._id} > 
+            <h1 id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</h1>
+            {this.state.dreams.map( (dream) =>
+              <DreamDiv key={dream._id} >
                 <h2>{dream.title}</h2>
                 <p>{dream.content}</p>
-                <Link to={{ 
-                  pathname: './editDream', 
-                  state: { 
-                    title: dream.title, 
-                    content: dream.content, 
+                <Link to={{
+                  pathname: './editDream',
+                  state: {
+                    title: dream.title,
+                    content: dream.content,
                     _id: dream._id,
                     userId: dream.userId,
                   }
@@ -49,7 +49,7 @@ class ArchivePage extends Component {
         )}
       </AuthUserContext.Consumer>
     )
-  } 
+  }
 }
 
 const PageStyle = styled.div`

@@ -11,7 +11,7 @@ import * as ROUTES from '../../Constants/routes';
 
 const SignInPage = () => (
   <div>
-    <h1>SignIn</h1>
+    <h1 id="test-signin-h1">SignIn</h1>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
@@ -52,20 +52,20 @@ class SignInFormBase extends Component {
 
   render() {
     const { email, password, error } = this.state;
-    
+
     const isInvalid = password === '' || email === '';
 
     return(
       <PageStyle>
         <form onSubmit={this.onSubmit}>
-          <input 
+          <input
             name="email"
             value={email}
             onChange={this.onChange}
             type="text"
             placeholder="Email Address"
           />
-          <input 
+          <input
             name="password"
             value={password}
             onChange={this.onChange}
@@ -80,7 +80,7 @@ class SignInFormBase extends Component {
       </PageStyle>
     );
   }
-} 
+}
 
 const PageStyle = styled.div`
   margin-left: 25px;

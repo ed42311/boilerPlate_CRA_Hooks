@@ -32,7 +32,10 @@
   ],
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "puppeteer": "^1.13.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Montana-Code-School/DreamsFront.git"
