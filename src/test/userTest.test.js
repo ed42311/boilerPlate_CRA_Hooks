@@ -13,6 +13,7 @@ const ROOT_URL = `http://localhost:${process.env.REACT_APP_TESTING_PORT}`;
 const SCREEN_DIR = 'src/test/screenshots/';
 let browser;
 let page;
+console.log(process.env);
 
 describe('user signup test', () => {
   beforeAll(async () => {
