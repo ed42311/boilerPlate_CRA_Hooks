@@ -63,7 +63,7 @@ describe('user signup test', () => {
     if (local) {
       await page.screenshot({path: `${SCREEN_DIR}signUpSubmit.png`});
     }
-    await page.waitForSelector('#test-dreamarchive-user-h1');
+    await page.waitForSelector('#test-dreamarchive-user-h1', {timeout: 60000});
     const title = await page.$eval('#test-dreamarchive-user-h1', e => e.innerHTML);
     expect(title).toBe(`Dream Archive for ${testUser.email}`);
   }, 64000);
