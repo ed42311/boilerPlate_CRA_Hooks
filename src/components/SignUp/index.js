@@ -7,7 +7,7 @@ import * as ROUTES from '../../Constants/routes';
 
 const SignUpPage = () => (
   <div>
-    <h1>SignUp</h1>
+    <h1 id="test-title-signup">SignUp</h1>
     <SignUpForm />
   </div>
 );
@@ -28,28 +28,17 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = (event) => {
-    const { username, email, passwordOne } = this.state;
+    event.preventDefault();
+    const { email, passwordOne } = this.state;
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        // Create a user in you firebase realtime database
-        return this.props.firebase
-          .user(authUser.user.uid)
-          .set({
-            username,
-            email,
-          });
-      })
-      .then(authUser => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
       })
       .catch(error => {
         this.setState({ error });
       });
-    
-    event.preventDefault();
   };
 
   onChange = event => {
@@ -65,43 +54,47 @@ class SignUpFormBase extends Component {
       error,
     } = this.state;
 
-    const isInvalid = 
+    const isInvalid =
       passwordOne !== passwordTwo ||
-      passwordOne === '' || 
+      passwordOne === '' ||
       email === '' ||
       username === '';
 
     return (
       <form onSubmit={this.onSubmit}>
-        <input 
+        <input
+          id="test-input-username"
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"
         />
-        <input 
+        <input
+        id="test-input-email"
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
         />
-        <input 
+        <input
+          id="test-input-passwordone"
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
           placeholder="Password"
         />
-        <input 
-           name="passwordTwo"
-           value={passwordTwo}
-           onChange={this.onChange}
-           type="password"
-           placeholder="Confirm Password"
+        <input
+          id="test-input-passwordtwo"
+          name="passwordTwo"
+          value={passwordTwo}
+          onChange={this.onChange}
+          type="password"
+          placeholder="Confirm Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button id="test-button-signup-submit" disabled={isInvalid} type="submit">
           Sign Up
         </button>
 
@@ -113,7 +106,7 @@ class SignUpFormBase extends Component {
 
 const SignUpLink = () => (
   <p>
-    Don't have an account? <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+    Don't have an account? <Link id="test-link-signup" to={ROUTES.SIGN_UP}>Sign Up</Link>
   </p>
 );
 

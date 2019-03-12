@@ -18,19 +18,19 @@ const Navigation = () => (
 const NavigationAuth = () => (
   <ul>
     <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
+      <Link id="test-nav-landing" to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
-      <Link to={ROUTES.HOME}>Home</Link>
+      <Link id="test-nav-home" to={ROUTES.HOME}>Home</Link>
     </li>
     <li>
-      <Link to={ROUTES.ACCOUNT}>Account</Link>
+      <Link id="test-nav-account" to={ROUTES.ACCOUNT}>Account</Link>
     </li>
     <li>
-      <Link to={ROUTES.NEW_DREAM}>New Dream</Link>
+      <Link id="test-nav-newdream" to={ROUTES.NEW_DREAM}>New Dream</Link>
     </li>
     <li>
-      <Link to={ROUTES.DREAM_ARCHIVE}>Dream Archive</Link>
+      <Link id="test-nav-dreamarchive" to={ROUTES.DREAM_ARCHIVE}>Dream Archive</Link>
     </li>
     <li>
       <SignOutButton />
@@ -41,10 +41,10 @@ const NavigationAuth = () => (
 const NavigationNonAuth = () => (
   <ul>
     <li>
-      <Link to={ROUTES.LANDING}>Landing</Link>
+      <Link id="test-nav-landing" to={ROUTES.LANDING}>Landing</Link>
     </li>
     <li>
-      <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+      <Link id="test-nav-signin" to={ROUTES.SIGN_IN}>Sign In</Link>
     </li>
   </ul>
 );
