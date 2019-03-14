@@ -7,6 +7,7 @@ import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
 import { withState } from 'recompose';
 
+import ImageContainer from './ImagesContainer'
 import { commonWords, archetypes } from './archetypes';
 
 const { REACT_APP_BACKEND_URL } = process.env;
@@ -20,12 +21,25 @@ class NewDreamPage extends Component {
     userId: this.props.firebase.auth.O,
     keyWords: [],
     imgUrlArr: [],
+    editing: false,
   }
 
   handleChange = (event) => {
     event.preventDefault();
     event.stopPropagation();
     this.setState({[event.target.name]: event.target.value});
+  }
+
+  textAreaOnFocus = (event) => {
+    console.log("text area on Focus!");
+    let emptyKeywords = [];
+    let emptyImgUrlArr = [];
+    this.setState({editing: true, keyWords: emptyKeywords, imgUrlArr: emptyImgUrlArr});
+  }
+
+  textAreaOnBlur = (event) => {
+    console.log("text area on blur");
+    this.setState({editing: false});
   }
 
   parseDreamContent = (e) => {
@@ -75,7 +89,7 @@ class NewDreamPage extends Component {
     .then((data) => {
       let randomIndex = Math.floor(Math.random() * data.hits.length);
       this.imgUrlsToState(data.hits[randomIndex].previewURL)
-      this.appendImg(data.hits[randomIndex])
+
     });
   }
 
@@ -86,19 +100,6 @@ class NewDreamPage extends Component {
     this.setState({imgUrlArr: thumbsArr});
     console.log("state imgURL set: ", this.state.imgUrlArr);
   }
-
-  // add pixabay results to page
-  appendImg(imageObject) {
-    const htmlTemplate =`
-        <div>
-            <img src="${imageObject.previewURL}" alt="..." >
-        </div>
-      `
-    const imgDiv = document.createElement('div');
-    imgDiv.innerHTML = htmlTemplate;
-    document.getElementById('image-container').append(imgDiv);
-  }
-
 
   addDream = (e) => {
     e.preventDefault();
@@ -124,7 +125,6 @@ class NewDreamPage extends Component {
   }
 
   render () {
-
     return(
       <PageStyle>
         <form onSubmit={ (e) => {e.preventDefault()} }>
@@ -139,29 +139,36 @@ class NewDreamPage extends Component {
         <br/>
         <DreamTextarea
           type="text"
-          rows="15"
+          rows="8"
           cols="30"
           name="content"
           id="DreamText"
           placeholder="start writing..."
           value={this.state.content}
           onChange={this.handleChange}
+          onFocus={this.textAreaOnFocus}
+          onBlur={this.textAreaOnBlur}
         />
         <br/>
+        {(this.state.keyWords.length > 0) ?
+          <SaveButton
+            name="addDream"
+            onClick={ (e) => {this.addDream(e)}}
+          >Save Dream
+          </SaveButton> : null
+        }
 
-        <SaveButton
-          name="addDream"
-          onClick={ (e) => {this.addDream(e)}}
-        >Generate Images
-        </SaveButton>
 
         <ArchetypesButton
           onClick={ (e) => {this.archButtonHandler(e)}}
-        >Did I dream of any Archetypes?
+        >Generate Images
         </ArchetypesButton>
-
         </form>
-        <ThumbsDiv id='image-container'></ThumbsDiv>
+        <ThumbsDiv id='image-container'>
+          {this.state.imgUrlArr.map( (url) =>
+            <ImageContainer key={url} url={url}/>
+          )}
+        </ThumbsDiv>
       </PageStyle>
     );
   }
@@ -207,7 +214,6 @@ const DreamInput = styled.input`
 
 `
 const DreamTextarea = styled.textarea`
-  width: 950px;
   font-family: serif;
   border: white;
   text-align: left;
