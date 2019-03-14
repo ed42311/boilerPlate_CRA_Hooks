@@ -7,7 +7,7 @@ import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
 import { withState } from 'recompose';
 
-import { commonWords, keyWords } from './archetypes';
+import { commonWords, archetypes } from './archetypes';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -18,7 +18,8 @@ class NewDreamPage extends Component {
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
-    imgArr: [],
+    keyWords: [],
+    imgUrlArr: [],
   }
 
   handleChange = (event) => {
@@ -27,95 +28,105 @@ class NewDreamPage extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  // add img urls to state
-
-  urlsToState = (url) =>{
-    let thumbsArr = this.state.imgArr.slice();
-    thumbsArr.push(url);
-    this.setState({imgArr: thumbsArr});
-  }
-
-  addDream = (e) => {
-    e.preventDefault();
-    const self = this;
-    const { title, content, userId, imgArr } = this.state;
-    if (!title || !content) {
-      return;
-    }
-
-    //get just the unique words
-    let lower = content.toLowerCase();
+  parseDreamContent = (e) => {
+    //remove common words
+    let lower = this.state.content.toLowerCase();
     lower = lower.replace(/[^\w\d ]/g, '');
-    let dreamWords = lower.split(' ')
+    let dreamWords = lower.split(' ');
     dreamWords = dreamWords.filter(function (word) {
       return commonWords.indexOf(word) === -1;
     });
 
     // match against archetypes
+    let keysArr = this.state.keyWords.slice();
     for (let i = 0; i < dreamWords.length; i++){
       let word = dreamWords[i];
-      if (keyWords.includes(word)){
-        buildCompleteURL(word);
-        // const pTag = document.createElement('p');
-        // pTag.textContent = word;
-        // document.getElementById('image-container').append(pTag);
+      if (archetypes.includes(word)){
+        keysArr.push(word);
       }
     }
+    this.setState({keyWords: keysArr});
+    console.log("matched keywords set to state ", this.state.keyWords);
+  }
 
-    // build pixabay search URL
-    function buildCompleteURL(searchValue) {
-      const baseURL = 'https://pixabay.com/api/?key=11543969-d5ffb78383da99ab7336a1888';
-      const imageType = '&image_type=photo&pretty=true';
-      const searchTerm = '&q=' + searchValue;
-      const completeURL = baseURL + searchTerm + imageType;
-      callPixa(completeURL);
+  async archButtonHandler() {
+    await this.parseDreamContent();
+    const { keyWords } = this.state;
+    console.log("awaited keywords", keyWords);
+    if (this.state.keyWords === []) return;
+    for (let i = 0; i < keyWords.length; i++) {
+      this.buildCompleteURL(keyWords[i])
     }
+  }
 
-    // call pixabay
-    function callPixa(url) {
-      console.log(self);
-      fetch(url)
-      .then(response => response.json())
-      .then((data) => {
-        self.urlsToState(data.hits[0].previewURL)
-        //appendImg(data.hits[0])
-      });
+  // build pixabay search URL
+  buildCompleteURL = (searchValue) => {
+    const baseURL = 'https://pixabay.com/api/?key=11543969-d5ffb78383da99ab7336a1888';
+    const imageType = '&image_type=photo&pretty=true';
+    const searchTerm = '&q=' + searchValue;
+    const completeURL = baseURL + searchTerm + imageType;
+    this.callPixa(completeURL);
+  }
+
+  // call pixabay
+  callPixa = (url) => {
+    fetch(url)
+    .then(response => response.json())
+    .then((data) => {
+      let randomIndex = Math.floor(Math.random() * data.hits.length);
+      this.imgUrlsToState(data.hits[randomIndex].previewURL)
+      this.appendImg(data.hits[randomIndex])
+    });
+  }
+
+  // add img urls to state
+  imgUrlsToState = (url) =>{
+    let thumbsArr = this.state.imgUrlArr.slice();
+    thumbsArr.push(url);
+    this.setState({imgUrlArr: thumbsArr});
+    console.log("state imgURL set: ", this.state.imgUrlArr);
+  }
+
+  // add pixabay results to page
+  appendImg(imageObject) {
+    const htmlTemplate =`
+        <div>
+            <img src="${imageObject.previewURL}" alt="..." >
+        </div>
+      `
+    const imgDiv = document.createElement('div');
+    imgDiv.innerHTML = htmlTemplate;
+    document.getElementById('image-container').append(imgDiv);
+  }
+
+
+  addDream = (e) => {
+    e.preventDefault();
+    const { title, content, userId, imgUrlArr} = this.state;
+    if (!title || !content) {
+      return;
     }
-
-    // add pixabay results to page
-    function appendImg(imageObject) {
-      const htmlTemplate =`
-          <div>
-              <img src="${imageObject.previewURL}" alt="..." >
-          </div>
-        `
-      const imgDiv = document.createElement('div');
-      imgDiv.innerHTML = htmlTemplate;
-      document.getElementById('image-container').append(imgDiv);
-    }
-
     // Post to DB
     if(title){
-      console.log("state imgarr ", imgArr);
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "POST",
-        body: JSON.stringify({ title, content, userId, imgArr }),
+        body: JSON.stringify({ title, content, userId, imgUrlArr }),
         headers: {
           "Content-Type": "application/json"
         }
       })
       .then(response => response.json())
-      .then(() => {
+      .then((myJson) => {
+        console.log(myJson);
         // this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
   }
 
   render () {
+
     return(
       <PageStyle>
-        <h1></h1>
-        <ColorBlob/>
         <form onSubmit={ (e) => {e.preventDefault()} }>
         <DreamInput
           type="text"
@@ -137,13 +148,43 @@ class NewDreamPage extends Component {
           onChange={this.handleChange}
         />
         <br/>
-        <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Generate Images</SaveButton>
+
+        <SaveButton
+          name="addDream"
+          onClick={ (e) => {this.addDream(e)}}
+        >Generate Images
+        </SaveButton>
+
+        <ArchetypesButton
+          onClick={ (e) => {this.archButtonHandler(e)}}
+        >Did I dream of any Archetypes?
+        </ArchetypesButton>
+
         </form>
         <ThumbsDiv id='image-container'></ThumbsDiv>
       </PageStyle>
     );
   }
 }
+
+const ArchetypesButton = styled.button`
+  font-size: xx-large;
+  color: gray;
+  padding: 25px;
+  border-radius: 1em 10em 10em 10em;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  font-family: serif;
+  border-style: double;
+  border-width: 4px;
+  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  &:hover{
+    transition: 1s ease-in-out;
+    background-color: turquoise;;
+  }
+`
 
 const ThumbsDiv = styled.div`
   display: flex;

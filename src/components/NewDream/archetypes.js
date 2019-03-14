@@ -167,6 +167,6 @@ for (let i = 0; i < keys.length; i++) {
   keys[i] = keys[i].toLowerCase();
 }
 
-export const keyWords = keys;
+export const archetypes = keys;
 
 export const commonWords = ['i','a','about','an','and','are','as','at','be','by','com','de','en','for','from','how','in','is','it','la','of','on','or','that','the','this','to','was','what','when','where','who','will','with','und','the','www'];
