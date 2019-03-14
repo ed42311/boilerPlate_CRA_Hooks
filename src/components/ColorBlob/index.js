@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
+
+//how to get blob to show up in particular places on page?
+//place it in reference to something other than the window?
+
 let y2;
 export default class ColorBlob extends Component{
   generate = () => {
@@ -199,7 +203,7 @@ export default class ColorBlob extends Component{
         <CanvasContainer width="200" height="200" id="hello-container" className="container">
           <BlobOnCanvas className="js-canvas"></BlobOnCanvas>
 
-          <canvas className="js-canvas-stitch"></canvas>
+          <CanvasStitch className="js-canvas-stitch"></CanvasStitch>
         </CanvasContainer>
       </BlobBody>
     )
@@ -207,16 +211,25 @@ export default class ColorBlob extends Component{
 }
 
 const CanvasContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 5vw;
+  height: 10vh;
   display: flex;
+  border: double;
   justify-content: center;
   align-items: center;
 `
 const BlobOnCanvas = styled.canvas`
-  width: 20%
+  width: 150%
+  align-items: center;
+  border: double;
 `
 const BlobBody = styled.div`
-  overflow: hidden;
+  : 100px;
+`
+const CanvasStitch = styled.canvas`
+border: double;
+display: flex;
+justify-content: center;
+align-items: center;
 `
 
