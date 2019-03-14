@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
+import ColorBlob from '../ColorBlob';
+import { withState } from 'recompose';
 
 import { commonWords, keyWords } from './archetypes';
 
@@ -112,8 +114,8 @@ class NewDreamPage extends Component {
   render () {
     return(
       <PageStyle>
-        <h1>New Dream Page</h1>
-        <p>The New Dream Page is accessible by every signed in user.</p>
+        <h1></h1>
+        <ColorBlob/>
         <form onSubmit={ (e) => {e.preventDefault()} }>
         <DreamInput
           type="text"
@@ -121,21 +123,21 @@ class NewDreamPage extends Component {
           name="title"
           value={this.state.title}
           onChange={this.handleChange}
-          placeholder="Enter Dream Title"
+          placeholder="title..."
         />
         <br/>
         <DreamTextarea
           type="text"
-          rows="10"
+          rows="15"
           cols="30"
           name="content"
           id="DreamText"
-          placeholder="Enter New Dream"
+          placeholder="start writing..."
           value={this.state.content}
           onChange={this.handleChange}
         />
         <br/>
-        <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
+        <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Generate Images</SaveButton>
         </form>
         <ThumbsDiv id='image-container'></ThumbsDiv>
       </PageStyle>
@@ -152,40 +154,44 @@ const ThumbsDiv = styled.div`
 
 const PageStyle = styled.div`
   margin-left: 25px;
-`
-
-const DreamTextarea = styled.textarea`
-  padding: 15px;
-  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
-  margin-bottom: 25px;
-  font-size: x-large;
-  border-style: double;
-  border-width: 4px;
-  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  text-align:center;
 `
 const DreamInput = styled.input`
-  padding: 15px;
-  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
-  margin-bottom: 25px;
-  font-size: x-large;
-  border-style: double;
-  border-width: 4px;
-  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  font-family: serif;
+  font-size: xx-large;
+  color: gray;
+  border: white;
+  text-align: left;
+  margin-bottom: 150px;
+
 `
+const DreamTextarea = styled.textarea`
+  width: 950px;
+  font-family: serif;
+  border: white;
+  text-align: left;
+  overflow: scroll;
+  font-size: 200%;
+  color: gray;
+  line-height: 1.5;
+  `
 const SaveButton = styled.button`
-  padding: 15px;
-  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
+  font-size: xx-large;
+  color: gray;
+  padding: 25px;
+  border-radius: 1em 10em 10em 10em;
+  margin-top: 15px;
   margin-bottom: 25px;
-  font-size: x-large;
+  font-family: serif;
   border-style: double;
   border-width: 4px;
   -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
   -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
   box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  &:hover{
+    transition: 1s ease-in-out;
+    background-color: turquoise;;
+  }
 `
 const condition = authUser => !!authUser;
 
