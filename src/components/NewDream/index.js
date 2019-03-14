@@ -94,10 +94,13 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content, userId, imgUrlArr} = this.state;
+    const { title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
     if (!title || !content) {
       return;
     }
+    const imgUrlArr = thumbUrlObj
+      .filter((obj) => obj.selected === true)
+      .map( obj => obj.url);
     // Post to DB
     if(title){
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
