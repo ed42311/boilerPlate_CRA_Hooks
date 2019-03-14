@@ -128,7 +128,9 @@ class NewDreamPage extends Component {
       <PageStyle>
         <form onSubmit={ (e) => {e.preventDefault()} }>
           <TitleContainer_S>
-            <ColorBlob/>
+            <ColorBlob
+              watchValue={this.state.title}
+            />
             <DreamInput
               autoComplete="off"
               type="text"

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
-
-//how to get blob to show up in particular places on page?
-//place it in reference to something other than the window?
+import { throttle } from 'lodash';
 
 let y2;
 export default class ColorBlob extends Component{
-  generate = () => {
+  blob = React.createRef()
+  stitch = React.createRef()
+
+  generate = throttle(() => {
     const randomGaussian = (mean = 0, sd = 1) => {
       let y1;
       let x1;
@@ -32,15 +33,10 @@ export default class ColorBlob extends Component{
 
     const randomBetween = (min, max) => (Math.random() * (max - min + 1)) + min;
 
-    const ctx = document
-      .querySelector('.js-canvas')
-      .getContext('2d');
+    const ctx = this.blob.current.getContext('2d');
 
     // stitch pattern
-    const ctxStitch = document
-      .querySelector('.js-canvas-stitch')
-      .getContext('2d');
-    console.log(ctxStitch);
+    const ctxStitch = this.stitch.current.getContext('2d');
     const stitchWidth = 60;
 
     ctxStitch.canvas.width = stitchWidth;
@@ -49,7 +45,7 @@ export default class ColorBlob extends Component{
     ctxStitch.strokeStyle = `rgba(220, 220, 220, 0.1)`;
 
     ctxStitch.beginPath();
-    ctxStitch.moveTo(0, 0);
+    ctxStitch.moveTo(0, 10);
     ctxStitch.lineTo(stitchWidth, stitchWidth);
     ctxStitch.stroke();
     ctxStitch.closePath();
@@ -61,7 +57,7 @@ export default class ColorBlob extends Component{
     ctxStitch.closePath();
 
     const stitchPattern = ctx.createPattern(ctxStitch.canvas, 'repeat');
-    // makes canvas bigger or smaller
+
     const W = window.innerWidth;
     const H = window.innerHeight;
 
@@ -88,7 +84,7 @@ export default class ColorBlob extends Component{
 
     const VARIANCE_DEFAULT = 20;
     const NUM_POLIES = 200;
-    const DEPTH = 3;
+    const DEPTH = 2;
     const NUM_SPOTS = 3;
     const ANGLE_STEP = TAU / NUM_SPOTS;
 
@@ -137,7 +133,7 @@ export default class ColorBlob extends Component{
       ctx.translate(MID_X, MID_Y);
       ctx.beginPath();
       ctx.fillStyle = color;
-      ctx.moveTo(firstVertex.x, firstVertex.y);
+      ctx.moveTo(firstVertex.y, firstVertex.x);
       for (let i = 1; i < vertices.length; i++) {
         const vertex = vertices[i];
         ctx.lineTo(vertex.x, vertex.y);
@@ -186,25 +182,24 @@ export default class ColorBlob extends Component{
       }
     };
     draw();
-  };
+  }, 1000, {leading: true})
 
+  componentDidUpdate(previousProps){
+    if(this.props.watchValue !== previousProps.watchValue){
+      this.generate();
+    }
+  }
   componentDidMount(){
     this.generate();
-    document.getElementById('hello-container').addEventListener('click', this.generate);
   }
 
-  componentWillUnmount(){
-    document.getElementById('hello-container').addEventListener('click', this.generate);
-  }
   render(){
 
     return(
-      <CanvasContainer width="200" height="200" id="hello-container" className="container">
-        <BlobOnCanvas className="js-canvas"></BlobOnCanvas>
-
-        <CanvasStitch className="js-canvas-stitch"></CanvasStitch>
+      <CanvasContainer width="200" height="200" onClick={this.generate} className="container">
+        <BlobOnCanvas ref={this.blob}></BlobOnCanvas>
+        <CanvasStitch ref={this.stitch}></CanvasStitch>
       </CanvasContainer>
-
     )
   }
 }
