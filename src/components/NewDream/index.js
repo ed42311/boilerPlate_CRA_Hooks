@@ -85,11 +85,11 @@ class NewDreamPage extends Component {
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
         let randomIndex = Math.floor(Math.random() * values[i].hits.length);
-        thumbsArr.push(values[i].hits[randomIndex].previewURL);
+        thumbsArr.push({url: values[i].hits[randomIndex].previewURL, selected: false});
       }
       this.setState({imgUrlArr: thumbsArr, editing: false});
+      console.log(this.state.imgUrlArr)
     });
-    console.log("urls set to state: ", this.state.imgUrlArr);
   }
 
   addDream = (e) => {
@@ -113,6 +113,17 @@ class NewDreamPage extends Component {
         // this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
+  }
+
+  toggleSelected = (e, url) => {
+    console.log(url)
+    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
+      if (obj.url === url){
+        obj.selected = !obj.selected
+      }
+      return obj;
+    })
+    this.setState({imgUrlArr: thumbsUrlObjs})
   }
 
   render () {
@@ -155,8 +166,13 @@ class NewDreamPage extends Component {
         }
         </form>
         <ThumbsDiv id='image-container'>
-          {this.state.imgUrlArr.map( (url) =>
-            <ImageContainer key={url} url={url}/>
+          {this.state.imgUrlArr.map( (obj) =>
+            <ImageContainer
+              key={obj.url}
+              url={obj.url}
+              selected={obj.selected}
+              toggleSelected={this.toggleSelected}
+            />
           )}
         </ThumbsDiv>
       </PageStyle>
