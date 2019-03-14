@@ -199,37 +199,30 @@ export default class ColorBlob extends Component{
   render(){
 
     return(
-      <BlobBody>
-        <CanvasContainer width="200" height="200" id="hello-container" className="container">
-          <BlobOnCanvas className="js-canvas"></BlobOnCanvas>
+      <CanvasContainer width="200" height="200" id="hello-container" className="container">
+        <BlobOnCanvas className="js-canvas"></BlobOnCanvas>
 
-          <CanvasStitch className="js-canvas-stitch"></CanvasStitch>
-        </CanvasContainer>
-      </BlobBody>
+        <CanvasStitch className="js-canvas-stitch"></CanvasStitch>
+      </CanvasContainer>
+
     )
   }
 }
 
 const CanvasContainer = styled.div`
+  position: absolute;
   width: 5vw;
   height: 10vh;
   display: flex;
-  border: double;
   justify-content: center;
   align-items: center;
 `
 const BlobOnCanvas = styled.canvas`
-  width: 150%
+  width: 150%;
   align-items: center;
-  border: double;
-`
-const BlobBody = styled.div`
-  : 100px;
 `
 const CanvasStitch = styled.canvas`
-border: double;
 display: flex;
 justify-content: center;
 align-items: center;
 `
-
