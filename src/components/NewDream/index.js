@@ -30,16 +30,13 @@ class NewDreamPage extends Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  textAreaOnFocus = (event) => {
-    console.log("text area on Focus!");
+  textAreaOnFocus = () => {
     let emptyKeywords = [];
     let emptyImgUrlArr = [];
     this.setState({editing: true, keyWords: emptyKeywords, imgUrlArr: emptyImgUrlArr});
   }
 
-  textAreaOnBlur = (event) => {
-    console.log("text area on blur");
-    this.setState({editing: false});
+  textAreaOnBlur = () => {
   }
 
   parseDreamContent = (e) => {
@@ -60,45 +57,39 @@ class NewDreamPage extends Component {
       }
     }
     this.setState({keyWords: keysArr});
-    console.log("matched keywords set to state ", this.state.keyWords);
   }
 
   async archButtonHandler() {
     await this.parseDreamContent();
     const { keyWords } = this.state;
-    console.log("awaited keywords", keyWords);
     if (this.state.keyWords === []) return;
+    let promiseArr = [];
     for (let i = 0; i < keyWords.length; i++) {
-      this.buildCompleteURL(keyWords[i])
+      let url = this.buildPromiseArr(keyWords[i]);
+      promiseArr.push(url);
     }
+    this.promiseResolver(promiseArr);
   }
 
   // build pixabay search URL
-  buildCompleteURL = (searchValue) => {
+  buildPromiseArr = (searchValue) => {
     const baseURL = 'https://pixabay.com/api/?key=11543969-d5ffb78383da99ab7336a1888';
     const imageType = '&image_type=photo&pretty=true';
     const searchTerm = '&q=' + searchValue;
     const completeURL = baseURL + searchTerm + imageType;
-    this.callPixa(completeURL);
+    return fetch(completeURL).then(res => res.json());
   }
 
-  // call pixabay
-  callPixa = (url) => {
-    fetch(url)
-    .then(response => response.json())
-    .then((data) => {
-      let randomIndex = Math.floor(Math.random() * data.hits.length);
-      this.imgUrlsToState(data.hits[randomIndex].previewURL)
-
-    });
-  }
-
-  // add img urls to state
-  imgUrlsToState = (url) =>{
+  promiseResolver = (arr) => {
     let thumbsArr = this.state.imgUrlArr.slice();
-    thumbsArr.push(url);
-    this.setState({imgUrlArr: thumbsArr});
-    console.log("state imgURL set: ", this.state.imgUrlArr);
+    Promise.all(arr).then((values) => {
+      for (let i = 0; i < values.length; i++) {
+        let randomIndex = Math.floor(Math.random() * values[i].hits.length);
+        thumbsArr.push(values[i].hits[randomIndex].previewURL);
+      }
+      this.setState({imgUrlArr: thumbsArr, editing: false});
+    });
+    console.log("urls set to state: ", this.state.imgUrlArr);
   }
 
   addDream = (e) => {
@@ -150,19 +141,18 @@ class NewDreamPage extends Component {
           onBlur={this.textAreaOnBlur}
         />
         <br/>
-        {(this.state.keyWords.length > 0) ?
+        {(this.state.editing) ?
+          <ArchetypesButton
+            onClick={ (e) => {this.archButtonHandler(e)}}
+          >Generate Images
+          </ArchetypesButton> :
+
           <SaveButton
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
-          </SaveButton> : null
+          </SaveButton>
         }
-
-
-        <ArchetypesButton
-          onClick={ (e) => {this.archButtonHandler(e)}}
-        >Generate Images
-        </ArchetypesButton>
         </form>
         <ThumbsDiv id='image-container'>
           {this.state.imgUrlArr.map( (url) =>
