@@ -61,7 +61,7 @@ let archs = {
   "Dining Room": "affiliation, hospitality, integration",
   "Basement": "unconscious",
   "Cellar": "unconscious",
-  "Foundations": "determines the shape and structure, represents the collective unconscious",
+  "Foundation": "determines the shape and structure, represents the collective unconscious",
   "Attic": "secrets from the past",
   "Stairs": "themes of descent and ascent (interaction between unconscious and conscious), from Freud it is associated with sexual intercourse",
   "Doors": "open/welcoming, shut/excluding",
@@ -107,7 +107,6 @@ let archs = {
   "Mother": "child-rearing, nurturance, home-making",
   "Father": "law and order, authority",
   "Son": "self-centered, unconcerned with collective social responsibilities",
-// "Hero": "overcomes self-centeredness, oriented to collective needs",
   "Wise Man": "ideas, meaning",
   "Necktie": "phallic symbol (also plough, hammer, rifle, revolver, sabres, sword)",
   "Cord" : "individual life",
@@ -163,10 +162,16 @@ let archs = {
 }
 const keys = Object.keys(archs);
 
+
 for (let i = 0; i < keys.length; i++) {
   keys[i] = keys[i].toLowerCase();
 }
 
 export const archetypes = keys;
 
-export const commonWords = ['i','a','about','an','and','are','as','at','be','by','com','de','en','for','from','how','in','is','it','la','of','on','or','that','the','this','to','was','what','when','where','who','will','with','und','the','www'];
+export const commonWords = [
+  'i','a','about','an','and','are','as','at','be','by',
+  'com','de','en','for','from','how','in','is','it','la',
+  'of','on','or','that','the','this','to','was','what','when',
+  'where','who','will','with','und','the','www',
+];

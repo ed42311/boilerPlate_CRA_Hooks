@@ -20,7 +20,15 @@ class NewDreamPage extends Component {
     _id: '',
     userId: this.props.firebase.auth.O,
     keyWords: [],
-    imgUrlArr: [],
+    imgUrlArr: [
+      {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
+      selected: false,
+      keyword: "cow"},
+      {url: "https://cdn.pixabay.com/photo/2016/01/12/16/51/white-horse-1136093_150.jpg",
+      selected: false,
+      keyword: "horse"}
+    ],
+
     editing: false,
   }
 
@@ -77,7 +85,14 @@ class NewDreamPage extends Component {
     const imageType = '&image_type=photo&pretty=true';
     const searchTerm = '&q=' + searchValue;
     const completeURL = baseURL + searchTerm + imageType;
-    return fetch(completeURL).then(res => res.json());
+    return fetch(completeURL).then(res => {
+      return new Promise((resolve) => {
+        res.json().then((data) => {
+          data.keyword = searchValue;
+          resolve(data);
+        })
+      })
+    });
   }
 
   promiseResolver = (arr) => {
@@ -85,10 +100,12 @@ class NewDreamPage extends Component {
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
         let randomIndex = Math.floor(Math.random() * values[i].hits.length);
-        thumbsArr.push({url: values[i].hits[randomIndex].previewURL, selected: false});
+        thumbsArr.push({
+          url: values[i].hits[randomIndex].previewURL,
+          selected: false,
+          keyword: values[i].keyword});
       }
       this.setState({imgUrlArr: thumbsArr, editing: false});
-      console.log(this.state.imgUrlArr)
     });
   }
 
@@ -98,35 +115,47 @@ class NewDreamPage extends Component {
     if (!title || !content) {
       return;
     }
-    const imgUrlArr = thumbUrlObj
+
+    const images = thumbUrlObj
       .filter((obj) => obj.selected === true)
-      .map( obj => obj.url);
+      .map( obj => ({url: obj.url, caption: obj.caption}));
+
     // Post to DB
     if(title){
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "POST",
-        body: JSON.stringify({ title, content, userId, imgUrlArr }),
+        body: JSON.stringify({ title, content, userId, images }),
         headers: {
           "Content-Type": "application/json"
         }
       })
       .then(response => response.json())
       .then((myJson) => {
-        console.log(myJson);
-        // this.props.history.push(ROUTES.DREAM_ARCHIVE);
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
   }
 
   toggleSelected = (e, url) => {
-    console.log(url)
     let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
       if (obj.url === url){
-        obj.selected = !obj.selected
+        obj.selected = !obj.selected;
       }
       return obj;
     })
     this.setState({imgUrlArr: thumbsUrlObjs})
+    console.log("imgUrlArr state after clicked: ", this.state.imgUrlArr)
+  }
+
+  saveCaption = (e, url) => {
+    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
+      if (obj.url === url){
+        obj.caption = e.target.value;
+      }
+      return obj;
+    })
+    this.setState({imgUrlArr: thumbsUrlObjs})
+    console.log("imgUrlArr state after caption onBlur: ", this.state.imgUrlArr)
   }
 
   render () {
@@ -159,29 +188,38 @@ class NewDreamPage extends Component {
           <ArchetypesButton
             onClick={ (e) => {this.archButtonHandler(e)}}
           >Generate Images
-          </ArchetypesButton> :
+          </ArchetypesButton> : null
+        }
+        <ThumbsDiv id='image-container'>
+          {this.state.imgUrlArr.map( (obj) =>
+            <CaptionFrame key={obj.url}>
+              <ImageContainer
+                key={obj.url}
+                url={obj.url}
+                selected={obj.selected}
+                toggleSelected={this.toggleSelected}
+                saveCaption={this.saveCaption}
+              />
+            </CaptionFrame>
 
+          )}
+        </ThumbsDiv>
+        {(this.state.imgUrlArr.find(obj => obj.selected)) ?
           <SaveButton
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
-          </SaveButton>
+          </SaveButton> : null
         }
         </form>
-        <ThumbsDiv id='image-container'>
-          {this.state.imgUrlArr.map( (obj) =>
-            <ImageContainer
-              key={obj.url}
-              url={obj.url}
-              selected={obj.selected}
-              toggleSelected={this.toggleSelected}
-            />
-          )}
-        </ThumbsDiv>
       </PageStyle>
     );
   }
 }
+
+const CaptionFrame = styled.div`
+  display: inline-block;
+`
 
 const ArchetypesButton = styled.button`
   font-size: xx-large;
