@@ -14,6 +14,7 @@ class NewDreamPage extends Component {
   state = {
     dreams: [],
     title:'',
+    firstletter:'',
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
@@ -24,6 +25,17 @@ class NewDreamPage extends Component {
   handleChange = (event) => {
     event.preventDefault();
     event.stopPropagation();
+    const newState = {}
+    const { name, value } = event.target;
+    newState[name] = value;
+    // if(name === "content"){
+    //   let firstletter = value[0]
+    //   if (!firstletter || firstletter === ' ') firstletter = this.state.firstletter;
+    //   if (!value.length) firstletter = '';
+    //   newState.firstletter = firstletter;
+    //   newState.content = value.length ? ' ' + value.substr(1) : '';
+    // }
+    // this.setState(newState);
     this.setState({[event.target.name]: event.target.value});
   }
 
@@ -127,7 +139,7 @@ class NewDreamPage extends Component {
     return(
       <PageStyle>
         <form onSubmit={ (e) => {e.preventDefault()} }>
-          <TitleContainer_S>
+          <BlobInputContainer_S>
             <ColorBlob
               watchValue={this.state.title}
             />
@@ -140,18 +152,24 @@ class NewDreamPage extends Component {
               onChange={this.handleChange}
               placeholder="title..."
             />
-          </TitleContainer_S>
+          </BlobInputContainer_S>
           <br/>
-          <DreamTextarea
-            type="text"
-            rows="15"
-            cols="30"
-            name="content"
-            id="DreamText"
-            placeholder="start writing..."
-            value={this.state.content}
-            onChange={this.handleChange}
-          />
+          <BlobInputContainer_S>
+            <ColorBlob/>
+            <FirstLetter_S>
+              {this.state.firstletter}
+            </FirstLetter_S>
+            <DreamTextarea
+              type="text"
+              rows="15"
+              cols="30"
+              name="content"
+              id="DreamText"
+              placeholder="start writing..."
+              value={this.state.content}
+              onChange={this.handleChange}
+            />
+          </BlobInputContainer_S>
           <br/>
           <SaveButton
             name="addDream"
@@ -200,7 +218,7 @@ const PageStyle = styled.div`
   margin-left: 25px;
   text-align:center;
 `
-const TitleContainer_S = styled.div`
+const BlobInputContainer_S = styled.div`
   display: inline-block;
 `
 const DreamInput = styled.input`
@@ -220,17 +238,28 @@ const DreamInput = styled.input`
     outline:none;
   }
 `
-
+const FirstLetter_S = styled.span`
+  position: absolute;
+  font-size: 2.5rem;
+`
 const DreamTextarea = styled.textarea`
   width: 950px;
   font-family: serif;
   border: white;
   text-align: left;
   overflow: scroll;
-  font-size: 200%;
-  color: gray;
+  font-size: 2rem;
   line-height: 1.5;
-  `
+  padding: 10px 0 0 10px;
+  position: relative;
+  background: rgba(255, 255, 255,0);
+  &::placeholder{
+    color: black;
+  }
+  &:focus{
+    outline:none;
+  }
+`
 
 const SaveButton = styled.button`
   font-size: xx-large;
