@@ -16,26 +16,23 @@ const Navigation = () => (
 )
 
 const NavigationAuth = () => (
-  <ul>
-    <li>
-      <Link id="test-nav-landing" to={ROUTES.LANDING}>Landing</Link>
-    </li>
-    <li>
+  <nav>
+  <div className="AuthNavBar">
+    <a>
       <Link id="test-nav-home" to={ROUTES.HOME}>Home</Link>
-    </li>
-    <li>
       <Link id="test-nav-account" to={ROUTES.ACCOUNT}>Account</Link>
-    </li>
-    <li>
-      <Link id="test-nav-newdream" to={ROUTES.NEW_DREAM}>New Dream</Link>
-    </li>
-    <li>
-      <Link id="test-nav-dreamarchive" to={ROUTES.DREAM_ARCHIVE}>Dream Archive</Link>
-    </li>
-    <li>
-      <SignOutButton />
-    </li>
-  </ul>
+    </a>
+    <a>
+      <Link id="test-nav-newdream" to={ROUTES.NEW_DREAM}>New</Link>
+    </a>
+    <a>
+      <Link id="test-nav-dreamarchive" to={ROUTES.DREAM_ARCHIVE}>Archives</Link>
+    </a>
+    <a>
+      <SignOutButton/>
+    </a>
+  </div>
+  </nav>
 );
 
 const NavigationNonAuth = () => (
