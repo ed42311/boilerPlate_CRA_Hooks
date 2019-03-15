@@ -14,7 +14,6 @@ class NewDreamPage extends Component {
   state = {
     dreams: [],
     title:'',
-    firstletter:'',
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
@@ -25,17 +24,6 @@ class NewDreamPage extends Component {
   handleChange = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const newState = {}
-    const { name, value } = event.target;
-    newState[name] = value;
-    // if(name === "content"){
-    //   let firstletter = value[0]
-    //   if (!firstletter || firstletter === ' ') firstletter = this.state.firstletter;
-    //   if (!value.length) firstletter = '';
-    //   newState.firstletter = firstletter;
-    //   newState.content = value.length ? ' ' + value.substr(1) : '';
-    // }
-    // this.setState(newState);
     this.setState({[event.target.name]: event.target.value});
   }
 
@@ -156,9 +144,6 @@ class NewDreamPage extends Component {
           <br/>
           <BlobInputContainer_S>
             <ColorBlob/>
-            <FirstLetter_S>
-              {this.state.firstletter}
-            </FirstLetter_S>
             <DreamTextarea
               type="text"
               rows="15"
@@ -222,6 +207,8 @@ const BlobInputContainer_S = styled.div`
   display: inline-block;
 `
 const DreamInput = styled.input`
+  padding: 10px;
+  z-index: 20;
   font-family: serif;
   font-size: xx-large;
   border: white;
@@ -230,7 +217,7 @@ const DreamInput = styled.input`
   margin-top: 1.8rem;
   position: relative;
   background: rgba(255,255,255,0.2);
-  border-radius: 20%;
+  border-radius: 6px;
   &::placeholder{
     color: black;
   }
@@ -238,11 +225,8 @@ const DreamInput = styled.input`
     outline:none;
   }
 `
-const FirstLetter_S = styled.span`
-  position: absolute;
-  font-size: 2.5rem;
-`
 const DreamTextarea = styled.textarea`
+  z-index: 20;
   width: 950px;
   font-family: serif;
   border: white;
