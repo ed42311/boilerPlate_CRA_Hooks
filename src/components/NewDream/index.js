@@ -19,18 +19,18 @@ class NewDreamPage extends Component {
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
-    keyWords: [],
-    imgUrlArr: [
-      {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
-      selected: false,
-      keyword: "cow"},
-      {url: "https://cdn.pixabay.com/photo/2016/01/12/16/51/white-horse-1136093_150.jpg",
-      selected: false,
-      keyword: "horse"}
-    ],
-
+    imgUrlArr: [],
     editing: false,
+    noKeyWordsInDream: false,
   }
+  // KEEP THESE URLS AROUND UNTIL AT LEAST 2PM SATURDAY MARCH 16 (test if they're good past 24hrs)
+  // {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
+  //     selected: false,
+  //     keyword: "cow"},
+  //     {url: "https://cdn.pixabay.com/photo/2016/01/12/16/51/white-horse-1136093_150.jpg",
+  //     selected: false,
+  //     keyword: "horse"
+  // }
 
   handleChange = (event) => {
     event.preventDefault();
@@ -39,9 +39,8 @@ class NewDreamPage extends Component {
   }
 
   textAreaOnFocus = () => {
-    let emptyKeywords = [];
     let emptyImgUrlArr = [];
-    this.setState({editing: true, keyWords: emptyKeywords, imgUrlArr: emptyImgUrlArr});
+    this.setState({editing: true, imgUrlArr: emptyImgUrlArr});
   }
 
   textAreaOnBlur = () => {
@@ -57,25 +56,28 @@ class NewDreamPage extends Component {
     });
 
     // match against archetypes
-    let keysArr = this.state.keyWords.slice();
+    let keysArr = [];
     for (let i = 0; i < dreamWords.length; i++){
       let word = dreamWords[i];
-      if (archetypes.includes(word)){
+      if (archetypes.includes(word) && !keysArr.includes(word)){
         keysArr.push(word);
       }
     }
-    this.setState({keyWords: keysArr});
+    return keysArr;
   }
 
-  async archButtonHandler() {
-    await this.parseDreamContent();
-    const { keyWords } = this.state;
-    if (this.state.keyWords === []) return;
+  archButtonHandler() {
+    const keyWords = this.parseDreamContent();
+    if (!keyWords.length) {
+       this.setState({noKeyWordsInDream: true});
+       return;
+    }
     let promiseArr = [];
     for (let i = 0; i < keyWords.length; i++) {
       let url = this.buildPromiseArr(keyWords[i]);
       promiseArr.push(url);
     }
+    if(!promiseArr.length) return;
     this.promiseResolver(promiseArr);
   }
 
@@ -99,9 +101,9 @@ class NewDreamPage extends Component {
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        let randomIndex = Math.floor(Math.random() * values[i].hits.length);
+        //let randomIndex = Math.floor(Math.random() * values[i].hits.length);
         thumbsArr.push({
-          url: values[i].hits[randomIndex].previewURL,
+          url: values[i].hits[0].previewURL,
           selected: false,
           keyword: values[i].keyword});
       }
@@ -144,7 +146,6 @@ class NewDreamPage extends Component {
       return obj;
     })
     this.setState({imgUrlArr: thumbsUrlObjs})
-    console.log("imgUrlArr state after clicked: ", this.state.imgUrlArr)
   }
 
   saveCaption = (e, url) => {
@@ -155,7 +156,6 @@ class NewDreamPage extends Component {
       return obj;
     })
     this.setState({imgUrlArr: thumbsUrlObjs})
-    console.log("imgUrlArr state after caption onBlur: ", this.state.imgUrlArr)
   }
 
   render () {
@@ -168,7 +168,7 @@ class NewDreamPage extends Component {
           name="title"
           value={this.state.title}
           onChange={this.handleChange}
-          placeholder="title..."
+          placeholder="Enter Dream Title (required)"
         />
         <br/>
         <DreamTextarea
@@ -177,7 +177,7 @@ class NewDreamPage extends Component {
           cols="30"
           name="content"
           id="DreamText"
-          placeholder="start writing..."
+          placeholder="Enter Dream Text (required)"
           value={this.state.content}
           onChange={this.handleChange}
           onFocus={this.textAreaOnFocus}
@@ -201,11 +201,11 @@ class NewDreamPage extends Component {
                 saveCaption={this.saveCaption}
               />
             </CaptionFrame>
-
           )}
         </ThumbsDiv>
-        {(this.state.imgUrlArr.find(obj => obj.selected)) ?
+        {(this.state.imgUrlArr.find(obj => obj.selected)) || this.state.noKeyWordsInDream === true ?
           <SaveButton
+            type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
@@ -252,8 +252,9 @@ const PageStyle = styled.div`
   text-align:center;
 `
 const DreamInput = styled.input`
+  width: 300px;
   font-family: serif;
-  font-size: xx-large;
+  font-size: medium;
   color: gray;
   border: white;
   text-align: left;

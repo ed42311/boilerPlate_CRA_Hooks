@@ -6,11 +6,12 @@ function ImageContainer({url, selected, toggleSelected, saveCaption}) {
 
   return (
     <ThumbDiv selected={selected} onClick={(e) => toggleSelected(e, url)} autoFocus="autofocus">
-      <ImageCaptioning src={url} alt="..." className="captionable"></ImageCaptioning>
+      <ImageCaptioning src={url} alt="..."></ImageCaptioning>
       {(selected) ?
         <CaptionInput
           autoFocus="autofocus"
-          defaultValue="caption"
+          defaultValue="write a caption"
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
           onBlur={(e) => saveCaption(e, url)}>
         </CaptionInput> :
         null
