@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 
-
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
@@ -263,25 +262,48 @@ const PageStyle = styled.div`
   margin-left: 25px;
   text-align:center;
 `
+const BlobInputContainer_S = styled.div`
+  display: inline-block;
+`
 const DreamInput = styled.input`
-  width: 300px;
+  padding: 10px;
+  z-index: 20;
   font-family: serif;
-  font-size: medium;
-  color: gray;
+  font-size: xx-large;
   border: white;
   text-align: left;
-  margin-bottom: 15px;
-
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+  &::placeholder{
+    color: black;
+  }
+  &:focus{
+    outline:none;
+  }
 `
 const DreamTextarea = styled.textarea`
+  z-index: 20;
+  width: 950px;
   font-family: serif;
   border: white;
   text-align: left;
   overflow: scroll;
-  font-size: 200%;
-  color: gray;
+  font-size: 2rem;
   line-height: 1.5;
-  `
+  padding: 10px 0 0 10px;
+  position: relative;
+  background: rgba(255, 255, 255,0);
+  &::placeholder{
+    color: black;
+  }
+  &:focus{
+    outline:none;
+  }
+`
+
 const SaveButton = styled.button`
   font-size: xx-large;
   color: gray;
