@@ -17,7 +17,6 @@ const Navigation = () => (
 )
 
 const NavigationAuth = () => (
-
   <AuthNavBar_S className="AuthNavBar">
     <NavBox sticky="top" fluid collapseOnSelect>
 
@@ -44,7 +43,6 @@ const NavigationAuth = () => (
     </Navbar.Collapse>
     </NavBox>
   </AuthNavBar_S>
-
 );
 
 

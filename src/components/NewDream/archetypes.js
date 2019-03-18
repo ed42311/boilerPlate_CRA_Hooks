@@ -25,7 +25,7 @@ let archs = {
   "Water": "primal origin of all things, potentiality, removes contaminants, maintains life.  Also, deluge, destruction and resurrection.  Symbolic of the unconscious (deep water)",
   "Sky": "masculine, identified with deities (contrasted with feminine earth, goddess, fertility).  Represents aspirations, ambition, goals",
   "Sun": "will, royalty, splendor, majesty, warmth, light, healing, goodness, everlasting life  (symbols for the sun include; disc, circle, wheel, eye, swastika, chariot, solar gods, solar animals)",
-  "Sunbeams": "light and heat",
+  "Sunbeam": "light and heat",
   "Underworld": "darkness, evil, sickness and death",
   "Moon": "imagination, cycles of nature, tides, floods, menstruation, passive, reflective, Mother archetype",
   "Mars": "action and destruction",
@@ -35,12 +35,12 @@ let archs = {
   "Saturn": "endurance",
   "Clouds": "promise of rain (fertility)",
   "Comet": "sign of danger, war",
-  "Meteorites": "metal from the gods (used to make weapons), sacred stones, linked to male deity, thunder",
+  "Meteorite": "metal from the gods (used to make weapons), sacred stones, linked to male deity, thunder",
   "Rain": "gift from the gods, fertility, divine semen",
   "Rainbow": "bridge or pathway to heaven, mystic serpent, vitality, power",
   "Thunder": "anger of gods, destruction or punishment",
   "lightning": "anger of gods, destruction or punishment",
-  "Colors": "active/hot/advancing color red, yellow, orange, white, and retreating/cold/passive colors blue indigo, violet and black.  Green is the transition between advancing and retreating.",
+  "Color": "active/hot/advancing color red, yellow, orange, white, and retreating/cold/passive colors blue indigo, violet and black.  Green is the transition between advancing and retreating.",
   "Black": "darkness, death, sickness and evil (associated with the Shadow archetype)",
   "White": "light, sun, air, holiness, perfection, innocence, friendship, truce, goodwill",
   "Red": "sun, masculinity, fire, passion, energy, blood, war, rage",
@@ -61,7 +61,7 @@ let archs = {
   "Dining Room": "affiliation, hospitality, integration",
   "Basement": "unconscious",
   "Cellar": "unconscious",
-  "Foundations": "determines the shape and structure, represents the collective unconscious",
+  "Foundation": "determines the shape and structure, represents the collective unconscious",
   "Attic": "secrets from the past",
   "Stairs": "themes of descent and ascent (interaction between unconscious and conscious), from Freud it is associated with sexual intercourse",
   "Doors": "open/welcoming, shut/excluding",
@@ -93,6 +93,7 @@ let archs = {
   "Plough": "fertilizing the feminine",
   "Harp": "angels, heaven, wind deities",
   "Drum": "war",
+  "Neptune": "seahorse, trident, equatioral, cyan",
   "Bicycle": "independence and autonomy",
   "Wheel": "the individuating self",
   "Boat": "symbolic of the body, carrying the self through life",
@@ -107,7 +108,6 @@ let archs = {
   "Mother": "child-rearing, nurturance, home-making",
   "Father": "law and order, authority",
   "Son": "self-centered, unconcerned with collective social responsibilities",
-// "Hero": "overcomes self-centeredness, oriented to collective needs",
   "Wise Man": "ideas, meaning",
   "Necktie": "phallic symbol (also plough, hammer, rifle, revolver, sabres, sword)",
   "Cord" : "individual life",
@@ -163,10 +163,16 @@ let archs = {
 }
 const keys = Object.keys(archs);
 
+
 for (let i = 0; i < keys.length; i++) {
   keys[i] = keys[i].toLowerCase();
 }
 
 export const archetypes = keys;
 
-export const commonWords = ['i','a','about','an','and','are','as','at','be','by','com','de','en','for','from','how','in','is','it','la','of','on','or','that','the','this','to','was','what','when','where','who','will','with','und','the','www'];
+export const commonWords = [
+  'i','a','about','an','and','are','as','at','be','by',
+  'com','de','en','for','from','how','in','is','it','la',
+  'of','on','or','that','the','this','to','was','what','when',
+  'where','who','will','with','und','the','www',
+];
