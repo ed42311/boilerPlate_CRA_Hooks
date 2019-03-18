@@ -6,6 +6,7 @@ import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
 import { withState } from 'recompose';
 
+import ImageContainer from './ImagesContainer'
 import { commonWords, archetypes } from './archetypes';
 
 const { REACT_APP_BACKEND_URL } = process.env;
@@ -17,14 +18,32 @@ class NewDreamPage extends Component {
     content:'',
     _id: '',
     userId: this.props.firebase.auth.O,
-    keyWords: [],
     imgUrlArr: [],
+    editing: false,
+    noKeyWordsInDream: true,
   }
+  // KEEP THESE URLS AROUND UNTIL AT LEAST 2PM SATURDAY MARCH 16 (test if they're good past 24hrs)
+  // {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
+  //     selected: false,
+  //     keyword: "cow"},
+  //     {url: "https://cdn.pixabay.com/photo/2016/01/12/16/51/white-horse-1136093_150.jpg",
+  //     selected: false,
+  //     keyword: "horse"
+  // }
 
   handleChange = (event) => {
     event.preventDefault();
     event.stopPropagation();
     this.setState({[event.target.name]: event.target.value});
+  }
+
+  textAreaOnFocus = () => {
+    let emptyImgUrlArr = [];
+    this.setState({editing: true, imgUrlArr: emptyImgUrlArr});
+  }
+
+  textAreaOnBlur = () => {
+    this.parseDreamContent();
   }
 
   parseDreamContent = (e) => {
@@ -37,141 +56,181 @@ class NewDreamPage extends Component {
     });
 
     // match against archetypes
-    let keysArr = this.state.keyWords.slice();
+    let keysArr = [];
     for (let i = 0; i < dreamWords.length; i++){
       let word = dreamWords[i];
-      if (archetypes.includes(word)){
+      if (archetypes.includes(word) && !keysArr.includes(word)){
         keysArr.push(word);
       }
     }
-    this.setState({keyWords: keysArr});
-    console.log("matched keywords set to state ", this.state.keyWords);
-  }
+    if (keysArr.length)this.setState({noKeyWordsInDream: false});
+    return keysArr;
+  };
 
-  async archButtonHandler() {
-    await this.parseDreamContent();
-    const { keyWords } = this.state;
-    console.log("awaited keywords", keyWords);
-    if (this.state.keyWords === []) return;
-    for (let i = 0; i < keyWords.length; i++) {
-      this.buildCompleteURL(keyWords[i])
+  archButtonHandler() {
+    const keyWords = this.parseDreamContent();
+    if (!keyWords.length) {
+       this.setState({noKeyWordsInDream: true});
+       return;
     }
+    let promiseArr = [];
+    for (let i = 0; i < keyWords.length; i++) {
+      let url = this.buildPromiseArr(keyWords[i]);
+      promiseArr.push(url);
+    }
+    if(!promiseArr.length) return;
+    this.promiseResolver(promiseArr);
   }
 
   // build pixabay search URL
-  buildCompleteURL = (searchValue) => {
+  buildPromiseArr = (searchValue) => {
     const baseURL = 'https://pixabay.com/api/?key=11543969-d5ffb78383da99ab7336a1888';
     const imageType = '&image_type=photo&pretty=true';
     const searchTerm = '&q=' + searchValue;
     const completeURL = baseURL + searchTerm + imageType;
-    this.callPixa(completeURL);
-  }
-
-  // call pixabay
-  callPixa = (url) => {
-    fetch(url)
-    .then(response => response.json())
-    .then((data) => {
-      let randomIndex = Math.floor(Math.random() * data.hits.length);
-      this.imgUrlsToState(data.hits[randomIndex].previewURL)
-      this.appendImg(data.hits[randomIndex])
+    return fetch(completeURL).then(res => {
+      return new Promise((resolve) => {
+        res.json().then((data) => {
+          data.keyword = searchValue;
+          resolve(data);
+        })
+      })
     });
   }
 
-  // add img urls to state
-  imgUrlsToState = (url) =>{
+  promiseResolver = (arr) => {
     let thumbsArr = this.state.imgUrlArr.slice();
-    thumbsArr.push(url);
-    this.setState({imgUrlArr: thumbsArr});
-    console.log("state imgURL set: ", this.state.imgUrlArr);
+    Promise.all(arr).then((values) => {
+      for (let i = 0; i < values.length; i++) {
+        let rand = Math.floor(Math.random() * values[i].hits.length);
+        thumbsArr.push({
+          url: values[i].hits[rand].previewURL,
+          selected: false,
+          keyword: values[i].keyword});
+      }
+      this.setState({imgUrlArr: thumbsArr, editing: false});
+    });
   }
-
-  // add pixabay results to page
-  appendImg(imageObject) {
-    const htmlTemplate =`
-        <div>
-            <img src="${imageObject.previewURL}" alt="..." >
-        </div>
-      `
-    const imgDiv = document.createElement('div');
-    imgDiv.innerHTML = htmlTemplate;
-    document.getElementById('image-container').append(imgDiv);
-  }
-
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content, userId, imgUrlArr} = this.state;
+    const { title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
     if (!title || !content) {
       return;
     }
+
+    const images = thumbUrlObj
+      .filter((obj) => obj.selected === true)
+      .map( obj => ({url: obj.url, caption: obj.caption}));
+
     // Post to DB
     if(title){
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
         method: "POST",
-        body: JSON.stringify({ title, content, userId, imgUrlArr }),
+        body: JSON.stringify({ title, content, userId, images }),
         headers: {
           "Content-Type": "application/json"
         }
       })
       .then(response => response.json())
       .then((myJson) => {
-        console.log(myJson);
-        // this.props.history.push(ROUTES.DREAM_ARCHIVE);
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
   }
 
-  render () {
+  toggleSelected = (e, url) => {
+    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
+      if (obj.url === url){
+        obj.selected = !obj.selected;
+      }
+      return obj;
+    })
+    this.setState({imgUrlArr: thumbsUrlObjs})
+  }
 
+  saveCaption = (e, url) => {
+    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
+      if (obj.url === url){
+        obj.caption = e.target.value;
+      }
+      return obj;
+    })
+    this.setState({imgUrlArr: thumbsUrlObjs})
+  }
+
+  render () {
     return(
       <PageStyle>
-        <form onSubmit={ (e) => {e.preventDefault()} }>
-          <BlobInputContainer_S>
-            <ColorBlob
-              watchValue={this.state.title}
-            />
-            <DreamInput
-              autoComplete="off"
-              type="text"
-              id="DreamTitle"
-              name="title"
-              value={this.state.title}
-              onChange={this.handleChange}
-              placeholder="title..."
-            />
-          </BlobInputContainer_S>
-          <br/>
-          <BlobInputContainer_S>
-            <ColorBlob/>
-            <DreamTextarea
-              type="text"
-              rows="15"
-              cols="30"
-              name="content"
-              id="DreamText"
-              placeholder="start writing..."
-              value={this.state.content}
-              onChange={this.handleChange}
-            />
-          </BlobInputContainer_S>
-          <br/>
+        <form
+          onSubmit={ (e) => {e.preventDefault()} }
+        >
+        <DreamTextarea
+          onSubmit={ (e) => {e.preventDefault()}}
+          type="textarea"
+          rows="3"
+          cols="25"
+          name="content"
+          id="DreamText"
+          placeholder="Enter Dream Text (required)"
+          value={this.state.content}
+          onChange={e => this.handleChange(e)}
+          onFocus={this.textAreaOnFocus}
+          onBlur={this.textAreaOnBlur}
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+        />
+        <br/>
+        <DreamInput
+          type="text"
+          id="DreamTitle"
+          name="title"
+          value={this.state.title}
+          onChange={this.handleChange}
+          placeholder="Enter Dream Title (required)"
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+        />
+        <br />
+        {this.state.content &&
+          <ArchetypesButton
+              onClick={ (e) => {this.archButtonHandler(e)}}
+            >Generate Images
+          </ArchetypesButton>
+        }
+        <br />
+        {(!this.state.noKeyWordsInDream) &&
+          <div>
+           <ThumbsDiv id='image-container'>
+            {this.state.imgUrlArr.map( (obj) =>
+              <CaptionFrame key={obj.url}>
+                <ImageContainer
+                  key={obj.url}
+                  url={obj.url}
+                  selected={obj.selected}
+                  toggleSelected={this.toggleSelected}
+                  saveCaption={this.saveCaption}
+                />
+              </CaptionFrame>
+            )}
+            </ThumbsDiv>
+          </div>
+        }
+        {(this.state.title && this.state.content ?
           <SaveButton
+            type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
-          >Generate Images
-          </SaveButton>
-          <ArchetypesButton
-            onClick={ (e) => {this.archButtonHandler(e)}}
-          >Did I dream of any Archetypes?
-          </ArchetypesButton>
-
+          >Save Dream
+          </SaveButton> : null
+        )}
         </form>
-        <ThumbsDiv id='image-container'></ThumbsDiv>
       </PageStyle>
     );
   }
 }
+
+const CaptionFrame = styled.div`
+  display: inline-block;
+`
 
 const ArchetypesButton = styled.button`
   font-size: xx-large;

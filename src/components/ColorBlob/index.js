@@ -213,7 +213,7 @@ const CanvasContainer = styled.div`
   align-items: center;
 `
 const BlobOnCanvas = styled.canvas`
-  width: 1000%;
+  width: 100%
   align-items: center;
 `
 const CanvasStitch = styled.canvas`
