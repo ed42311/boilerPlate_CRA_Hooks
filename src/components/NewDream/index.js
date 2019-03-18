@@ -21,7 +21,7 @@ class NewDreamPage extends Component {
     userId: this.props.firebase.auth.O,
     imgUrlArr: [],
     editing: false,
-    noKeyWordsInDream: false,
+    noKeyWordsInDream: true,
   }
   // KEEP THESE URLS AROUND UNTIL AT LEAST 2PM SATURDAY MARCH 16 (test if they're good past 24hrs)
   // {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
@@ -44,6 +44,7 @@ class NewDreamPage extends Component {
   }
 
   textAreaOnBlur = () => {
+    this.parseDreamContent();
   }
 
   parseDreamContent = (e) => {
@@ -63,8 +64,9 @@ class NewDreamPage extends Component {
         keysArr.push(word);
       }
     }
+    if (keysArr.length)this.setState({noKeyWordsInDream: false});
     return keysArr;
-  }
+  };
 
   archButtonHandler() {
     const keyWords = this.parseDreamContent();
@@ -101,9 +103,9 @@ class NewDreamPage extends Component {
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        //let randomIndex = Math.floor(Math.random() * values[i].hits.length);
+        let rand = Math.floor(Math.random() * values[i].hits.length);
         thumbsArr.push({
-          url: values[i].hits[0].previewURL,
+          url: values[i].hits[rand].previewURL,
           selected: false,
           keyword: values[i].keyword});
       }
@@ -161,7 +163,24 @@ class NewDreamPage extends Component {
   render () {
     return(
       <PageStyle>
-        <form onSubmit={ (e) => {e.preventDefault()} }>
+        <form
+          onSubmit={ (e) => {e.preventDefault()} }
+        >
+        <DreamTextarea
+          onSubmit={ (e) => {e.preventDefault()}}
+          type="textarea"
+          rows="3"
+          cols="25"
+          name="content"
+          id="DreamText"
+          placeholder="Enter Dream Text (required)"
+          value={this.state.content}
+          onChange={e => this.handleChange(e)}
+          onFocus={this.textAreaOnFocus}
+          onBlur={this.textAreaOnBlur}
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+        />
+        <br/>
         <DreamInput
           type="text"
           id="DreamTitle"
@@ -169,48 +188,41 @@ class NewDreamPage extends Component {
           value={this.state.title}
           onChange={this.handleChange}
           placeholder="Enter Dream Title (required)"
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
         />
-        <br/>
-        <DreamTextarea
-          type="text"
-          rows="8"
-          cols="30"
-          name="content"
-          id="DreamText"
-          placeholder="Enter Dream Text (required)"
-          value={this.state.content}
-          onChange={this.handleChange}
-          onFocus={this.textAreaOnFocus}
-          onBlur={this.textAreaOnBlur}
-        />
-        <br/>
-        {(this.state.editing) ?
+        <br />
+        {this.state.content &&
           <ArchetypesButton
-            onClick={ (e) => {this.archButtonHandler(e)}}
-          >Generate Images
-          </ArchetypesButton> : null
+              onClick={ (e) => {this.archButtonHandler(e)}}
+            >Generate Images
+          </ArchetypesButton>
         }
-        <ThumbsDiv id='image-container'>
-          {this.state.imgUrlArr.map( (obj) =>
-            <CaptionFrame key={obj.url}>
-              <ImageContainer
-                key={obj.url}
-                url={obj.url}
-                selected={obj.selected}
-                toggleSelected={this.toggleSelected}
-                saveCaption={this.saveCaption}
-              />
-            </CaptionFrame>
-          )}
-        </ThumbsDiv>
-        {(this.state.imgUrlArr.find(obj => obj.selected)) || this.state.noKeyWordsInDream === true ?
+        <br />
+        {(!this.state.noKeyWordsInDream) &&
+          <div>
+           <ThumbsDiv id='image-container'>
+            {this.state.imgUrlArr.map( (obj) =>
+              <CaptionFrame key={obj.url}>
+                <ImageContainer
+                  key={obj.url}
+                  url={obj.url}
+                  selected={obj.selected}
+                  toggleSelected={this.toggleSelected}
+                  saveCaption={this.saveCaption}
+                />
+              </CaptionFrame>
+            )}
+            </ThumbsDiv>
+          </div>
+        }
+        {(this.state.title && this.state.content ?
           <SaveButton
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
           </SaveButton> : null
-        }
+        )}
         </form>
       </PageStyle>
     );
@@ -258,7 +270,7 @@ const DreamInput = styled.input`
   color: gray;
   border: white;
   text-align: left;
-  margin-bottom: 150px;
+  margin-bottom: 15px;
 
 `
 const DreamTextarea = styled.textarea`

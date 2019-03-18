@@ -214,9 +214,8 @@ const CanvasContainer = styled.div`
   align-items: center;
 `
 const BlobOnCanvas = styled.canvas`
-  width: 20%
+  width: 100%
 `
 const BlobBody = styled.div`
   overflow: hidden;
 `
-

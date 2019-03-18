@@ -5,7 +5,7 @@ import styled, { css } from "styled-components";
 function ImageContainer({url, selected, toggleSelected, saveCaption}) {
 
   return (
-    <ThumbDiv selected={selected} onClick={(e) => toggleSelected(e, url)} autoFocus="autofocus">
+    <ThumbDiv selected={selected} onClick={(e) => toggleSelected(e, url)}>
       <ImageCaptioning src={url} alt="..."></ImageCaptioning>
       {(selected) ?
         <CaptionInput
