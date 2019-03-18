@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styled from 'styled-components';
 import { withFirebase } from '../Firebase';
 
 const SignOutButton = ({ firebase }) => (
@@ -9,4 +9,7 @@ const SignOutButton = ({ firebase }) => (
 
 );
 
+const SignOut = styled.button`
+  border: none;
+`
 export default withFirebase(SignOutButton);
