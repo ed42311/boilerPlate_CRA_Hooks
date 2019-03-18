@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
+import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
+import { BlobInputContainerS } from '../Style';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -25,29 +27,34 @@ class ArchivePage extends Component {
 
   render() {
     return(
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <PageStyle>
-            <h1>user ID: {authUser.uid}</h1>
-            <h1 id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</h1>
-            {this.state.dreams.map( (dream) =>
-              <DreamDiv key={dream._id} >
-                <h2>{dream.title}</h2>
-                <p>{dream.content}</p>
-                <Link to={{
-                  pathname: './editDream',
-                  state: {
-                    title: dream.title,
-                    content: dream.content,
-                    _id: dream._id,
-                    userId: dream.userId,
-                  }
-                }}>Edit Dream</Link>
-              </DreamDiv>
-            )}
-          </PageStyle>
-        )}
-      </AuthUserContext.Consumer>
+      <PageStyle>
+        <BlobInputContainerS>
+          <ColorBlob/>
+        </BlobInputContainerS>
+        <AuthUserContext.Consumer>
+          {authUser => (
+            <div>
+              <h1>user ID: {authUser.uid}</h1>
+              <h1 id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</h1>
+              {this.state.dreams.map( (dream) =>
+                <DreamDiv key={dream._id} >
+                  <h2>{dream.title}</h2>
+                  <p>{dream.content}</p>
+                  <Link to={{
+                    pathname: './editDream',
+                    state: {
+                      title: dream.title,
+                      content: dream.content,
+                      _id: dream._id,
+                      userId: dream.userId,
+                    }
+                  }}>Edit Dream</Link>
+                </DreamDiv>
+              )}
+            </div>
+          )}
+        </AuthUserContext.Consumer>
+      </PageStyle>
     )
   }
 }
