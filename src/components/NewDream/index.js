@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 
-
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
@@ -128,37 +127,44 @@ class NewDreamPage extends Component {
     return(
       <PageStyle>
         <form onSubmit={ (e) => {e.preventDefault()} }>
-        <DreamInput
-          type="text"
-          id="DreamTitle"
-          name="title"
-          value={this.state.title}
-          onChange={this.handleChange}
-          placeholder="title..."
-        />
-        <br/>
-        <DreamTextarea
-          type="text"
-          rows="15"
-          cols="30"
-          name="content"
-          id="DreamText"
-          placeholder="start writing..."
-          value={this.state.content}
-          onChange={this.handleChange}
-        />
-        <br/>
-
-        <SaveButton
-          name="addDream"
-          onClick={ (e) => {this.addDream(e)}}
-        >Generate Images
-        </SaveButton>
-
-        <ArchetypesButton
-          onClick={ (e) => {this.archButtonHandler(e)}}
-        >Did I dream of any Archetypes?
-        </ArchetypesButton>
+          <BlobInputContainer_S>
+            <ColorBlob
+              watchValue={this.state.title}
+            />
+            <DreamInput
+              autoComplete="off"
+              type="text"
+              id="DreamTitle"
+              name="title"
+              value={this.state.title}
+              onChange={this.handleChange}
+              placeholder="title..."
+            />
+          </BlobInputContainer_S>
+          <br/>
+          <BlobInputContainer_S>
+            <ColorBlob/>
+            <DreamTextarea
+              type="text"
+              rows="15"
+              cols="30"
+              name="content"
+              id="DreamText"
+              placeholder="start writing..."
+              value={this.state.content}
+              onChange={this.handleChange}
+            />
+          </BlobInputContainer_S>
+          <br/>
+          <SaveButton
+            name="addDream"
+            onClick={ (e) => {this.addDream(e)}}
+          >Generate Images
+          </SaveButton>
+          <ArchetypesButton
+            onClick={ (e) => {this.archButtonHandler(e)}}
+          >Did I dream of any Archetypes?
+          </ArchetypesButton>
 
         </form>
         <ThumbsDiv id='image-container'></ThumbsDiv>
@@ -197,25 +203,48 @@ const PageStyle = styled.div`
   margin-left: 25px;
   text-align:center;
 `
+const BlobInputContainer_S = styled.div`
+  display: inline-block;
+`
 const DreamInput = styled.input`
+  padding: 10px;
+  z-index: 20;
   font-family: serif;
   font-size: xx-large;
-  color: gray;
   border: white;
   text-align: left;
-  margin-bottom: 150px;
-
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+  &::placeholder{
+    color: black;
+  }
+  &:focus{
+    outline:none;
+  }
 `
 const DreamTextarea = styled.textarea`
+  z-index: 20;
   width: 950px;
   font-family: serif;
   border: white;
   text-align: left;
   overflow: scroll;
-  font-size: 200%;
-  color: gray;
+  font-size: 2rem;
   line-height: 1.5;
-  `
+  padding: 10px 0 0 10px;
+  position: relative;
+  background: rgba(255, 255, 255,0);
+  &::placeholder{
+    color: black;
+  }
+  &:focus{
+    outline:none;
+  }
+`
+
 const SaveButton = styled.button`
   font-size: xx-large;
   color: gray;
