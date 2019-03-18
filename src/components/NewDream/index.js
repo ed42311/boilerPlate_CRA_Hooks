@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
-import { withState } from 'recompose';
 
 import ImageContainer from './ImagesContainer'
 import { commonWords, archetypes } from './archetypes';
@@ -22,14 +21,6 @@ class NewDreamPage extends Component {
     editing: false,
     noKeyWordsInDream: true,
   }
-  // KEEP THESE URLS AROUND UNTIL AT LEAST 2PM SATURDAY MARCH 16 (test if they're good past 24hrs)
-  // {url: "https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_150.jpg",
-  //     selected: false,
-  //     keyword: "cow"},
-  //     {url: "https://cdn.pixabay.com/photo/2016/01/12/16/51/white-horse-1136093_150.jpg",
-  //     selected: false,
-  //     keyword: "horse"
-  // }
 
   handleChange = (event) => {
     event.preventDefault();
@@ -165,30 +156,36 @@ class NewDreamPage extends Component {
         <form
           onSubmit={ (e) => {e.preventDefault()} }
         >
-        <DreamTextarea
-          onSubmit={ (e) => {e.preventDefault()}}
-          type="textarea"
-          rows="3"
-          cols="25"
-          name="content"
-          id="DreamText"
-          placeholder="Enter Dream Text (required)"
-          value={this.state.content}
-          onChange={e => this.handleChange(e)}
-          onFocus={this.textAreaOnFocus}
-          onBlur={this.textAreaOnBlur}
-          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
-        />
+        <BlobInputContainerS>
+          <ColorBlob watchValue={this.state.content}/>
+          <DreamTextarea
+            onSubmit={ (e) => {e.preventDefault()}}
+            type="textarea"
+            rows="3"
+            cols="25"
+            name="content"
+            id="DreamText"
+            placeholder="Enter Dream Text (required)"
+            value={this.state.content}
+            onChange={e => this.handleChange(e)}
+            onFocus={this.textAreaOnFocus}
+            onBlur={this.textAreaOnBlur}
+            onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+          />
+        </BlobInputContainerS>
         <br/>
-        <DreamInput
-          type="text"
-          id="DreamTitle"
-          name="title"
-          value={this.state.title}
-          onChange={this.handleChange}
-          placeholder="Enter Dream Title (required)"
-          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
-        />
+        <BlobInputContainerS>
+          <ColorBlob/>
+          <DreamInput
+            type="text"
+            id="DreamTitle"
+            name="title"
+            value={this.state.title}
+            onChange={this.handleChange}
+            placeholder="Enter Dream Title (required)"
+            onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+          />
+        </BlobInputContainerS>
         <br />
         {this.state.content &&
           <ArchetypesButton
@@ -262,14 +259,15 @@ const PageStyle = styled.div`
   margin-left: 25px;
   text-align:center;
 `
-const BlobInputContainer_S = styled.div`
+const BlobInputContainerS = styled.div`
   display: inline-block;
 `
 const DreamInput = styled.input`
   padding: 10px;
   z-index: 20;
+  width: 350px;
   font-family: serif;
-  font-size: xx-large;
+  font-size: medium;
   border: white;
   text-align: left;
   margin-bottom: 2rem;
@@ -286,7 +284,6 @@ const DreamInput = styled.input`
 `
 const DreamTextarea = styled.textarea`
   z-index: 20;
-  width: 950px;
   font-family: serif;
   border: white;
   text-align: left;
@@ -296,6 +293,7 @@ const DreamTextarea = styled.textarea`
   padding: 10px 0 0 10px;
   position: relative;
   background: rgba(255, 255, 255,0);
+  resize: none;
   &::placeholder{
     color: black;
   }
