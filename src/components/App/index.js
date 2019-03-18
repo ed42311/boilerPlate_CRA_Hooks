@@ -24,7 +24,6 @@ const App = () => (
       <Navigation />
 
       <hr />
-
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
@@ -34,6 +33,7 @@ const App = () => (
       <Route path={ROUTES.NEW_DREAM} component={NewDreamPage} />
       <Route path={ROUTES.DREAM_ARCHIVE} component={ArchivePage} />
       <Route path={ROUTES.EDIT_DREAM} component={EditDreamPage} />
+
     </div>
   </Router>
 );
