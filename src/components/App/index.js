@@ -11,7 +11,7 @@ import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
-import NewDreamPage from '../NewDream';
+import NewDreamPage from '../NewOrEditDream';
 import ArchivePage from '../DreamArchive';
 import EditDreamPage from '../EditDream';
 
