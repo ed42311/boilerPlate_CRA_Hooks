@@ -137,6 +137,24 @@ class NewDreamPage extends Component {
     }
   }
 
+  deleteDream = (e) => {
+    e.preventDefault();
+    const { _id } = this.state;
+    if(_id){
+      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
+        method: "DELETE",
+        body: JSON.stringify({ _id }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
+      })
+    }
+  }
+
   toggleSelected = (e, url) => {
     let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
       if (obj.url === url){
@@ -218,19 +236,37 @@ class NewDreamPage extends Component {
             </ThumbsDiv>
           </div>
         }
-        {(this.state.title && this.state.content ?
+        {(!!this.state.title && !!this.state.content) &&
           <SaveButton
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
-          </SaveButton> : null
-        )}
+          </SaveButton>
+        }
         </form>
+        {!this.isNew &&
+          <DeleteButton name="deleteDream" onClick={this.deleteDream}>Delete</DeleteButton>
+        }
       </PageStyle>
     );
   }
 }
+
+const DeleteButton = styled.button`
+  color: white;
+  background: black;
+  padding: 15px;
+  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
+  margin-bottom: 25px;
+  margin-left: 10px;
+  font-size: x-large;
+  border-style: double;
+  border-width: 4px;
+  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+`
 
 const CaptionFrame = styled.div`
   display: inline-block;
