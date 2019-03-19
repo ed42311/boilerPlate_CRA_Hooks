@@ -12,11 +12,14 @@ import { BlobInputContainerS } from '../Style';
 const { REACT_APP_BACKEND_URL } = process.env;
 
 class NewDreamPage extends Component {
+
+  isNew = this.props.match.path === ROUTES.NEW_DREAM;
+
   state = {
     dreams: [],
-    title:'',
-    content:'',
-    _id: '',
+    title: (this.props.location.state && this.props.location.state.title) || '',
+    content: (this.props.location.state && this.props.location.state.content) || '',
+    _id: (this.props.location.state && this.props.location.state._id) || '',
     userId: this.props.firebase.auth.O,
     imgUrlArr: [],
     editing: false,
@@ -106,7 +109,7 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
     if (!title || !content) {
       return;
     }
@@ -115,11 +118,14 @@ class NewDreamPage extends Component {
       .filter((obj) => obj.selected === true)
       .map( obj => ({url: obj.url, caption: obj.caption}));
 
+    const body = { title, content, userId, images };
+    if(!this.isNew) body._id = _id;
+
     // Post to DB
     if(title){
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
-        method: "POST",
-        body: JSON.stringify({ title, content, userId, images }),
+        method: this.isNew ? "POST" : "PUT",
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json"
         }
