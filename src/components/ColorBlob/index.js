@@ -196,7 +196,14 @@ export default class ColorBlob extends Component{
   render(){
 
     return(
-      <CanvasContainer width="200" height="200" onClick={this.generate} className="container">
+      <CanvasContainer
+        width="200"
+        height="200"
+        onClick={this.generate}
+        className="container"
+        canvasWidth={5}
+        canvasHeight={10}
+      >
         <BlobOnCanvas ref={this.blob}></BlobOnCanvas>
         <CanvasStitch ref={this.stitch}></CanvasStitch>
       </CanvasContainer>
@@ -206,8 +213,8 @@ export default class ColorBlob extends Component{
 
 const CanvasContainer = styled.div`
   position: absolute;
-  width: 5vw;
-  height: 10vh;
+  width: ${props => props.canvasWidth}vw;
+  height: ${props => props.canvasHeight}vh;
   display: flex;
   justify-content: center;
   align-items: center;

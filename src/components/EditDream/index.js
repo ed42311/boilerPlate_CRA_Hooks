@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { AuthUserContext, withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
+import ColorBlob from '../ColorBlob';
+import { BlobInputContainerS } from '../Style';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -16,7 +18,7 @@ class EditDreamPage extends Component {
       userId: this.props.firebase.auth.O,
     };
   }
-  
+
   handleChange = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -64,38 +66,43 @@ class EditDreamPage extends Component {
 
   render () {
     return(
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <EditStyles>
-          <h1>Edit Dream Page</h1>
-          <p>The Edit Dream Page is accessible by {authUser.email}.</p>
-          <form onSubmit={ (e) => {e.preventDefault()} }>
-          <DreamInput
-            type="text"
-            id="DreamTitle"
-            name="title"
-            value={this.state.title}
-            onChange={this.handleChange}
-            placeholder="Enter Dream Title"
-          />
-          <br/>
-          <DreamTextarea
-            type="text"
-            rows="10"
-            cols="30"
-            name="content"
-            id="DreamText"
-            placeholder="Enter New Dream"
-            value={this.state.content}
-            onChange={this.handleChange}
-          />
-          <br/>
-          <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
-          <DeleteButton name="deleteDream" onClick={ (e) => {this.deleteDream(e)}}>Delete</DeleteButton>
-          </form>
-        </EditStyles>
-        )}
-      </AuthUserContext.Consumer>
+      <div>
+          <BlobInputContainerS>
+          <ColorBlob/>
+        </BlobInputContainerS>
+        <AuthUserContext.Consumer>
+          {authUser => (
+            <EditStyles>
+            <h1>Edit Dream Page</h1>
+            <p>The Edit Dream Page is accessible by {authUser.email}.</p>
+            <form onSubmit={ (e) => {e.preventDefault()} }>
+            <DreamInput
+              type="text"
+              id="DreamTitle"
+              name="title"
+              value={this.state.title}
+              onChange={this.handleChange}
+              placeholder="Enter Dream Title"
+            />
+            <br/>
+            <DreamTextarea
+              type="text"
+              rows="10"
+              cols="30"
+              name="content"
+              id="DreamText"
+              placeholder="Enter New Dream"
+              value={this.state.content}
+              onChange={this.handleChange}
+            />
+            <br/>
+            <SaveButton name="addDream" onClick={ (e) => {this.addDream(e)}}>Save</SaveButton>
+            <DeleteButton name="deleteDream" onClick={ (e) => {this.deleteDream(e)}}>Delete</DeleteButton>
+            </form>
+          </EditStyles>
+          )}
+        </AuthUserContext.Consumer>
+      </div>
     );
   }
 }

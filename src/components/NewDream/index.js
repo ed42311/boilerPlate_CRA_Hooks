@@ -5,8 +5,9 @@ import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
 import ColorBlob from '../ColorBlob';
 
-import ImageContainer from './ImagesContainer'
+import ImageContainer from './ImagesContainer';
 import { commonWords, archetypes } from './archetypes';
+import { BlobInputContainerS } from '../Style';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -259,9 +260,7 @@ const PageStyle = styled.div`
   margin-left: 25px;
   text-align:center;
 `
-const BlobInputContainerS = styled.div`
-  display: inline-block;
-`
+
 const DreamInput = styled.input`
   padding: 10px;
   z-index: 20;
