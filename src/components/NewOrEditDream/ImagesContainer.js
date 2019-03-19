@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled, { css } from "styled-components";
 
-function ImageContainer({url, selected, toggleSelected, saveCaption}) {
+function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
 
   return (
     <ThumbDiv selected={selected} onClick={(e) => toggleSelected(e, url)}>
@@ -10,7 +10,7 @@ function ImageContainer({url, selected, toggleSelected, saveCaption}) {
       {(selected) ?
         <CaptionInput
           autoFocus="autofocus"
-          defaultValue="write a caption"
+          defaultValue={caption}
           onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
           onBlur={(e) => saveCaption(e, url)}>
         </CaptionInput> :

@@ -16,14 +16,23 @@ class NewDreamPage extends Component {
   isNew = this.props.match.path === ROUTES.NEW_DREAM;
 
   state = {
-    dreams: [],
     title: (this.props.location.state && this.props.location.state.title) || '',
     content: (this.props.location.state && this.props.location.state.content) || '',
     _id: (this.props.location.state && this.props.location.state._id) || '',
     userId: this.props.firebase.auth.O,
-    imgUrlArr: [],
+    imgUrlArr: (this.props.location.state && this.props.location.state.images) || [],
     editing: false,
-    noKeyWordsInDream: true,
+    noKeyWordsInDream: this.isNew,
+  }
+
+  componentDidMount(){
+    if(!this.isNew && this.state.imgUrlArr.length){
+      const imgUrlArr = this.state.imgUrlArr.map((image) => {
+        image.selected = true;
+        return image;
+      });
+      this.setState({imgUrlArr});
+    }
   }
 
   handleChange = (event) => {
@@ -113,13 +122,13 @@ class NewDreamPage extends Component {
     if (!title || !content) {
       return;
     }
-
     const images = thumbUrlObj
       .filter((obj) => obj.selected === true)
-      .map( obj => ({url: obj.url, caption: obj.caption}));
+      .map( obj => ({url: obj.url, caption: obj.caption, _id: obj._id}));
 
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
+
 
     // Post to DB
     if(title){
@@ -228,6 +237,7 @@ class NewDreamPage extends Component {
                   key={obj.url}
                   url={obj.url}
                   selected={obj.selected}
+                  caption={this.isNew ? "write a caption" : obj.caption }
                   toggleSelected={this.toggleSelected}
                   saveCaption={this.saveCaption}
                 />
