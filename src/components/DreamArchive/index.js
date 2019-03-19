@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import ColorBlob from '../ColorBlob';
@@ -22,7 +22,6 @@ class ArchivePage extends Component {
       .then(response => response.json())
       .then((myJson) => {
         this.setState({dreams: myJson});
-        console.log(this.state);
       })
 
   }
