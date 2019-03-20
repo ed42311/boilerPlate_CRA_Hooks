@@ -34,7 +34,7 @@ export default class Navigation extends React.Component {
   }
   render() {
     return (
-      <NavStyle>
+      <NavStyleS>
         <NavbarS light expand="md">
         <div><ThetaFlowS href="/">Theta Flow</ThetaFlowS></div>
         <div>
@@ -50,7 +50,7 @@ export default class Navigation extends React.Component {
           </Collapse>
           </div>
         </NavbarS>
-      </NavStyle>
+      </NavStyleS>
     );
   }
 }
@@ -64,9 +64,9 @@ const NavigationAuth = () => (
       <ArchiveOptionS tag={Link} to={ROUTES.DREAM_ARCHIVE}>Archive</ArchiveOptionS>
     </NavItem>
     <DropDownS nav inNavbar>
-      <DropToggleS nav>
-        ...
-      </DropToggleS>
+      <DropdownToggle nav>
+        <ESpanS>...</ESpanS>
+      </DropdownToggle>
       <DropDownMenuS>
         <DropdownItemS>
           <DreamOptionS tag={Link} to={ROUTES.ACCOUNT}>Account</DreamOptionS>
@@ -100,11 +100,13 @@ const NavigationNonAuth = () => (
   </Nav>
 );
 
-const NavStyle = styled.div`
+const NavStyleS = styled.div`
   display: grid;
   justify-content: center;
   font-size: small;
   text-align: center;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
 `
 const NavbarS = styled(Navbar)`
       display: grid;
@@ -115,18 +117,13 @@ const ThetaFlowS = styled.div`
   font-family: serif;
   font-size: 3rem;
   color: gray;
+  letter-spacing: .3rem;
 `
 
 const DropdownItemS = styled(DropdownItem)`
   &:hover{
     transition: .5s ease-in-out;
     background-color: transparent;
-    width: 4.35rem;
-    height: 4.35rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
   }
 `
 
@@ -137,17 +134,15 @@ const DropDownMenuS = styled(DropdownMenu)`
   left: -28px;
   font-size: small;
 `
-const DropToggleS = styled(DropdownToggle)`
+const ESpanS = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 1.38rem;
-  height: 3.4rem;
   font-size: xx-large;
-  padding-top: 2.2rem;
-  margin-top: -2.5rem;
+  margin-top: -1.9rem;
 `
+
 const DropDownS = styled(UncontrolledDropdown)`
   z-index: 50;
   border: double;
@@ -160,8 +155,9 @@ const DropDownS = styled(UncontrolledDropdown)`
     transition: .5s ease-in-out;
     background-color: palevioletred;
   }
+  width: 4.35rem;
+  height: 4.35rem;
 `
-
 const DreamOptionS = styled(NavLink)`
   z-index: 50;
   &:hover{
