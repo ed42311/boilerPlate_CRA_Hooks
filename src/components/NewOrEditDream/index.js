@@ -106,9 +106,9 @@ class NewDreamPage extends Component {
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        let rand = Math.floor(Math.random() * values[i].hits.length);
+        //let rand = Math.floor(Math.random() * values[i].hits.length);
         thumbsArr.push({
-          url: values[i].hits[rand].previewURL,
+          url: values[i].hits[2].previewURL,
           selected: false,
           keyword: values[i].keyword});
       }
