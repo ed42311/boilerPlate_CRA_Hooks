@@ -35,8 +35,8 @@ export default class Navigation extends React.Component {
   render() {
     return (
       <NavStyle>
-        <Navbar color="light" light expand="md">
-        <div><ThetaFlow href="/">Theta Flow</ThetaFlow></div>
+        <NavbarS light expand="md">
+        <div><ThetaFlowS href="/">Theta Flow</ThetaFlowS></div>
         <div>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -49,7 +49,7 @@ export default class Navigation extends React.Component {
             </AuthUserContext.Consumer>
           </Collapse>
           </div>
-        </Navbar>
+        </NavbarS>
       </NavStyle>
     );
   }
@@ -61,7 +61,7 @@ const NavigationAuth = () => (
       <DreamOptionS tag={Link} to={ROUTES.NEW_DREAM}>New <br/> Dream</DreamOptionS>
     </NavItem>
     <NavItem>
-      <DreamOptionS tag={Link} to={ROUTES.DREAM_ARCHIVE}>Archive</DreamOptionS>
+      <ArchiveOptionS tag={Link} to={ROUTES.DREAM_ARCHIVE}>Archive</ArchiveOptionS>
     </NavItem>
     <DropDownS nav inNavbar>
       <DropToggleS nav>
@@ -72,7 +72,7 @@ const NavigationAuth = () => (
           <DreamOptionS tag={Link} to={ROUTES.ACCOUNT}>Account</DreamOptionS>
         </DropdownItemS>
         <DropdownItemS>
-          <DreamOptionS tag={Link} to={ROUTES.HOME}>Home</DreamOptionS>
+          <HomeOptionS tag={Link} to={ROUTES.HOME}>Home</HomeOptionS>
         </DropdownItemS>
         <DropdownItemS/>
         <SignOutButton />
@@ -101,13 +101,20 @@ const NavigationNonAuth = () => (
 );
 
 const NavStyle = styled.div`
-  display: inline-block;
+  display: grid;
+  justify-content: center;
   font-size: small;
+  text-align: center;
+`
+const NavbarS = styled(Navbar)`
+      display: grid;
+      font-weight: 600;
 `
 
-const ThetaFlow = styled(NavbarBrand)`
+const ThetaFlowS = styled.div`
   font-family: serif;
-  font-size: large;
+  font-size: 3rem;
+  color: gray;
 `
 
 const DropdownItemS = styled(DropdownItem)`
@@ -144,13 +151,14 @@ const DropToggleS = styled(DropdownToggle)`
 const DropDownS = styled(UncontrolledDropdown)`
   z-index: 50;
   border: double;
+  border-color: darkgoldenrod;
   padding: 20px;
   margin-right: 30px;
   border-radius: 200px;
   border-style: double;
   &:hover{
     transition: .5s ease-in-out;
-    background-color: turquoise;
+    background-color: palevioletred;
   }
 `
 
@@ -158,14 +166,53 @@ const DreamOptionS = styled(NavLink)`
   z-index: 50;
   &:hover{
     transition: .5s ease-in-out;
-    background-color: turquoise;;
+    background-color: goldenrod;
   }
-  border: double;
   background-color: white;
   padding: 20px;
   margin-right: 30px;
   border-radius: 40px;
   border-style: double;
+  border-color: darkcyan;
+  width: 4.35rem;
+  height: 4.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
+`
+const HomeOptionS = styled(NavLink)`
+   z-index: 50;
+  &:hover{
+    transition: .5s ease-in-out;
+    background-color: turquoise;
+  }
+  background-color: white;
+  padding: 20px;
+  margin-right: 30px;
+  border-radius: 40px;
+  border-style: double;
+  border-color: hotpink;
+  width: 4.35rem;
+  height: 4.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`
+const ArchiveOptionS = styled(NavLink)`
+    z-index: 50;
+  &:hover{
+    transition: .5s ease-in-out;
+    background-color: turquoise;
+  }
+  background-color: white;
+  padding: 20px;
+  margin-right: 30px;
+  border-radius: 40px;
+  border-style: double;
+  border-color: hotpink;
   width: 4.35rem;
   height: 4.35rem;
   display: flex;

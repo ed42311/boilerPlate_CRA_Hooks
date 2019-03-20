@@ -11,17 +11,7 @@ const SignOutButton = ({ firebase }) => (
 );
 
 const SignOut = styled(DropdownItem)`
-  z-index: 50;
-  &:hover{
-    transition: .5s ease-in-out;
-    background-color: turquoise;;
-  }
-  border: double;
   background-color: white;
-  padding: 20px;
-  margin-right: 30px;
-  border-radius: 40px;
-  border-style: double;
   width: 4.35rem;
   height: 4.35rem;
   display: flex;
@@ -31,5 +21,16 @@ const SignOut = styled(DropdownItem)`
   font-size: small;
   position: inherit;
   margin-left: 1.5rem;
+  z-index: 50;
+  border: double;
+  border-color: darkgoldenrod;
+  padding: 20px;
+  margin-right: 30px;
+  border-radius: 200px;
+  border-style: double;
+  &:hover{
+    transition: .5s ease-in-out;
+    background-color: palevioletred;
+  }
 `
 export default withFirebase(SignOutButton);
