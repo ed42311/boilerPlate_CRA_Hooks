@@ -16,6 +16,7 @@ class ArchivePage extends Component {
       dreams: []
     };
   }
+
   componentDidMount() {
     const { userId } = this.state;
     fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
@@ -23,7 +24,6 @@ class ArchivePage extends Component {
       .then((myJson) => {
         this.setState({dreams: myJson});
       })
-
   }
 
   render() {
@@ -51,6 +51,7 @@ class ArchivePage extends Component {
                         content: dream.content,
                         _id: dream._id,
                         userId: dream.userId,
+                        images: dream.images,
                       }
                     }}>Edit Dream</Link>
                   </TitleRowDiv>

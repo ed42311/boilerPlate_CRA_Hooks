@@ -12,15 +12,27 @@ import { BlobInputContainerS } from '../Style';
 const { REACT_APP_BACKEND_URL } = process.env;
 
 class NewDreamPage extends Component {
+
+  isNew = this.props.match.path === ROUTES.NEW_DREAM;
+
   state = {
-    dreams: [],
-    title:'',
-    content:'',
-    _id: '',
+    title: (this.props.location.state && this.props.location.state.title) || '',
+    content: (this.props.location.state && this.props.location.state.content) || '',
+    _id: (this.props.location.state && this.props.location.state._id) || '',
     userId: this.props.firebase.auth.O,
-    imgUrlArr: [],
+    imgUrlArr: (this.props.location.state && this.props.location.state.images) || [],
     editing: false,
-    noKeyWordsInDream: true,
+    noKeyWordsInDream: this.isNew,
+  }
+
+  componentDidMount(){
+    if(!this.isNew && this.state.imgUrlArr.length){
+      const imgUrlArr = this.state.imgUrlArr.map((image) => {
+        image.selected = true;
+        return image;
+      });
+      this.setState({imgUrlArr});
+    }
   }
 
   handleChange = (event) => {
@@ -106,20 +118,23 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
     if (!title || !content) {
       return;
     }
-
     const images = thumbUrlObj
       .filter((obj) => obj.selected === true)
-      .map( obj => ({url: obj.url, caption: obj.caption}));
+      .map( obj => ({url: obj.url, caption: obj.caption, _id: obj._id}));
+
+    const body = { title, content, userId, images };
+    if(!this.isNew) body._id = _id;
+
 
     // Post to DB
     if(title){
       fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
-        method: "POST",
-        body: JSON.stringify({ title, content, userId, images }),
+        method: this.isNew ? "POST" : "PUT",
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json"
         }
@@ -128,6 +143,24 @@ class NewDreamPage extends Component {
       .then((myJson) => {
         this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
+    }
+  }
+
+  deleteDream = (e) => {
+    e.preventDefault();
+    const { _id } = this.state;
+    if(_id){
+      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
+        method: "DELETE",
+        body: JSON.stringify({ _id }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.props.history.push(ROUTES.DREAM_ARCHIVE);
+      })
     }
   }
 
@@ -204,6 +237,7 @@ class NewDreamPage extends Component {
                   key={obj.url}
                   url={obj.url}
                   selected={obj.selected}
+                  caption={this.isNew ? "write a caption" : obj.caption }
                   toggleSelected={this.toggleSelected}
                   saveCaption={this.saveCaption}
                 />
@@ -212,19 +246,37 @@ class NewDreamPage extends Component {
             </ThumbsDiv>
           </div>
         }
-        {(this.state.title && this.state.content ?
+        {(!!this.state.title && !!this.state.content) &&
           <SaveButton
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
           >Save Dream
-          </SaveButton> : null
-        )}
+          </SaveButton>
+        }
         </form>
+        {!this.isNew &&
+          <DeleteButton name="deleteDream" onClick={this.deleteDream}>Delete</DeleteButton>
+        }
       </PageStyle>
     );
   }
 }
+
+const DeleteButton = styled.button`
+  color: white;
+  background: black;
+  padding: 15px;
+  border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
+  margin-bottom: 25px;
+  margin-left: 10px;
+  font-size: x-large;
+  border-style: double;
+  border-width: 4px;
+  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+`
 
 const CaptionFrame = styled.div`
   display: inline-block;
