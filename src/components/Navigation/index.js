@@ -34,9 +34,10 @@ export default class Navigation extends React.Component {
   }
   render() {
     return (
-      <div>
-        <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">Theta Flow</NavbarBrand>
+      <NavStyleS>
+        <NavbarS light expand="md">
+        <div><ThetaFlowS href="/">Theta Flow</ThetaFlowS></div>
+        <div>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <AuthUserContext.Consumer>
@@ -47,8 +48,9 @@ export default class Navigation extends React.Component {
               }
             </AuthUserContext.Consumer>
           </Collapse>
-        </Navbar>
-      </div>
+          </div>
+        </NavbarS>
+      </NavStyleS>
     );
   }
 }
@@ -56,23 +58,23 @@ export default class Navigation extends React.Component {
 const NavigationAuth = () => (
   <Nav className="ml-auto" navbar>
     <NavItem>
-      <DreamOptionS tag={Link} to={ROUTES.NEW_DREAM}>New Dream</DreamOptionS>
+      <DreamOptionS tag={Link} to={ROUTES.NEW_DREAM}>New <br/> Dream</DreamOptionS>
     </NavItem>
     <NavItem>
-      <DreamOptionS tag={Link} to={ROUTES.DREAM_ARCHIVE}>Dream Archive</DreamOptionS>
+      <ArchiveOptionS tag={Link} to={ROUTES.DREAM_ARCHIVE}>Archive</ArchiveOptionS>
     </NavItem>
     <DropDownS nav inNavbar>
-      <DropdownToggle nav caret>
-        Options
+      <DropdownToggle nav>
+        <ESpanS>...</ESpanS>
       </DropdownToggle>
-      <DropDownMenuS right>
+      <DropDownMenuS>
         <DropdownItemS>
           <DreamOptionS tag={Link} to={ROUTES.ACCOUNT}>Account</DreamOptionS>
         </DropdownItemS>
         <DropdownItemS>
-          <DreamOptionS tag={Link} to={ROUTES.HOME}>Home</DreamOptionS>
+          <HomeOptionS tag={Link} to={ROUTES.HOME}>Home</HomeOptionS>
         </DropdownItemS>
-        <DropdownItemS divider />
+        <DropdownItemS/>
         <SignOutButton />
       </DropDownMenuS>
     </DropDownS>
@@ -98,6 +100,26 @@ const NavigationNonAuth = () => (
   </Nav>
 );
 
+const NavStyleS = styled.div`
+  display: grid;
+  justify-content: center;
+  font-size: small;
+  text-align: center;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+`
+const NavbarS = styled(Navbar)`
+      display: grid;
+      font-weight: 600;
+`
+
+const ThetaFlowS = styled.div`
+  font-family: serif;
+  font-size: 3rem;
+  color: gray;
+  letter-spacing: .3rem;
+`
+
 const DropdownItemS = styled(DropdownItem)`
   &:hover{
     transition: .5s ease-in-out;
@@ -106,33 +128,92 @@ const DropdownItemS = styled(DropdownItem)`
 `
 
 const DropDownMenuS = styled(DropdownMenu)`
-  z-index: 50px;
+  z-index: 50;
   border: none;
   background-color: transparent;
+  left: -28px;
+  font-size: small;
+`
+const ESpanS = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: xx-large;
+  margin-top: -1.9rem;
 `
 
 const DropDownS = styled(UncontrolledDropdown)`
-  z-index: 50px;
+  z-index: 50;
   border: double;
+  border-color: darkgoldenrod;
   padding: 20px;
   margin-right: 30px;
-  border-radius: 200px 200px 200px 200px;
+  border-radius: 200px;
   border-style: double;
+  &:hover{
+    transition: .5s ease-in-out;
+    background-color: palevioletred;
+  }
+  width: 4.35rem;
+  height: 4.35rem;
+`
+const DreamOptionS = styled(NavLink)`
+  z-index: 50;
+  &:hover{
+    transition: .5s ease-in-out;
+    background-color: goldenrod;
+  }
+  background-color: white;
+  padding: 20px;
+  margin-right: 30px;
+  border-radius: 40px;
+  border-style: double;
+  border-color: darkcyan;
+  width: 4.35rem;
+  height: 4.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
+`
+const HomeOptionS = styled(NavLink)`
+   z-index: 50;
   &:hover{
     transition: .5s ease-in-out;
     background-color: turquoise;
   }
-`
-
-const DreamOptionS = styled(NavLink)`
-  z-index: 50px;
-  border: double;
+  background-color: white;
   padding: 20px;
   margin-right: 30px;
-  border-radius: 200px 200px 200px 200px;
+  border-radius: 40px;
   border-style: double;
+  border-color: hotpink;
+  width: 4.35rem;
+  height: 4.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`
+const ArchiveOptionS = styled(NavLink)`
+    z-index: 50;
   &:hover{
     transition: .5s ease-in-out;
-    background-color: turquoise;;
+    background-color: turquoise;
   }
+  background-color: white;
+  padding: 20px;
+  margin-right: 30px;
+  border-radius: 40px;
+  border-style: double;
+  border-color: hotpink;
+  width: 4.35rem;
+  height: 4.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
 `
