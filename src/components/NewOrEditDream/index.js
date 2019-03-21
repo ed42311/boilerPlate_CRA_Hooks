@@ -57,7 +57,6 @@ class NewDreamPage extends Component {
     dreamWords = dreamWords.filter(function (word) {
       return commonWords.indexOf(word) === -1;
     });
-
     // match against archetypes
     let keysArr = [];
     for (let i = 0; i < dreamWords.length; i++){
@@ -78,8 +77,8 @@ class NewDreamPage extends Component {
     }
     let promiseArr = [];
     for (let i = 0; i < keyWords.length; i++) {
-      let url = this.buildPromiseArr(keyWords[i]);
-      promiseArr.push(url);
+      let data = this.buildPromiseArr(keyWords[i]);
+      promiseArr.push(data);
     }
     if(!promiseArr.length) return;
     this.promiseResolver(promiseArr);
@@ -108,7 +107,7 @@ class NewDreamPage extends Component {
         //let rand = Math.floor(Math.random() * values[i].hits.length);
         let oldUrls = thumbsArr.map( obj => obj.url)
         let newValue = {
-          url: values[i].hits[1].previewURL,
+          url: values[i].hits[2].previewURL,
           selected: true,
           keyword: values[i].keyword
         };
@@ -233,7 +232,6 @@ class NewDreamPage extends Component {
           <div>
            <ThumbsDiv id='image-container'>
             {this.state.imgUrlArr.map( (obj) =>
-              <CaptionFrame key={obj.url}>
                 <ImageContainer
                   key={obj.url}
                   url={obj.url}
@@ -242,7 +240,6 @@ class NewDreamPage extends Component {
                   toggleSelected={this.toggleSelected}
                   saveCaption={this.saveCaption}
                 />
-              </CaptionFrame>
             )}
             </ThumbsDiv>
           </div>
@@ -277,10 +274,6 @@ const DeleteButton = styled.button`
   -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
   -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
   box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-`
-
-const CaptionFrame = styled.div`
-  display: inline-block;
 `
 
 const ArchetypesButton = styled.button`

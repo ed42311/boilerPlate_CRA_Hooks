@@ -27,7 +27,6 @@ class ArchivePage extends Component {
   }
 
   render() {
-
     return(
       <PageStyle>
         <BlobInputContainerS>
