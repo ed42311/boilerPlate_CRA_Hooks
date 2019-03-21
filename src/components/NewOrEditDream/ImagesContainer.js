@@ -32,6 +32,7 @@ const ButtonS = styled.button`
 `
 
 const CaptionInput = styled.input`
+  margin-left: 15px;
   margin-top: -2rem;
   font-family: serif;
   border: transparent;
