@@ -3,6 +3,8 @@ html{
   width: 100%;
 }
 body {
+  z-index: -2;
+  position: relative;
   height: 100%;
   width: 100%;
   margin: 0;
