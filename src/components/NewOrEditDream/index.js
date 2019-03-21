@@ -224,7 +224,7 @@ class NewDreamPage extends Component {
         {this.state.content &&
           <ArchetypesButton
               onClick={ (e) => {this.archButtonHandler(e)}}
-            >Generate Images
+            >Generate <br/> Images
           </ArchetypesButton>
         }
         <br />
@@ -251,7 +251,7 @@ class NewDreamPage extends Component {
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
-          >Save Dream
+          >Save <br/> Dream
           </SaveButton>
         }
         </form>
@@ -283,9 +283,10 @@ const DeleteButton = styled.button`
 `
 
 const ArchetypesButton = styled.button`
-  font-size: xx-large;
+  font-size: x-large;
+  padding: 15px;
+  line-height: 1.5rem;
   color: gray;
-  padding: 25px;
   border-radius: 1em 10em 10em 10em;
   margin-top: 15px;
   margin-bottom: 25px;
@@ -362,9 +363,10 @@ const DreamTextarea = styled.textarea`
 `
 
 const SaveButton = styled.button`
-  font-size: xx-large;
+  font-size: x-large;
+  padding: 15px;
+  line-height: 1.5rem;
   color: gray;
-  padding: 25px;
   border-radius: 1em 10em 10em 10em;
   margin-top: 15px;
   margin-bottom: 25px;
