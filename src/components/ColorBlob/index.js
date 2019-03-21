@@ -197,20 +197,22 @@ export default class ColorBlob extends Component{
 
     return(
       <CanvasContainer
-        width="200"
-        height="200"
+        width={this.props.width || 200}
+        height={this.props.height || 200}
         onClick={this.generate}
         className="container"
         canvasWidth={5}
         canvasHeight={10}
       >
-        <BlobOnCanvas ref={this.blob}></BlobOnCanvas>
+        <BlobOnCanvas
+        blobWidth={1000}
+        ref={this.blob}></BlobOnCanvas>
         <CanvasStitch ref={this.stitch}></CanvasStitch>
       </CanvasContainer>
     )
   }
 }
-
+//import CanvasContainer places and change size with this props thing in styling
 const CanvasContainer = styled.div`
   position: absolute;
   width: ${props => props.canvasWidth}vw;
@@ -220,7 +222,7 @@ const CanvasContainer = styled.div`
   align-items: center;
 `
 const BlobOnCanvas = styled.canvas`
-  width: 1000%;
+  width:${props => props.blobWidth}%;
   align-items: center;
 `
 const CanvasStitch = styled.canvas`

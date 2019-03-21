@@ -36,8 +36,8 @@ export default class Navigation extends React.Component {
     return (
       <NavStyleS>
         <NavbarS light expand="md">
-        <div><ThetaFlowS href="/">Theta Flow</ThetaFlowS></div>
-        <div>
+        <div><ThetaFlowS href="/">THETA</ThetaFlowS></div>
+        <NavDivUnderTitleS>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <AuthUserContext.Consumer>
@@ -48,7 +48,7 @@ export default class Navigation extends React.Component {
               }
             </AuthUserContext.Consumer>
           </Collapse>
-          </div>
+          </NavDivUnderTitleS>
         </NavbarS>
       </NavStyleS>
     );
@@ -117,9 +117,11 @@ const ThetaFlowS = styled.div`
   font-family: serif;
   font-size: 3rem;
   color: gray;
-  letter-spacing: .3rem;
+  letter-spacing: 2rem;
 `
-
+const NavDivUnderTitleS = styled.div`
+  margin-right: .6rem;
+`
 const DropdownItemS = styled(DropdownItem)`
   &:hover{
     transition: .5s ease-in-out;
