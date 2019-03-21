@@ -5,7 +5,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   NavLink,
@@ -71,9 +70,6 @@ const NavigationAuth = () => (
         <DropdownItemS>
           <DreamOptionS tag={Link} to={ROUTES.ACCOUNT}>Account</DreamOptionS>
         </DropdownItemS>
-        <DropdownItemS>
-          <HomeOptionS tag={Link} to={ROUTES.HOME}>Home</HomeOptionS>
-        </DropdownItemS>
         <DropdownItemS/>
         <SignOutButton />
       </DropDownMenuS>
@@ -82,22 +78,7 @@ const NavigationAuth = () => (
 )
 
 const NavigationNonAuth = () => (
-  <Nav className="ml-auto" navbar>
-    <NavItem>
-      <DreamOptionS
-        id="test-nav-landing"
-        tag={Link} to={ROUTES.LANDING}
-      >Landing
-      </DreamOptionS>
-    </NavItem>
-    <NavItem>
-      <DreamOptionS
-        id="test-nav-signin"
-        tag={Link} to={ROUTES.SIGN_IN}
-      >Sign in
-    </DreamOptionS>
-    </NavItem>
-  </Nav>
+  null
 );
 
 const NavStyleS = styled.div`
@@ -181,25 +162,7 @@ const DreamOptionS = styled(NavLink)`
   text-align: center;
   line-height: 1;
 `
-const HomeOptionS = styled(NavLink)`
-   z-index: 50;
-  &:hover{
-    transition: .5s ease-in-out;
-    background-color: turquoise;
-  }
-  background-color: white;
-  padding: 20px;
-  margin-right: 30px;
-  border-radius: 40px;
-  border-style: double;
-  border-color: hotpink;
-  width: 4.35rem;
-  height: 4.35rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-`
+
 const ArchiveOptionS = styled(NavLink)`
     z-index: 50;
   &:hover{
