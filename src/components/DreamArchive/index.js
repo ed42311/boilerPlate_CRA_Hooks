@@ -81,7 +81,7 @@ const ArchiveTitle = styled.h1`
   color: gray;
   font-size: xx-large;
   font-weight: 900;
-  background: rgba(255,255,255,0.3);
+  background: transparent;
 `
 const DreamTitle = styled.h2`
   font-family: serif;
@@ -91,6 +91,7 @@ const DreamTitle = styled.h2`
 `
 
 const BlobInputContainerSS = styled.div`
+  z-index: -1;
   position: absolute;
   display: flex;
   justify-content: center;
