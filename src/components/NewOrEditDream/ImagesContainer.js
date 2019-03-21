@@ -3,27 +3,26 @@ import React from 'react';
 import styled, { css } from "styled-components";
 
 function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
-
+  if (!selected) return null;
   return (
-    <ThumbDiv selected={selected} >
-      {(selected) &&
-        <div>
-          <ImageCaptioning
-          src={url}
-          alt="..."
-        />
-        <ButtonS onClick={(e) => toggleSelected(e, url)}>X</ButtonS>
-        <CaptionInput
-          autoFocus="autofocus"
-          defaultValue={caption ? caption : "write a caption"}
-          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
-          onBlur={(e) => saveCaption(e, url)}>
-        </CaptionInput>
-        </div>
-      }
+    <ThumbDiv>
+      <div>
+        <ImageCaptioning
+        src={url}
+        alt="..."
+      />
+      <ButtonS onClick={(e) => toggleSelected(e, url)}>X</ButtonS>
+      <CaptionInput
+        autoFocus="autofocus"
+        defaultValue={caption ? caption : "write a caption"}
+        onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+        onBlur={(e) => saveCaption(e, url)}>
+      </CaptionInput>
+      </div>
     </ThumbDiv>
   )
 }
+
 const ButtonS = styled.button`
   position: absolute;
   top: 0;
@@ -50,22 +49,21 @@ const ImageCaptioning = styled.img`
   -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
   -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
   box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  &:hover{
+  &:hover {
     transition: 0.5s ease-in-out;
     opacity: 1.0;
+  }
 `
 
 const ThumbDiv = styled.div`
-  ${props => props.selected && css`
-    position: relative;
-    display: inline-block;
-    padding: 3px 3px 3px 3px;
-    font-size: 80%;
-    width: 150px;
-    height: 150px;
-    text-align: center;
-    margin-bottom: 5px;
-  `}
+  position: relative;
+  display: inline-block;
+  padding: 3px 3px 3px 3px;
+  font-size: 80%;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  margin-bottom: 5px;
 `
 
 export default ImageContainer;
