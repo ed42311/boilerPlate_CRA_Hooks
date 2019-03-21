@@ -58,7 +58,7 @@ class ArchivePage extends Component {
                   </ContentRowDiv>
                   <StyledHR />
                   <ImgRowDiv>
-                    {dream.images.length &&
+                    {!!dream.images.length &&
                       dream.images.map( (image) => <StyledImg src={image.url} key={image._id}/>)
                     }
                   </ImgRowDiv>

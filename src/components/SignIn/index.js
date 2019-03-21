@@ -10,12 +10,12 @@ import * as ROUTES from '../../Constants/routes';
 
 
 const SignInPage = () => (
-  <div>
+  <SignInText>
     <h1 id="test-signin-h1">SignIn</h1>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
-  </div>
+  </SignInText>
 );
 
 const INITIAL_STATE = {
@@ -83,13 +83,25 @@ class SignInFormBase extends Component {
 }
 
 const PageStyle = styled.div`
+  margin-left: 20px;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+`
+const SignInText = styled.div`
   margin-left: 25px;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
 `
 
 const SignInForm = compose(
   withRouter,
   withFirebase,
 )(SignInFormBase);
+
 
 
 export default SignInPage;
