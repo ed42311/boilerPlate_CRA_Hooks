@@ -37,9 +37,7 @@ class ArchivePage extends Component {
             <div>
               <ArchiveTitle id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</ArchiveTitle>
               <BlobInputContainerSS>
-                <ColorBlobS
-                  blobWidth={5000}
-                />
+                <ColorBlob/>
               </BlobInputContainerSS>
               {this.state.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
@@ -99,9 +97,7 @@ const BlobInputContainerSS = styled.div`
   width: 250%;
   height: 50%;
   transform: scale(10);
-`
-const ColorBlobS = styled(ColorBlob)`
-  width: ${props => props.blobWidth}%;
+  overflow: hidden;
 `
 
 const StyledImg = styled.img`

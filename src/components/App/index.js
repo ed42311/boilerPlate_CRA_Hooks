@@ -36,6 +36,7 @@ const App = () => (
 const AppS = styled.div`
   height: 100%;
   background: rgba(200,200,200,0.3);
+  overflow-x: hidden;
 `
 const ContentS = styled.div`
   padding: 1.75rem;
