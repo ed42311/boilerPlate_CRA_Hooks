@@ -42,8 +42,7 @@ class NewDreamPage extends Component {
   }
 
   textAreaOnFocus = () => {
-    let emptyImgUrlArr = [];
-    this.setState({editing: true, imgUrlArr: emptyImgUrlArr});
+    this.setState({editing: true});
   }
 
   textAreaOnBlur = () => {
@@ -67,7 +66,7 @@ class NewDreamPage extends Component {
         keysArr.push(word);
       }
     }
-    if (keysArr.length)this.setState({noKeyWordsInDream: false});
+    if (keysArr.length) this.setState({noKeyWordsInDream: false});
     return keysArr;
   };
 
@@ -106,11 +105,14 @@ class NewDreamPage extends Component {
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        let rand = Math.floor(Math.random() * values[i].hits.length);
-        thumbsArr.push({
-          url: values[i].hits[rand].previewURL,
-          selected: false,
-          keyword: values[i].keyword});
+        //let rand = Math.floor(Math.random() * values[i].hits.length);
+        let oldUrls = thumbsArr.map( obj => obj.url)
+        let newValue = {
+          url: values[i].hits[1].previewURL,
+          selected: true,
+          keyword: values[i].keyword
+        };
+        if (!oldUrls.includes(newValue.url)) thumbsArr.push(newValue);
       }
       this.setState({imgUrlArr: thumbsArr, editing: false});
     });
@@ -128,7 +130,6 @@ class NewDreamPage extends Component {
 
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
-
 
     // Post to DB
     if(title){
@@ -209,7 +210,7 @@ class NewDreamPage extends Component {
         </BlobInputContainerS>
         <br/>
         <BlobInputContainerS>
-          <ColorBlob/>
+          <ColorBlob />
           <DreamInput
             type="text"
             id="DreamTitle"
