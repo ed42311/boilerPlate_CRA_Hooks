@@ -22,7 +22,7 @@ class NewDreamPage extends Component {
     userId: this.props.firebase.auth.O,
     imgUrlArr: (this.props.location.state && this.props.location.state.images) || [],
     editing: false,
-    noKeyWordsInDream: this.isNew,
+    noKeyWordsInDream: false,
   }
 
   componentDidMount(){
@@ -228,6 +228,8 @@ class NewDreamPage extends Component {
           </ArchetypesButton>
         }
         <br />
+        {(this.state.noKeyWordsInDream && !!this.state.content.length) &&
+        <h4>No keywords currently present in dream -- unable to generate images.</h4>}
         {(!this.state.noKeyWordsInDream) &&
           <div>
            <ThumbsDiv id='image-container'>
