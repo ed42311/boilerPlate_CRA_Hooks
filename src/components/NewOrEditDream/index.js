@@ -273,9 +273,9 @@ const DeleteButton = styled.button`
   font-family: serif;
   border-style: double;
   border-width: 4px;
-  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
   &:hover{
     transition: 1s ease-in-out;
     background-color: turquoise;;
@@ -292,9 +292,9 @@ const ArchetypesButton = styled.button`
   font-family: serif;
   border-style: double;
   border-width: 4px;
-  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
   &:hover{
     transition: 1s ease-in-out;
     background-color: turquoise;;
@@ -371,9 +371,9 @@ const SaveButton = styled.button`
   font-family: serif;
   border-style: double;
   border-width: 4px;
-  -webkit-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  -moz-box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
-  box-shadow: 3px 6px 25px -6px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
   &:hover{
     transition: 1s ease-in-out;
     background-color: turquoise;;
