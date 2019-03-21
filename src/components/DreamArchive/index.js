@@ -33,17 +33,14 @@ class ArchivePage extends Component {
         <BlobInputContainerS>
           <ColorBlob/>
         </BlobInputContainerS>
-        <BlobInputContainerS>
-          <ColorBlob/>
-        </BlobInputContainerS>
         <AuthUserContext.Consumer>
           {authUser => (
             <div>
-              <h1 id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</h1>
+              <ArchiveTitle id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</ArchiveTitle>
               {this.state.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
-                    <h2>{dream.title}</h2>
+                    <DreamTitle>{dream.title}</DreamTitle>
                     <Link to={{
                       pathname: './editDream',
                       state: {
@@ -70,10 +67,43 @@ class ArchivePage extends Component {
             </div>
           )}
         </AuthUserContext.Consumer>
+        <BlobInputContainerSS>
+
+           <ColorBlobS
+           blobWidth={5000}
+           />
+
+        </BlobInputContainerSS>
       </PageStyle>
     )
   }
 }
+
+const ArchiveTitle = styled.h1`
+  font-family: serif;
+  color: gray;
+  font-size: xx-large;
+  font-weight: 900;
+  background: rgba(255,255,255,0.3);
+`
+const DreamTitle = styled.h2`
+  font-family: serif;
+  color: gray;
+  font-size: xx-large;
+  font-weight: 900;
+`
+
+const BlobInputContainerSS = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150vw;
+  height: 50vh;
+`
+const ColorBlobS = styled(ColorBlob)`
+  width: ${props => props.blobWidth}%;
+`
 
 const StyledImg = styled.img`
   margin: 10px;
@@ -99,6 +129,10 @@ const TitleRowDiv = styled.div`
 `
 
 const ContentRowDiv = styled.div`
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
 `
 
 const ImgRowDiv = styled.div`
