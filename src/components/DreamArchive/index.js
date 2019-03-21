@@ -105,6 +105,8 @@ const ColorBlobS = styled(ColorBlob)`
 `
 
 const StyledImg = styled.img`
+
+  height: 100%;
   margin: 10px;
   border-radius: 15px;
   opacity: 0.75;
