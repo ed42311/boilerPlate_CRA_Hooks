@@ -10,12 +10,12 @@ import * as ROUTES from '../../Constants/routes';
 
 
 const SignInPage = () => (
-  <SignInText>
-    <h1 id="test-signin-h1">SignIn</h1>
+  <SignInPageS>
+    <h1 id="test-signin-h1">Sign In</h1>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
-  </SignInText>
+  </SignInPageS>
 );
 
 const INITIAL_STATE = {
@@ -61,23 +61,23 @@ class SignInFormBase extends Component {
           <ColorBlob/>
         </BlobInputContainerSS>
         <form onSubmit={this.onSubmit}>
-          <input
+          <SignInputS
             name="email"
             value={email}
             onChange={this.onChange}
             type="text"
             placeholder="Email Address"
           />
-          <input
+          <SignInputS
             name="password"
             value={password}
             onChange={this.onChange}
             type="password"
             placeholder="Password"
           />
-          <button disabled={isInvalid} type="submit">
+          <ButtonS disabled={isInvalid} type="submit">
             Sign In
-          </button>
+          </ButtonS>
           {error && <p>{error.message}</p>}
         </form>
       </PageStyle>
@@ -92,23 +92,74 @@ const BlobInputContainerSS = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 250%;
+  width: -150%;
   height: 50%;
   transform: scale(10);
 `
 const PageStyle = styled.div`
   margin-left: 20px;
   font-family: serif;
-  color: gray;
   font-size: x-large;
   font-weight: 900;
 `
-const SignInText = styled.div`
-  margin-left: 25px;
+const SignInPageS = styled.div`
+  padding: 50px;
+  border-radius: 10px;
   font-family: serif;
   color: gray;
   font-size: x-large;
   font-weight: 900;
+  background: rgba(255, 255, 255,.3);
+`
+const SignInputS = styled.input`
+  padding: 10px;
+  z-index: 20;
+  width: 350px;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+  border: white;
+  text-align: left;
+  margin-right: 5px;
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.3);
+  border-radius: 6px;
+  &::placeholder{
+    color: gray;
+    font-weight: 900;
+    font-size: x-large;
+  }
+  &:focus{
+    outline:none;
+  }
+`
+const ButtonS = styled.button`
+  padding: 10px;
+  z-index: 20;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+  border-style: double;
+  border-color: darkgoldenrod;
+  text-align: left;
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.3);
+  border-radius: 6px;
+  &::placeholder{
+    color: gray;
+    font-weight: 900;
+    font-size: x-large;
+  }
+  &:hover{
+    transition: 1s ease-in-out;
+    background-color: turquoise;;
+  }
 `
 
 const SignInForm = compose(
