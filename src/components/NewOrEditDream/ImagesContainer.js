@@ -10,14 +10,14 @@ function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
         <ImageCaptioning
         src={url}
         alt="..."
-      />
-      <ButtonS onClick={(e) => toggleSelected(e, url)}>X</ButtonS>
-      <CaptionInput
-        autoFocus="autofocus"
-        defaultValue={caption ? caption : "write a caption"}
-        onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
-        onBlur={(e) => saveCaption(e, url)}>
-      </CaptionInput>
+        />
+        <ButtonS onClick={(e) => toggleSelected(e, url)}>X</ButtonS>
+        <CaptionInput
+          autoFocus="autofocus"
+          defaultValue={caption ? caption : "write a caption"}
+          onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
+          onBlur={(e) => saveCaption(e, url)}>
+        </CaptionInput>
       </div>
     </ThumbDiv>
   )
