@@ -159,6 +159,7 @@ const DropDownS = styled(UncontrolledDropdown)`
   }
   width: 4.35rem;
   height: 4.35rem;
+
 `
 const DreamOptionS = styled(NavLink)`
   z-index: 50;
@@ -218,4 +219,5 @@ const ArchiveOptionS = styled(NavLink)`
   align-items: center;
   text-align: center;
   line-height: 1;
+
 `
