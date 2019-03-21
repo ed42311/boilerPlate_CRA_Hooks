@@ -36,6 +36,11 @@ class ArchivePage extends Component {
           {authUser => (
             <div>
               <ArchiveTitle id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</ArchiveTitle>
+              <BlobInputContainerSS>
+                <ColorBlobS
+                  blobWidth={5000}
+                />
+              </BlobInputContainerSS>
               {this.state.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
@@ -66,13 +71,6 @@ class ArchivePage extends Component {
             </div>
           )}
         </AuthUserContext.Consumer>
-        <BlobInputContainerSS>
-
-           <ColorBlobS
-           blobWidth={5000}
-           />
-
-        </BlobInputContainerSS>
       </PageStyle>
     )
   }
@@ -97,8 +95,9 @@ const BlobInputContainerSS = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 150vw;
-  height: 50vh;
+  width: 250%;
+  height: 50%;
+  transform: scale(10);
 `
 const ColorBlobS = styled(ColorBlob)`
   width: ${props => props.blobWidth}%;
