@@ -82,6 +82,7 @@ const NavigationNonAuth = () => (
 );
 
 const NavStyleS = styled.div`
+  border-bottom: 1px solid gray;
   display: grid;
   justify-content: center;
   font-size: small;
@@ -90,8 +91,8 @@ const NavStyleS = styled.div`
   padding-top: 2rem;
 `
 const NavbarS = styled(Navbar)`
-      display: grid;
-      font-weight: 600;
+  display: grid;
+  font-weight: 600;
 `
 
 const ThetaFlowS = styled.div`
@@ -128,6 +129,7 @@ const ESpanS = styled.span`
 
 const DropDownS = styled(UncontrolledDropdown)`
   z-index: 50;
+  background-color: white;
   border: double;
   border-color: darkgoldenrod;
   padding: 20px;

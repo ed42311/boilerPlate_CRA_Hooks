@@ -4,13 +4,13 @@ import { withFirebase } from '../Firebase';
 import { DropdownItem } from 'reactstrap';
 
 const SignOutButton = ({ firebase }) => (
-  <SignOut type="button" onClick={firebase.doSignOut}>
+  <SignOutS type="button" onClick={firebase.doSignOut}>
     Sign Out
-  </SignOut>
+  </SignOutS>
 
 );
 
-const SignOut = styled(DropdownItem)`
+const SignOutS = styled(DropdownItem)`
   background-color: white;
   width: 4.35rem;
   height: 4.35rem;
@@ -19,6 +19,7 @@ const SignOut = styled(DropdownItem)`
   align-items: center;
   text-align: center;
   font-size: small;
+  color: gray;
   position: inherit;
   margin-left: 1.5rem;
   z-index: 50;
