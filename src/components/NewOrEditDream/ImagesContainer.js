@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
   if (!selected) return null;
