@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import styled from "styled-components";
-
+import ColorBlob from "../ColorBlob";
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
@@ -57,6 +57,9 @@ class SignInFormBase extends Component {
 
     return(
       <PageStyle>
+         <BlobInputContainerSS>
+          <ColorBlob/>
+        </BlobInputContainerSS>
         <form onSubmit={this.onSubmit}>
           <input
             name="email"
@@ -82,6 +85,17 @@ class SignInFormBase extends Component {
   }
 }
 
+
+const BlobInputContainerSS = styled.div`
+  z-index: -1;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250%;
+  height: 50%;
+  transform: scale(10);
+`
 const PageStyle = styled.div`
   margin-left: 20px;
   font-family: serif;
