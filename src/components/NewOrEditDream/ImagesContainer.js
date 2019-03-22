@@ -63,7 +63,6 @@ const ThumbDiv = styled.div`
   padding: 3px 3px 3px 3px;
   font-size: 80%;
   width: 150px;
-  height: 150px;
   text-align: center;
   margin-bottom: 5px;
 `

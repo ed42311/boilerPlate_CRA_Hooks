@@ -311,14 +311,14 @@ const ArchetypesButton = styled.button`
 
 const ThumbsDiv = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   margin-bottom: 5px;
 `
 
 const PageStyle = styled.div`
   margin-left: 25px;
-  text-align:center;
+  text-align: center;
 `
 
 const DreamInput = styled.input`
