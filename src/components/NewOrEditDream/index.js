@@ -191,7 +191,11 @@ class NewDreamPage extends Component {
           onSubmit={ (e) => {e.preventDefault()} }
         >
         <BlobInputContainerS>
-          <ColorBlob watchValue={this.state.content}/>
+          <ColorBlob
+          watchValue={this.state.content}
+          leftAlign={-11}
+          topAlign={4}
+          />
           <DreamTextarea
             onSubmit={ (e) => {e.preventDefault()}}
             type="textarea"
@@ -209,7 +213,10 @@ class NewDreamPage extends Component {
         </BlobInputContainerS>
         <br/>
         <BlobInputContainerS>
-          <ColorBlob />
+          <ColorBlob
+          leftAlign={-9}
+          topAlign={6}
+          />
           <DreamInput
             type="text"
             id="DreamTitle"
