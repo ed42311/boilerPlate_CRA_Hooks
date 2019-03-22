@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import styled from 'styled-components';
 
+import { SignInLink } from '../SignIn'
 import ColorBlob from '../ColorBlob'
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../Constants/routes';
@@ -106,7 +107,7 @@ class SignUpFormBase extends Component {
         <ButtonS id="test-button-signup-submit" disabled={isInvalid} type="submit">
           Sign Up
         </ButtonS>
-
+        <SignInLink/>
         {error && <p>{error.message}</p>}
       </form>
     );

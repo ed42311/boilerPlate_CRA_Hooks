@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { compose } from 'recompose';
 import styled from "styled-components";
+
 import ColorBlob from "../ColorBlob";
 import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
@@ -85,7 +86,11 @@ class SignInFormBase extends Component {
   }
 }
 
-
+const SignInLink = () => (
+  <p>
+    Already have an account? <Link id="test-link-signin" to={ROUTES.SIGN_IN}>Sign In</Link>
+  </p>
+);
 const BlobInputContainerSS = styled.div`
   z-index: -1;
   position: absolute;
@@ -171,4 +176,4 @@ const SignInForm = compose(
 
 export default SignInPage;
 
-export { SignInForm };
+export { SignInForm, SignInLink };
