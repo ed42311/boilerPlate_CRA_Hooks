@@ -224,6 +224,7 @@ const CanvasContainer = styled.div`
 const BlobOnCanvas = styled.canvas`
   width:${props => props.blobWidth}%;
   align-items: center;
+  position: absolute;
 `
 const CanvasStitch = styled.canvas`
 display: flex;
