@@ -46,7 +46,6 @@ class NewDreamPage extends Component {
   }
 
   textAreaOnBlur = () => {
-    this.parseDreamContent();
   }
 
   parseDreamContent = () => {
