@@ -1,12 +1,16 @@
 import React, { Component }from 'react';
+import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
 import { withFirebase } from '../Firebase';
-import styled from "styled-components";
+import * as ROUTES from '../../Constants/routes';
+
 
 const INITIAL_STATE = {
   passwordOne: '',
   passwordTwo: '',
   error: null,
+  submitted: false,
 };
 
 class PasswordChangeForm extends Component {
@@ -14,6 +18,7 @@ class PasswordChangeForm extends Component {
     super(props);
 
     this.state = { ...INITIAL_STATE };
+
   }
 
   onSubmit = event => {
@@ -22,7 +27,7 @@ class PasswordChangeForm extends Component {
     this.props.firebase
       .doPasswordUpdate(passwordOne)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        this.setState({ ...INITIAL_STATE, submitted: true });
       })
       .catch(error => {
         this.setState({ error });
@@ -59,6 +64,9 @@ class PasswordChangeForm extends Component {
         <ButtonS disabled={isInvalid} type="submit">
           Reset My Password
         </ButtonS>
+        <br />
+        {this.state.submitted &&
+        <h2>Your password has been successfully changed! <Link to={ROUTES.SIGN_IN}>Sign In</Link></h2>}
 
         {error && <p>{error.message}</p>}
       </form>
