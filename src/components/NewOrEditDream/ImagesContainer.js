@@ -2,8 +2,8 @@ import React from 'react';
 
 import styled from "styled-components";
 
-function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
-  if (!selected) return null;
+function ImageContainer({url, toggleSelected, saveCaption, caption}) {
+  //if (!selected) return null;
   return (
     <ThumbDiv>
       <div>
@@ -14,7 +14,8 @@ function ImageContainer({url, selected, toggleSelected, saveCaption, caption}) {
         <ButtonS onClick={(e) => toggleSelected(e, url)}>X</ButtonS>
         <CaptionInput
           autoFocus="autofocus"
-          defaultValue={caption ? caption : "write a caption"}
+          placeholder={"write a caption"}
+          defaultValue={caption && caption}
           onKeyUp={(e) => e.keyCode === 13 && e.target.blur()}
           onBlur={(e) => saveCaption(e, url)}>
         </CaptionInput>

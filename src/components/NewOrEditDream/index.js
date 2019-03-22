@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
+import PropTypes from 'prop-types';
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
@@ -28,17 +29,16 @@ class NewDreamPage extends Component {
   componentDidMount(){
     if(!this.isNew && this.state.imgUrlArr.length){
       const imgUrlArr = this.state.imgUrlArr.map((image) => {
-        image.selected = true;
         return image;
       });
       this.setState({imgUrlArr});
     }
   }
 
-  handleChange = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    this.setState({[event.target.name]: event.target.value});
+  handleChange = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({[e.target.name]: e.target.value});
   }
 
   textAreaOnFocus = () => {
@@ -49,12 +49,12 @@ class NewDreamPage extends Component {
     this.parseDreamContent();
   }
 
-  parseDreamContent = (e) => {
+  parseDreamContent = () => {
     //remove common words
     let lower = this.state.content.toLowerCase();
     lower = lower.replace(/[^\w\d ]/g, '');
     let dreamWords = lower.split(' ');
-    dreamWords = dreamWords.filter(function (word) {
+    dreamWords = dreamWords.filter( (word) => {
       return commonWords.indexOf(word) === -1;
     });
     // match against archetypes
@@ -104,11 +104,10 @@ class NewDreamPage extends Component {
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
-        //let rand = Math.floor(Math.random() * values[i].hits.length);
         let oldUrls = thumbsArr.map( obj => obj.url)
         let newValue = {
           url: values[i].hits[2].previewURL,
-          selected: true,
+
           keyword: values[i].keyword
         };
         if (!oldUrls.includes(newValue.url)) thumbsArr.push(newValue);
@@ -124,7 +123,6 @@ class NewDreamPage extends Component {
       return;
     }
     const images = thumbUrlObj
-      .filter((obj) => obj.selected === true)
       .map( obj => ({url: obj.url, caption: obj.caption, _id: obj._id}));
 
     const body = { title, content, userId, images };
@@ -165,12 +163,16 @@ class NewDreamPage extends Component {
   }
 
   toggleSelected = (e, url) => {
+    let indexToRemove;
     let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
+
       if (obj.url === url){
-        obj.selected = !obj.selected;
+        indexToRemove = this.state.imgUrlArr.indexOf(obj)
       }
       return obj;
     })
+    thumbsUrlObjs.splice(indexToRemove, 1);
+    console.log(thumbsUrlObjs);
     this.setState({imgUrlArr: thumbsUrlObjs})
   }
 
@@ -237,8 +239,7 @@ class NewDreamPage extends Component {
                 <ImageContainer
                   key={obj.url}
                   url={obj.url}
-                  selected={obj.selected}
-                  caption={this.isNew ? "write a caption" : obj.caption }
+                  caption={obj.caption}
                   toggleSelected={this.toggleSelected}
                   saveCaption={this.saveCaption}
                 />
@@ -381,6 +382,18 @@ const SaveButton = styled.button`
     background-color: turquoise;;
   }
 `
+
+// PropTypes
+
+NewDreamPage.propTypes = {
+  title: PropTypes.string,
+  content: PropTypes.string,
+  _id: PropTypes.string,
+  userId: PropTypes.string,
+  imgUrlArr: PropTypes.array,
+};
+
+
 const condition = authUser => !!authUser;
 
 export default withAuthorization(condition)(NewDreamPage);
