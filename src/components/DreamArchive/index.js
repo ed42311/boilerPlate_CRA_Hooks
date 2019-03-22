@@ -39,6 +39,10 @@ class ArchivePage extends Component {
               <BlobInputContainerSS>
                 <ColorBlob/>
               </BlobInputContainerSS>
+              {!this.state.dreams.length &&
+                <p>Looks like you haven't journaled any dreams yet!
+                Click New Dream to get started!</p>
+              }
               {this.state.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>

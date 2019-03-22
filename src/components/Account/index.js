@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
-import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 
 const AccountPage = () => (
@@ -15,7 +14,6 @@ const AccountPage = () => (
           <ColorBlob/>
         </BlobInputContainerSS>
         <h1>Account: {authUser.email}</h1>
-        <PasswordForgetForm />
         <PasswordChangeForm />
       </PageStyle>
     )}
