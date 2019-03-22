@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
-import { BlobInputContainerS } from '../Style';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
@@ -30,11 +29,11 @@ class ArchivePage extends Component {
     return(
       <PageStyle>
         <BlobInputContainerS>
-          <ColorBlob/>
+          <ColorBlob leftAlign={0} topAlign={0}/>
         </BlobInputContainerS>
         <AuthUserContext.Consumer>
           {authUser => (
-            <div>
+            <ArchiveDivS>
               <ArchiveTitle id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</ArchiveTitle>
               <BlobInputContainerSS>
                 <ColorBlob/>
@@ -70,13 +69,24 @@ class ArchivePage extends Component {
                   </ImgRowDiv>
                 </DreamDiv>
               )}
-            </div>
+            </ArchiveDivS>
           )}
         </AuthUserContext.Consumer>
       </PageStyle>
     )
   }
 }
+
+const ArchiveDivS = styled.div`
+  position: relative;
+  top: -85px;
+  left: -10px;
+`
+
+const BlobInputContainerS = styled.div`
+  display: inline-block;
+  position: relative;
+`
 
 const ArchiveTitle = styled.h1`
   font-family: serif;
@@ -105,7 +115,6 @@ const BlobInputContainerSS = styled.div`
 `
 
 const StyledImg = styled.img`
-
   height: 100%;
   margin: 10px;
   border-radius: 15px;
