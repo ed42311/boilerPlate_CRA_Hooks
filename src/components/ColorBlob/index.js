@@ -201,6 +201,8 @@ export default class ColorBlob extends Component{
         height={this.props.height || 200}
         onClick={this.generate}
         className="container"
+        leftAlign={this.props.leftAlign}
+        topAlign={this.props.topAlign}
         canvasWidth={5}
         canvasHeight={10}
       >
@@ -214,7 +216,9 @@ export default class ColorBlob extends Component{
 }
 //import CanvasContainer places and change size with this props thing in styling
 const CanvasContainer = styled.div`
-  position: absolute;
+  position: relative;
+  top: ${props => props.topAlign}rem;
+  left: ${props => props.leftAlign}rem;
   width: ${props => props.canvasWidth}vw;
   height: ${props => props.canvasHeight}vh;
   display: flex;
@@ -224,7 +228,6 @@ const CanvasContainer = styled.div`
 const BlobOnCanvas = styled.canvas`
   width:${props => props.blobWidth}%;
   align-items: center;
-  position: absolute;
 `
 const CanvasStitch = styled.canvas`
 display: flex;
