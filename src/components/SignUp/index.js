@@ -138,10 +138,16 @@ const StyledDiv = styled.div`
   color: gray;
   font-family: serif;
   font-weight: 900;
-  padding: 50px;
-  padding-top: 10px;
   border-radius: 10px;
   font-size: x-large;
+  padding: 50px;
+  border-radius: 10px;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+  background: rgba(255, 255, 255,.3);
+
 `
 const ButtonS = styled.button`
   padding: 10px;
