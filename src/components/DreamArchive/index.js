@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
 
 const { REACT_APP_BACKEND_URL } = process.env;
@@ -14,6 +15,7 @@ class ArchivePage extends Component {
       dreams: []
     };
   }
+
   componentDidMount() {
     const { userId } = this.state;
     fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
@@ -25,39 +27,138 @@ class ArchivePage extends Component {
 
   render() {
     return(
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <PageStyle>
-            <h1>user ID: {authUser.uid}</h1>
-            <h1 id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</h1>
-            {this.state.dreams.map( (dream) =>
-              <DreamDiv key={dream._id} >
-                <h2>{dream.title}</h2>
-                <p>{dream.content}</p>
-                <Link to={{
-                  pathname: './editDream',
-                  state: {
-                    title: dream.title,
-                    content: dream.content,
-                    _id: dream._id,
-                    userId: dream.userId,
-                  }
-                }}>Edit Dream</Link>
-              </DreamDiv>
-            )}
-          </PageStyle>
-        )}
-      </AuthUserContext.Consumer>
+      <PageStyle>
+        <BlobInputContainerS>
+          <ColorBlob leftAlign={0} topAlign={0}/>
+        </BlobInputContainerS>
+        <AuthUserContext.Consumer>
+          {authUser => (
+            <ArchiveDivS>
+              <ArchiveTitle id="test-dreamarchive-user-h1">Dream Archive for {authUser.email}</ArchiveTitle>
+              <BlobInputContainerSS>
+                <ColorBlob/>
+              </BlobInputContainerSS>
+              {!this.state.dreams.length &&
+                <p>Looks like you haven't journaled any dreams yet!
+                Click New Dream to get started!</p>
+              }
+              {this.state.dreams.map( (dream) =>
+                <DreamDiv key={dream._id} >
+                  <TitleRowDiv>
+                    <DreamTitle>{dream.title}</DreamTitle>
+                    <Link to={{
+                      pathname: './editDream',
+                      state: {
+                        title: dream.title,
+                        content: dream.content,
+                        _id: dream._id,
+                        userId: dream.userId,
+                        images: dream.images,
+                      }
+                    }}>Edit Dream</Link>
+                  </TitleRowDiv>
+                  <StyledHR />
+                  <ContentRowDiv>
+                    <p>{dream.content}</p>
+                  </ContentRowDiv>
+                  <StyledHR />
+                  <ImgRowDiv>
+                    {!!dream.images.length &&
+                      dream.images.map( (image) => <StyledImg src={image.url} key={image._id}/>)
+                    }
+                  </ImgRowDiv>
+                </DreamDiv>
+              )}
+            </ArchiveDivS>
+          )}
+        </AuthUserContext.Consumer>
+      </PageStyle>
     )
   }
 }
+
+const ArchiveDivS = styled.div`
+  position: relative;
+  top: -85px;
+  left: -10px;
+`
+
+const BlobInputContainerS = styled.div`
+  display: inline-block;
+  position: relative;
+`
+
+const ArchiveTitle = styled.h1`
+  font-family: serif;
+  color: gray;
+  font-size: xx-large;
+  font-weight: 900;
+  background: transparent;
+`
+const DreamTitle = styled.h2`
+  font-family: serif;
+  color: gray;
+  font-size: xx-large;
+  font-weight: 900;
+`
+
+const BlobInputContainerSS = styled.div`
+  z-index: -1;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250%;
+  height: 50%;
+  transform: scale(10);
+  overflow: hidden;
+`
+
+const StyledImg = styled.img`
+  height: 100%;
+  margin: 10px;
+  border-radius: 15px;
+  opacity: 0.75;
+  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
+  &:hover{
+    transition: 1s ease-in-out;
+    opacity: 1.0;
+  }
+`
+
+const StyledHR = styled.hr`
+  border: 0.5px solid rgba(0,0,0,.1);
+  width: 100%;
+`
+
+const TitleRowDiv = styled.div`
+  display: flex;
+  justify-content: inherit;
+`
+
+const ContentRowDiv = styled.div`
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+`
+
+const ImgRowDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
 
 const PageStyle = styled.div`
   margin-left: 25px;
 `
 
 const DreamDiv = styled.div`
-  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 60%;
   padding: 15px;
   border-radius: 1em 5em 1em 5em / 2em 1em 2em 1em;
   margin-bottom: 25px;

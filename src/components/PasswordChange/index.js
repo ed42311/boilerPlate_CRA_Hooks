@@ -1,11 +1,16 @@
 import React, { Component }from 'react';
+import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
 import { withFirebase } from '../Firebase';
+import * as ROUTES from '../../Constants/routes';
+
 
 const INITIAL_STATE = {
   passwordOne: '',
   passwordTwo: '',
   error: null,
+  submitted: false,
 };
 
 class PasswordChangeForm extends Component {
@@ -13,15 +18,16 @@ class PasswordChangeForm extends Component {
     super(props);
 
     this.state = { ...INITIAL_STATE };
+
   }
 
   onSubmit = event => {
     const { passwordOne } = this.state;
-    
+
     this.props.firebase
       .doPasswordUpdate(passwordOne)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        this.setState({ ...INITIAL_STATE, submitted: true });
       })
       .catch(error => {
         this.setState({ error });
@@ -41,23 +47,26 @@ class PasswordChangeForm extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <input 
+        <PasswordS
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
           placeholder="New Password"
         />
-        <input 
+        <PasswordS
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
           type="password"
           placeholder="Confirm New Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <ButtonS disabled={isInvalid} type="submit">
           Reset My Password
-        </button>
+        </ButtonS>
+        <br />
+        {this.state.submitted &&
+        <h2>Your password has been successfully changed! <Link to={ROUTES.SIGN_IN}>Sign In</Link></h2>}
 
         {error && <p>{error.message}</p>}
       </form>
@@ -65,4 +74,54 @@ class PasswordChangeForm extends Component {
   }
 }
 
+const ButtonS = styled.button`
+  border-style: double;
+  border-color: darkgoldenrod;
+  padding: 10px;
+  z-index: 20;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+  text-align: left;
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.3);
+  border-radius: 6px;
+  &::placeholder{
+    color: gray;
+    font-weight: 900;
+    font-size: x-large;
+  }
+  &:hover{
+    transition: 1s ease-in-out;
+    background-color: turquoise;;
+  }
+`
+const PasswordS = styled.input`
+  padding: 10px;
+  z-index: 20;
+  width: 350px;
+  font-family: serif;
+  color: gray;
+  font-size: x-large;
+  font-weight: 900;
+  border: white;
+  text-align: left;
+  margin-right: 5px;
+  margin-bottom: 2rem;
+  margin-top: 1.8rem;
+  position: relative;
+  background: rgba(255,255,255,0.3);
+  border-radius: 6px;
+  &::placeholder{
+    color: gray;
+    font-weight: 900;
+    font-size: x-large;
+  }
+  &:focus{
+    outline:none;
+  }
+`
 export default withFirebase(PasswordChangeForm);

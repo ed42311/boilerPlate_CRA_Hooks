@@ -4,7 +4,7 @@ Dream Journal was made with Create-React-App (see CRA_README.md in docs folder).
 
 ## Instructions / Directions / Helpful Hints
 If you clone this repo you will need to `npm install`
-It may also good practice to do this after a major feature update.
+It may also be good practice to do this after a major feature update.
 
 ## Production
 `npm start` - for production we are running in node
