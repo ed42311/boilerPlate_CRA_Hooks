@@ -216,6 +216,7 @@ export default class ColorBlob extends Component{
 }
 //import CanvasContainer places and change size with this props thing in styling
 const CanvasContainer = styled.div`
+  z-index: -1;
   position: relative;
   top: ${props => props.topAlign}rem;
   left: ${props => props.leftAlign}rem;
