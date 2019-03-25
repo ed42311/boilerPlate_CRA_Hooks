@@ -231,6 +231,7 @@ class NewDreamPage extends Component {
         <br />
         {this.state.content &&
           <ArchetypesButton
+              id="archButton"
               onClick={ (e) => {this.archButtonHandler(e)}}
             >Generate <br/> Images
           </ArchetypesButton>
@@ -243,6 +244,7 @@ class NewDreamPage extends Component {
            <ThumbsDiv id='image-container'>
             {this.state.imgUrlArr.map( (obj) =>
                 <ImageContainer
+                  id="image-subcontainer"
                   key={obj.url}
                   url={obj.url}
                   caption={obj.caption}
