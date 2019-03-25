@@ -6,9 +6,10 @@ const testUser = {
   email: faker.internet.email().toLowerCase(),
   password: faker.internet.password(),
 }
-const debug = true;
-const options = debug ? {headless: false, slowMo: 150, args: [`--window-size${window.innerWidth},${window.innerHeight}`]} : {};
-const ROOT_URL = 'http://localhost:3000';
+const debug = false;
+const local = process.env.REACT_APP_TESTING_ENV === "local" ? true : false
+const options = debug ? {headless: false, slowMo: 150} : {};
+const ROOT_URL = `http://localhost:${process.env.REACT_APP_TESTING_PORT}`;
 const SCREEN_DIR = 'src/test/screenshots/';
 let browser;
 let page;
@@ -19,12 +20,14 @@ describe('user signup test', () => {
     page = await browser.newPage();
   });
 
-  test('user can see sign in page', async () => {
+  test('user should land on sign-in page', async () => {
     await page.goto(ROOT_URL);
-    await page.screenshot({path: `${SCREEN_DIR}landing.png`});
+    if (local) {
+      await page.screenshot({path: `${SCREEN_DIR}signIn.png`});
+    }
     const title = await page.$eval('#test-signin-h1', e => e.innerHTML);
     expect(title).toBe('Sign In');
-  }, 16000);
+  }, 32000);
 
   test('user can sign in', async () => {
     await page.goto(ROOT_URL);
