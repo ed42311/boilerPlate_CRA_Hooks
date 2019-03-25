@@ -27,7 +27,7 @@ describe('user signup test', () => {
     }
     const title = await page.$eval('#test-signin-h1', e => e.innerHTML);
     expect(title).toBe('Sign In');
-  }, 16000);
+  }, 32000);
 
   test('user can sign in', async () => {
     await page.goto(ROOT_URL);
