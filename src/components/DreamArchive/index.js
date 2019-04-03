@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { receivedDreams } from '../../store/actions';
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
 
@@ -12,7 +14,6 @@ class ArchivePage extends Component {
     super(props);
     this.state = {
       userId: this.props.firebase.auth.O,
-      dreams: []
     };
   }
 
@@ -21,7 +22,7 @@ class ArchivePage extends Component {
     fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
       .then(response => response.json())
       .then((myJson) => {
-        this.setState({dreams: myJson});
+        this.props.receivedDreams(myJson);
       })
   }
 
@@ -38,11 +39,11 @@ class ArchivePage extends Component {
               <BlobInputContainerSS>
                 <ColorBlob/>
               </BlobInputContainerSS>
-              {!this.state.dreams.length &&
+              {!this.props.dreams.length &&
                 <p>Looks like you haven't journaled any dreams yet!
                 Click New Dream to get started!</p>
               }
-              {this.state.dreams.map( (dream) =>
+              {this.props.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
@@ -172,4 +173,15 @@ const DreamDiv = styled.div`
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(ArchivePage);
+const authorizedArchivePage = withAuthorization(condition)(ArchivePage);
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = dispatch => ({
+  receivedDreams: (dreams) => dispatch(receivedDreams(dreams))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(authorizedArchivePage)
