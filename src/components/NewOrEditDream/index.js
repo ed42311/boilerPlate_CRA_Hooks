@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { addNewOrUpdateDream, deleteDream } from '../../store/actions';
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
@@ -139,6 +140,7 @@ class NewDreamPage extends Component {
       })
       .then(response => response.json())
       .then((myJson) => {
+        this.props.addNewOrUpdateDream(myJson);
         this.props.history.push(ROUTES.DREAM_ARCHIVE);
       });
     }
@@ -157,6 +159,7 @@ class NewDreamPage extends Component {
       })
       .then(response => response.json())
       .then(() => {
+        this.props.deleteDream(_id);
         this.props.history.push(ROUTES.DREAM_ARCHIVE);
       })
     }
@@ -414,7 +417,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  
+  addNewOrUpdateDream: (newDream) => dispatch(addNewOrUpdateDream(newDream)),
+  deleteDream: (id) => dispatch(deleteDream(id))
 });
 
 export default connect(

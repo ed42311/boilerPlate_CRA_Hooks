@@ -20,10 +20,12 @@ class ArchivePage extends Component {
 
   componentDidMount() {
     const { userId } = this.state;
+    if(this.props.dreams.length) return;
     fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
       .then(response => response.json())
-      .then((myJson) => {
-        this.props.receivedDreams(myJson);
+      .then((dreams) => {
+        dreams = dreams.reverse();
+        this.props.receivedDreams(dreams);
       })
   }
 
