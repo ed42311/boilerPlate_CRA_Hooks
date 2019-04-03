@@ -1,5 +1,6 @@
 const initialState = {
   dreams: [],
+  currentDream: {},
 }
 
 export const rootReducer = (state = initialState, action) => {
@@ -8,6 +9,11 @@ export const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         dreams: action.payload
+      };
+    case "SELECT_DREAM":
+      return {
+        ...state,
+        currentDream: action.payload,
       }
     default: return state;
   }

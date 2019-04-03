@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { receivedDreams } from '../../store/actions';
+import * as ROUTES from '../../Constants/routes';
+import { receivedDreams, selectDream } from '../../store/actions';
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
 
@@ -47,16 +48,10 @@ class ArchivePage extends Component {
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
-                    <Link to={{
-                      pathname: './editDream',
-                      state: {
-                        title: dream.title,
-                        content: dream.content,
-                        _id: dream._id,
-                        userId: dream.userId,
-                        images: dream.images,
-                      }
-                    }}>Edit Dream</Link>
+                    <Link 
+                      to={ROUTES.EDIT_DREAM}
+                      onClick={() => this.props.selectDream(dream)}
+                    >Edit Dream</Link>
                   </TitleRowDiv>
                   <StyledHR />
                   <ContentRowDiv>
@@ -178,7 +173,8 @@ const authorizedArchivePage = withAuthorization(condition)(ArchivePage);
 const mapStateToProps = state => state;
 
 const mapDispatchToProps = dispatch => ({
-  receivedDreams: (dreams) => dispatch(receivedDreams(dreams))
+  receivedDreams: (dreams) => dispatch(receivedDreams(dreams)),
+  selectDream: (dream) => dispatch(selectDream(dream))
 });
 
 export default connect(

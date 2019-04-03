@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
@@ -17,11 +18,11 @@ class NewDreamPage extends Component {
   isNew = this.props.match.path === ROUTES.NEW_DREAM;
 
   state = {
-    title: (this.props.location.state && this.props.location.state.title) || '',
-    content: (this.props.location.state && this.props.location.state.content) || '',
-    _id: (this.props.location.state && this.props.location.state._id) || '',
+    title: this.props.currentDream.title || '',
+    content: this.props.currentDream.content || '',
+    _id: this.props.currentDream._id || '',
     userId: this.props.firebase.auth.O,
-    imgUrlArr: (this.props.location.state && this.props.location.state.images) || [],
+    imgUrlArr: this.props.currentDream.images || [],
     editing: false,
     noKeyWordsInDream: false,
   }
@@ -404,4 +405,19 @@ NewDreamPage.propTypes = {
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(NewDreamPage);
+const authWrap = withAuthorization(condition)(NewDreamPage);
+
+const mapStateToProps = state => {
+  return {
+    currentDream: state.currentDream
+  }
+};
+
+const mapDispatchToProps = dispatch => ({
+  
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(authWrap)
