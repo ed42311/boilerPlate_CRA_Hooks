@@ -1,33 +1,42 @@
+import { 
+  RECEIVED_DREAMS, 
+  REQUEST_DREAMS, 
+  SELECT_DREAM, 
+  ADD_NEW_OR_UPDATE_DREAM, 
+  DELETE_DREAM 
+} from "../Constants/actionTypes";
+
+const { REACT_APP_BACKEND_URL } = process.env;
+
 function receivedDreams(payload) {
   return {
-    type: "RECEIVED_DREAMS",
+    type: RECEIVED_DREAMS,
     payload
   }
 }
 function requestDreams() {
   return {
-    type: "REQUEST_DREAMS",
+    type: REQUEST_DREAMS,
   }
 }
 export function selectDream(payload) {
   return {
-    type: "SELECT_DREAM",
+    type: SELECT_DREAM,
     payload
   }
 }
 export function addNewOrUpdateDream(payload) {
   return {
-    type: "ADD_NEW_OR_UPDATE_DREAM",
+    type: ADD_NEW_OR_UPDATE_DREAM,
     payload
   }
 }
 export function deleteDream(id) {
   return {
-    type: "DELETE_DREAM",
+    type: DELETE_DREAM,
     payload: {id},
   }
 }
-const { REACT_APP_BACKEND_URL } = process.env;
 export function fetchDreams(userID) {
   return function(dispatch, getState){
     dispatch(requestDreams());
