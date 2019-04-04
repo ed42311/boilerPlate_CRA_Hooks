@@ -21,6 +21,15 @@ class ArchivePage extends Component {
     this.props.fetchDreams(userId);
   }
 
+  loadingOrNoDreams(){
+    if(this.props.isFetchingDreams){
+      return <p>Loading....</p>
+    } else if (!this.props.dreams.length){
+      return <p>Looks like you haven't journaled any dreams yet!
+      Click New Dream to get started!</p>
+    }
+  }
+
   render() {
     return(
       <PageStyle>
@@ -34,10 +43,7 @@ class ArchivePage extends Component {
               <BlobInputContainerSS>
                 <ColorBlob/>
               </BlobInputContainerSS>
-              {!this.props.dreams.length &&
-                <p>Looks like you haven't journaled any dreams yet!
-                Click New Dream to get started!</p>
-              }
+              {this.loadingOrNoDreams()}
               {this.props.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
