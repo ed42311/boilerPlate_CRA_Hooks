@@ -4,11 +4,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import * as ROUTES from '../../Constants/routes';
-import { receivedDreams, selectDream } from '../../store/actions';
+import { selectDream, fetchDreams } from '../../store/actions';
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
-
-const { REACT_APP_BACKEND_URL } = process.env;
 
 class ArchivePage extends Component {
   constructor(props) {
@@ -20,13 +18,7 @@ class ArchivePage extends Component {
 
   componentDidMount() {
     const { userId } = this.state;
-    if(this.props.dreams.length) return;
-    fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
-      .then(response => response.json())
-      .then((dreams) => {
-        dreams = dreams.reverse();
-        this.props.receivedDreams(dreams);
-      })
+    this.props.fetchDreams(userId);
   }
 
   render() {
@@ -175,8 +167,8 @@ const authorizedArchivePage = withAuthorization(condition)(ArchivePage);
 const mapStateToProps = state => state;
 
 const mapDispatchToProps = dispatch => ({
-  receivedDreams: (dreams) => dispatch(receivedDreams(dreams)),
-  selectDream: (dream) => dispatch(selectDream(dream))
+  selectDream: (dream) => dispatch(selectDream(dream)),
+  fetchDreams: (userID) => dispatch(fetchDreams(userID)),
 });
 
 export default connect(

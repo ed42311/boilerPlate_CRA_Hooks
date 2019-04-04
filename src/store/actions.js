@@ -1,4 +1,4 @@
-export function receivedDreams(payload) {
+function receivedDreams(payload) {
   return {
     type: "RECEIVED_DREAMS",
     payload
@@ -20,5 +20,17 @@ export function deleteDream(id) {
   return {
     type: "DELETE_DREAM",
     payload: {id},
+  }
+}
+const { REACT_APP_BACKEND_URL } = process.env;
+export function fetchDreams(userID) {
+  return function(dispatch, getState){
+    if(getState().dreams.length) return;
+    return fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userID}`)
+      .then(response => response.json())
+      .then((dreams) => {
+        dreams = dreams.reverse();
+        dispatch(receivedDreams(dreams));
+      })
   }
 }
