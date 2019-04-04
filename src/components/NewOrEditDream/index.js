@@ -15,18 +15,33 @@ import { BlobInputContainerS } from '../Style';
 const { REACT_APP_BACKEND_URL } = process.env;
 
 class NewDreamPage extends Component {
-
+  constructor(props){
+    super(props);
+    if(this.isNew){
+      this.state = {
+        title: '',
+        content: '',
+        _id: '',
+        userId: this.props.firebase.auth.O,
+        imgUrlArr: [],
+        editing: false,
+        noKeyWordsInDream: false,
+      }
+    } else {
+      const { title, content, _id, images } = this.props.currentDream
+      this.state = {
+        title: title || '',
+        content: content || '',
+        _id: _id || '',
+        userId: this.props.firebase.auth.O,
+        imgUrlArr: images || [],
+        editing: false,
+        noKeyWordsInDream: false,
+      }
+    }
+  }
   isNew = this.props.match.path === ROUTES.NEW_DREAM;
 
-  state = {
-    title: this.props.currentDream.title || '',
-    content: this.props.currentDream.content || '',
-    _id: this.props.currentDream._id || '',
-    userId: this.props.firebase.auth.O,
-    imgUrlArr: this.props.currentDream.images || [],
-    editing: false,
-    noKeyWordsInDream: false,
-  }
 
   componentDidMount(){
     if(!this.isNew && this.state.imgUrlArr.length){
