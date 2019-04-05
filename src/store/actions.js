@@ -39,13 +39,29 @@ export function deleteDream(id) {
 }
 export function fetchDreams(userID) {
   return function(dispatch, getState){
-    dispatch(requestDreams());
     if(getState().dreams.length) return;
+    dispatch(requestDreams());
     return fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userID}`)
       .then(response => response.json())
       .then((dreams) => {
         dreams = dreams.reverse();
         dispatch(receivedDreams(dreams));
       })
+  }
+}
+export function saveDream(dream, isNew, promiseResolver) {
+  return function(dispatch, getState){
+    fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
+      method: isNew ? "POST" : "PUT",
+      body: JSON.stringify(dream),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then((myJson) => {
+      dispatch(addNewOrUpdateDream(myJson));
+      promiseResolver();
+    });
   }
 }

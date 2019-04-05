@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNewOrUpdateDream, deleteDream } from '../../store/actions';
+import { addNewOrUpdateDream, deleteDream, saveDream } from '../../store/actions';
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
@@ -22,7 +22,6 @@ class NewDreamPage extends Component {
         title: '',
         content: '',
         _id: '',
-        userId: this.props.firebase.auth.O,
         imgUrlArr: [],
         editing: false,
         noKeyWordsInDream: false,
@@ -33,7 +32,6 @@ class NewDreamPage extends Component {
         title: title || '',
         content: content || '',
         _id: _id || '',
-        userId: this.props.firebase.auth.O,
         imgUrlArr: images || [],
         editing: false,
         noKeyWordsInDream: false,
@@ -41,6 +39,7 @@ class NewDreamPage extends Component {
     }
   }
   isNew = this.props.match.path === ROUTES.NEW_DREAM;
+  userId = this.props.firebase.auth.O;
 
 
   componentDidMount(){
@@ -123,7 +122,6 @@ class NewDreamPage extends Component {
         let oldUrls = thumbsArr.map( obj => obj.url)
         let newValue = {
           url: values[i].hits[2].previewURL,
-
           keyword: values[i].keyword
         };
         if (!oldUrls.includes(newValue.url)) thumbsArr.push(newValue);
@@ -134,7 +132,8 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { _id, title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, imgUrlArr: thumbUrlObj} = this.state;
+    const { userId } = this;
     if (!title || !content) {
       return;
     }
@@ -145,20 +144,10 @@ class NewDreamPage extends Component {
     if(!this.isNew) body._id = _id;
 
     // Post to DB
-    if(title){
-      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
-        method: this.isNew ? "POST" : "PUT",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => response.json())
-      .then((myJson) => {
-        this.props.addNewOrUpdateDream(myJson);
-        this.props.history.push(ROUTES.DREAM_ARCHIVE);
-      });
-    }
+    const onSaveComplete = new Promise((resolve, reject) => {
+      this.props.saveDream(body, this.isNew, resolve);
+    });
+    onSaveComplete.then(() => this.props.history.push(ROUTES.DREAM_ARCHIVE));
   }
 
   deleteDream = (e) => {
@@ -195,6 +184,7 @@ class NewDreamPage extends Component {
   }
 
   saveCaption = (e, url) => {
+    
     let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
       if (obj.url === url){
         obj.caption = e.target.value;
@@ -205,6 +195,7 @@ class NewDreamPage extends Component {
   }
 
   render () {
+    console.log(this.state.imgUrlArr)
     return(
       <PageStyle>
         <form
@@ -433,7 +424,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addNewOrUpdateDream: (newDream) => dispatch(addNewOrUpdateDream(newDream)),
-  deleteDream: (id) => dispatch(deleteDream(id))
+  deleteDream: (id) => dispatch(deleteDream(id)),
+  saveDream: (dream, isNew, promise) => dispatch(saveDream(dream, isNew, promise))
 });
 
 export default connect(
