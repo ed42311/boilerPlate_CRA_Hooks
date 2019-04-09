@@ -43,7 +43,7 @@ class ArchivePage extends Component {
                 Click New Dream to get started!</p>
               }
               {this.state.dreams.map( (dream) =>
-                <DreamDiv key={dream._id} >
+                <DreamDivS key={dream._id} >
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
                     <Link to={{
@@ -67,7 +67,7 @@ class ArchivePage extends Component {
                       dream.images.map( (image) => <StyledImg src={image.url} key={image._id}/>)
                     }
                   </ImgRowDiv>
-                </DreamDiv>
+                </DreamDivS>
               )}
             </ArchiveDivS>
           )}
@@ -103,8 +103,7 @@ const DreamTitle = styled.h2`
 `
 
 const BlobInputContainerSS = styled.div`
-  z-index: -1;
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,7 +153,8 @@ const PageStyle = styled.div`
   margin-left: 25px;
 `
 
-const DreamDiv = styled.div`
+const DreamDivS = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
