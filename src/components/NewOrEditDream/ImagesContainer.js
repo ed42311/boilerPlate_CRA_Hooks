@@ -24,12 +24,13 @@ function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlace
     <ThumbDiv>
       <div>
         <ImageCaptioning
-          className="imageGenerated"
+          className={keyword}
           src={baseURL.concat(url[imgIndex])}
           alt="..."
+          savedPlace={savedPlace}
         />
         <ButtonXS onClick={(e) => removeImage(keyword)}>X</ButtonXS>
-        <ButtonRS onClick={() => setCount(count + 1)}>&#x27E9;</ButtonRS>
+        <ButtonRS onClick={() => setCount(count + 1)} className={`${keyword}SlideRight`} >&#x27E9;</ButtonRS>
         <ButtonLS onClick={() => setCount(count - 1)}>&#x27E8;</ButtonLS>
         <p>{`${keyCapitalized}: ${archtypesFull[keyCapitalized]}`}</p>
       </div>

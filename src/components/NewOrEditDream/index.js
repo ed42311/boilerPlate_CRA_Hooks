@@ -57,7 +57,6 @@ class NewDreamPage extends Component {
       const imgUrlArr = this.state.imgUrlArr.map((image) => {
         return image;
       });
-      console.log("imgurlarr on CDM ", imgUrlArr)
       this.setState({imgUrlArr});
     }
   }
@@ -97,6 +96,7 @@ class NewDreamPage extends Component {
 
   archButtonHandler() {
     const keyWords = this.parseDreamContent();
+    console.log("keywords in archbuttonhandler ", keyWords);
     if (!keyWords.length) {
        this.setState({noKeyWordsInDream: true});
        return;
@@ -157,23 +157,19 @@ class NewDreamPage extends Component {
     }
     const images = _imgUrlArr
       .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, savedPlace: obj.savedPlace}));
-    console.log("gatheredSavedPlace images ", images)
     this.setState({imgUrlArr: images});
   }
 
   addDream = (e) => {
     e.preventDefault();
-    const { _id, title, content, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, imgUrlArr: images } = this.state;
     const { userId } = this;
     if (!title || !content) {
       return;
     }
-    const images = thumbUrlObj
-      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, savedPlace: obj.savedPlace}));
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
     // Post to DB
-    console.log("body.images just before save to db", body.images)
     const onSaveComplete = new Promise((resolve, reject) => {
       this.props.saveDream(body, this.isNew, resolve);
     });
@@ -200,19 +196,12 @@ class NewDreamPage extends Component {
   }
 
   removeImage = (keyword) => {
-    let indexToRemove;
-    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
-      if (obj.keyword === keyword){
-        indexToRemove = this.state.imgUrlArr.indexOf(obj)
-      }
-      return obj;
-    })
-    thumbsUrlObjs.splice(indexToRemove, 1);
+    let thumbsUrlObjs = this.state.imgUrlArr.filter( obj => obj.keyword !== keyword);
     this.setState({imgUrlArr: thumbsUrlObjs})
   }
 
   render () {
-    console.log("render imgURLarr ", this.state.imgUrlArr)
+    console.log("imgurlArr at beginning of render ", this.state.imgUrlArr);
     return(
       <PageStyle>
         <form
@@ -271,8 +260,8 @@ class NewDreamPage extends Component {
            <ThumbsDiv id='image-container'>
             {this.state.imgUrlArr.map( (obj) =>
                 <ImageContainer
-                  id="image-subcontainer"
-                  key={obj.url}
+                  id={obj.keyword}
+                  key={obj.keyword}
                   url={obj.url.split(',')}
                   keyword={obj.keyword}
                   savedPlace={obj.savedPlace}
@@ -285,6 +274,7 @@ class NewDreamPage extends Component {
         }
         {(!!this.state.title && !!this.state.content) &&
           <SaveButton
+            className="savebutton"
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}
