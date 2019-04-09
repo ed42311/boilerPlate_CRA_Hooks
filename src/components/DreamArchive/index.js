@@ -14,6 +14,7 @@ class ArchivePage extends Component {
     this.state = {
       userId: this.props.firebase.auth.O,
     };
+    
   }
 
   componentDidMount() {
@@ -31,6 +32,7 @@ class ArchivePage extends Component {
   }
 
   render() {
+    console.log("archive render dreams ", this.props.dreams)
     let baseURL = "https://cdn.pixabay.com/photo/"
     return(
       <PageStyle>
@@ -47,6 +49,7 @@ class ArchivePage extends Component {
               {this.loadingOrNoDreams()}
               {this.props.dreams.map( (dream) =>
                 <DreamDiv key={dream._id} >
+                  {console.log("dream div render dream: ", dream)}
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
                     <Link 
@@ -61,7 +64,7 @@ class ArchivePage extends Component {
                   <StyledHR />
                   <ImgRowDiv>
                     {!!dream.images.length &&
-                      dream.images.map( (image) => <StyledImg src={baseURL.concat(image.url.split(",")[0])} key={image._id}/>)
+                      dream.images.map( (image) => <StyledImg src={baseURL.concat(image.url.split(",")[image.savedPlace])} key={image._id}/>)
                     }
                   </ImgRowDiv>
                 </DreamDiv>

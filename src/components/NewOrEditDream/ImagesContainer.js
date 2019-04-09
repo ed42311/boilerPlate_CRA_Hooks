@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 
 import { archtypesFull } from './archetypes';
 
-function ImageContainer({url, removeImage, keyword}) {
-  const [count, setCount] = useState(0);
+function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlaces}) {
+  const [count, setCount] = useState(savedPlace ? savedPlace : 0);
   let key = `${keyword}`;
   let keyCapitalized = "";
   for (let i = 0; i < key.length; i++) {
@@ -16,6 +16,10 @@ function ImageContainer({url, removeImage, keyword}) {
   }
   let imgIndex = (((count) % url.length)+url.length) % url.length;
   let baseURL = "https://cdn.pixabay.com/photo/";
+  useEffect(() => {
+    gatherSavedPlaces(keyword, imgIndex);
+  }, [imgIndex]);
+
   return (
     <ThumbDiv>
       <div>
