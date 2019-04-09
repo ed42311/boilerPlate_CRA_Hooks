@@ -31,6 +31,7 @@ class ArchivePage extends Component {
   }
 
   render() {
+    let baseURL = "https://cdn.pixabay.com/photo/"
     return(
       <PageStyle>
         <BlobInputContainerS>
@@ -60,7 +61,7 @@ class ArchivePage extends Component {
                   <StyledHR />
                   <ImgRowDiv>
                     {!!dream.images.length &&
-                      dream.images.map( (image) => <StyledImg src={image.url} key={image._id}/>)
+                      dream.images.map( (image) => <StyledImg src={baseURL.concat(image.url.split(",")[0])} key={image._id}/>)
                     }
                   </ImgRowDiv>
                 </DreamDiv>
