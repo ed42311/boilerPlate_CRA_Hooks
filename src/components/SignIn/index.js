@@ -91,9 +91,15 @@ const SignInLink = () => (
     Already have an account? <Link id="test-link-signin" to={ROUTES.SIGN_IN}>Sign In</Link>
   </p>
 );
+
+const PageStyle = styled.div`
+  margin-left: 20px;
+  font-family: serif;
+  font-size: x-large;
+  font-weight: 900;
+`
 const BlobInputContainerSS = styled.div`
-  z-index: -1;
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -101,12 +107,7 @@ const BlobInputContainerSS = styled.div`
   height: 50%;
   transform: scale(10);
 `
-const PageStyle = styled.div`
-  margin-left: 20px;
-  font-family: serif;
-  font-size: x-large;
-  font-weight: 900;
-`
+//SignIn divs and button are child of form. Form is on same level as blob container
 const SignInPageS = styled.div`
   padding: 50px;
   border-radius: 10px;
