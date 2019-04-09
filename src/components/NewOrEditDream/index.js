@@ -152,12 +152,11 @@ class NewDreamPage extends Component {
     const { imgUrlArr: _imgUrlArr} = this.state;
     for (let i = 0; i < _imgUrlArr.length; i++) {
       if (_imgUrlArr[i].keyword === key){
-        _imgUrlArr[i] = { ..._imgUrlArr[i], savedPlace: index}
+        _imgUrlArr[i] = { ..._imgUrlArr[i], lastViewedIndex: index}
       }
     }
     const images = _imgUrlArr
-      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, savedPlace: obj.savedPlace}));
-    console.log("gatheredSavedPlace images ", images)
+      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
     this.setState({imgUrlArr: images});
   }
 
@@ -275,7 +274,7 @@ class NewDreamPage extends Component {
                   key={obj.url}
                   url={obj.url.split(',')}
                   keyword={obj.keyword}
-                  savedPlace={obj.savedPlace}
+                  lastViewedIndex={obj.lastViewedIndex}
                   removeImage={this.removeImage}
                   gatherSavedPlaces={this.gatherSavedPlaces}
                 />

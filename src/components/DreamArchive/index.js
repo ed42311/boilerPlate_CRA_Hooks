@@ -47,7 +47,7 @@ class ArchivePage extends Component {
                 <ColorBlob/>
               </BlobInputContainerSS>
               {this.loadingOrNoDreams()}
-              {this.props.dreams.map( (dream) =>
+              {this.props.dreams.map( (dream, index) =>
                 <DreamDiv key={dream._id} >
                   {console.log("dream div render dream: ", dream)}
                   <TitleRowDiv>
@@ -64,7 +64,13 @@ class ArchivePage extends Component {
                   <StyledHR />
                   <ImgRowDiv>
                     {!!dream.images.length &&
-                      dream.images.map( (image) => <StyledImg src={baseURL.concat(image.url.split(",")[image.savedPlace])} key={image._id}/>)
+                      dream.images.map( (image) =>
+                        <StyledImg 
+                          className={image.keyword+index}
+                          src={baseURL.concat(image.url.split(",")[image.lastViewedIndex])} 
+                          key={image._id}
+                          lastViewedIndex={image.lastViewedIndex}
+                        />)
                     }
                   </ImgRowDiv>
                 </DreamDiv>

@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import { archtypesFull } from './archetypes';
 
-function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlaces}) {
-  const [count, setCount] = useState(savedPlace ? savedPlace : 0);
+function ImageContainer({url, removeImage, keyword, lastViewedIndex, gatherSavedPlaces}) {
+  const [count, setCount] = useState(lastViewedIndex ? lastViewedIndex : 0);
   let key = `${keyword}`;
   let keyCapitalized = "";
   for (let i = 0; i < key.length; i++) {
@@ -27,6 +27,7 @@ function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlace
           className="imageGenerated"
           src={baseURL.concat(url[imgIndex])}
           alt="..."
+          lastViewedIndex={lastViewedIndex}
         />
         <ButtonXS onClick={(e) => removeImage(keyword)}>X</ButtonXS>
         <ButtonRS onClick={() => setCount(count + 1)}>&#x27E9;</ButtonRS>
