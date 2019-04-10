@@ -24,7 +24,7 @@ function ImageContainer({url, removeImage, keyword, lastViewedIndex, gatherSaved
     <ThumbDiv>
       <div>
         <ImageCaptioning
-          className={`${keyword}"ImageGenerated`}
+          className={`${keyword}ImageGenerated`}
           src={baseURL.concat(url[imgIndex])}
           alt="..."
           lastViewedIndex={lastViewedIndex}
