@@ -55,7 +55,7 @@ export default class Navigation extends React.Component {
 }
 
 const NavigationAuth = () => (
-  <Nav className="ml-auto" navbar>
+  <NavListS className="ml-auto" navbar>
     <NavItem>
       <DreamOptionS tag={Link} to={ROUTES.NEW_DREAM}>New <br/> Dream</DreamOptionS>
     </NavItem>
@@ -74,13 +74,16 @@ const NavigationAuth = () => (
         <SignOutButton />
       </DropDownMenuS>
     </DropDownS>
-  </Nav>
+  </NavListS>
 )
 
 const NavigationNonAuth = () => (
   null
 );
 
+const NavListS = styled(Nav)`
+  z-index: 50;
+`
 const NavStyleS = styled.div`
   border-bottom: 1px solid gray;
   display: grid;
@@ -184,5 +187,4 @@ const ArchiveOptionS = styled(NavLink)`
   align-items: center;
   text-align: center;
   line-height: 1;
-
 `

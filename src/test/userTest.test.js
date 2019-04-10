@@ -40,7 +40,7 @@ describe('user signup test', () => {
     expect(title).toBe('Enter Dream Text (required)');
   }, 16000);
 
-  test('user can generate images', async () => {
+  xtest('user can generate images', async () => {
     await page.goto(ROOT_URL);
     await page.type('#test-input-email', "jeff@jeff.com");
     await page.type('#test-input-password', "jeffrey");

@@ -115,11 +115,14 @@ class SignUpFormBase extends Component {
 }
 
 const SignUpLink = () => (
-  <p>
-    Don't have an account? <Link id="test-link-signup" to={ROUTES.SIGN_UP}>Sign Up</Link>
-  </p>
+  <SignUpS>
+    {`Don't have an account?`} <Link id="test-link-signup" to={ROUTES.SIGN_UP}>Sign Up</Link>
+  </SignUpS>
 );
 
+const SignUpS = styled.p`
+  position: relative;
+`
 const SignUpForm = compose(
   withRouter,
   withFirebase,

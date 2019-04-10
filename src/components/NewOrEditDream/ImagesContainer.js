@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import { archtypesFull } from './archetypes';
 
-function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlaces}) {
-  const [count, setCount] = useState(savedPlace ? savedPlace : 0);
+function ImageContainer({url, removeImage, keyword, lastViewedIndex, gatherSavedPlaces}) {
+  const [count, setCount] = useState(lastViewedIndex ? lastViewedIndex : 0);
   let key = `${keyword}`;
   let keyCapitalized = "";
   for (let i = 0; i < key.length; i++) {
@@ -27,7 +27,7 @@ function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlace
           className={keyword}
           src={baseURL.concat(url[imgIndex])}
           alt="..."
-          savedPlace={savedPlace}
+          lastViewedIndex={lastViewedIndex}
         />
         <ButtonXS onClick={(e) => removeImage(keyword)}>X</ButtonXS>
         <ButtonRS onClick={() => setCount(count + 1)} className={`${keyword}SlideRight`} >&#x27E9;</ButtonRS>
@@ -39,7 +39,7 @@ function ImageContainer({url, removeImage, keyword, savedPlace, gatherSavedPlace
 }
 
 const ButtonXS = styled.button`
-  position: absolute;  
+  position: absolute;
   top: 12px;
   right: -7px;
   border-radius: 12px;

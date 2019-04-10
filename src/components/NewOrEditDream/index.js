@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNewOrUpdateDream, deleteDream, saveDream } from '../../store/actions';
@@ -83,10 +82,12 @@ class NewDreamPage extends Component {
       return commonWords.indexOf(word) === -1;
     });
     // match against archetypes
+    // skipping already existing keywords
+    let currentKeywords = this.state.imgUrlArr.map( obj => obj.keyword);
     let keysArr = [];
     for (let i = 0; i < dreamWords.length; i++){
       let word = dreamWords[i];
-      if (archetypes.includes(word) && !keysArr.includes(word)){
+      if ((archetypes.includes(word) && !keysArr.includes(word) && !currentKeywords.includes(word))){
         keysArr.push(word);
       }
     }
@@ -96,10 +97,8 @@ class NewDreamPage extends Component {
 
   archButtonHandler() {
     const keyWords = this.parseDreamContent();
-    console.log("keywords in archbuttonhandler ", keyWords);
     if (!keyWords.length) {
-       this.setState({noKeyWordsInDream: true});
-       return;
+       return; 
     }
     let promiseArr = [];
     for (let i = 0; i < keyWords.length; i++) {
@@ -152,11 +151,11 @@ class NewDreamPage extends Component {
     const { imgUrlArr: _imgUrlArr} = this.state;
     for (let i = 0; i < _imgUrlArr.length; i++) {
       if (_imgUrlArr[i].keyword === key){
-        _imgUrlArr[i] = { ..._imgUrlArr[i], savedPlace: index}
+        _imgUrlArr[i] = { ..._imgUrlArr[i], lastViewedIndex: index}
       }
     }
     const images = _imgUrlArr
-      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, savedPlace: obj.savedPlace}));
+      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
     this.setState({imgUrlArr: images});
   }
 
@@ -201,7 +200,6 @@ class NewDreamPage extends Component {
   }
 
   render () {
-    console.log("imgurlArr at beginning of render ", this.state.imgUrlArr);
     return(
       <PageStyle>
         <form
@@ -264,7 +262,7 @@ class NewDreamPage extends Component {
                   key={obj.keyword}
                   url={obj.url.split(',')}
                   keyword={obj.keyword}
-                  savedPlace={obj.savedPlace}
+                  lastViewedIndex={obj.lastViewedIndex}
                   removeImage={this.removeImage}
                   gatherSavedPlaces={this.gatherSavedPlaces}
                 />
