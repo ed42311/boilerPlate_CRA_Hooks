@@ -26,13 +26,12 @@ class ArchivePage extends Component {
     if(this.props.isFetchingDreams){
       return <p>Loading....</p>
     } else if (!this.props.dreams.length){
-      return <p>Looks like you haven't journaled any dreams yet!
-      Click New Dream to get started!</p>
+      return <p>{`Looks like you haven't journaled any dreams yet!
+      Click New Dream to get started!`}</p>
     }
   }
 
   render() {
-    console.log("archive render imgUrlArr: ", this.state.dreams)
     let baseURL = "https://cdn.pixabay.com/photo/"
     return(
       <PageStyle>
@@ -49,7 +48,6 @@ class ArchivePage extends Component {
               {this.loadingOrNoDreams()}
               {this.props.dreams.map( (dream, index) =>
                 <DreamDiv key={dream._id} >
-                  {console.log("dream div render dream: ", dream)}
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
                     <Link 

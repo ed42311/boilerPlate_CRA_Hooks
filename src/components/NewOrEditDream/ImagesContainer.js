@@ -39,7 +39,7 @@ function ImageContainer({url, removeImage, keyword, lastViewedIndex, gatherSaved
 }
 
 const ButtonXS = styled.button`
-  position: absolute;  
+  position: absolute;
   top: 12px;
   right: -7px;
   border-radius: 12px;
