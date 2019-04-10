@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from "styled-components";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNewOrUpdateDream, deleteDream, saveDream } from '../../store/actions';
@@ -57,7 +56,6 @@ class NewDreamPage extends Component {
       const imgUrlArr = this.state.imgUrlArr.map((image) => {
         return image;
       });
-      console.log("imgurlarr on CDM ", imgUrlArr)
       this.setState({imgUrlArr});
     }
   }
@@ -84,10 +82,12 @@ class NewDreamPage extends Component {
       return commonWords.indexOf(word) === -1;
     });
     // match against archetypes
+    // skipping already existing keywords
+    let currentKeywords = this.state.imgUrlArr.map( obj => obj.keyword);
     let keysArr = [];
     for (let i = 0; i < dreamWords.length; i++){
       let word = dreamWords[i];
-      if (archetypes.includes(word) && !keysArr.includes(word)){
+      if ((archetypes.includes(word) && !keysArr.includes(word) && !currentKeywords.includes(word))){
         keysArr.push(word);
       }
     }
@@ -98,8 +98,7 @@ class NewDreamPage extends Component {
   archButtonHandler() {
     const keyWords = this.parseDreamContent();
     if (!keyWords.length) {
-       this.setState({noKeyWordsInDream: true});
-       return;
+       return; 
     }
     let promiseArr = [];
     for (let i = 0; i < keyWords.length; i++) {
@@ -172,7 +171,6 @@ class NewDreamPage extends Component {
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
     // Post to DB
-    console.log("body.images just before save to db", body.images)
     const onSaveComplete = new Promise((resolve, reject) => {
       this.props.saveDream(body, this.isNew, resolve);
     });
@@ -211,7 +209,6 @@ class NewDreamPage extends Component {
   }
 
   render () {
-    console.log("render imgURLarr ", this.state.imgUrlArr)
     return(
       <PageStyle>
         <form
