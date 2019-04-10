@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from "styled-components";
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addNewOrUpdateDream, deleteDream, saveDream } from '../../store/actions';
 
 import { withAuthorization } from '../Session';
 import * as ROUTES from '../../Constants/routes';
@@ -9,28 +11,53 @@ import ColorBlob from '../ColorBlob';
 import ImageContainer from './ImagesContainer';
 import { commonWords, archetypes } from './archetypes';
 import { BlobInputContainerS } from '../Style';
+import {
+  ThumbsDiv,
+  PageStyle,
+  DreamInput,
+  DreamTextarea,
+  SaveButton,
+  DeleteButton,
+  ArchetypesButton,
+} from './styled';
 
 const { REACT_APP_BACKEND_URL } = process.env;
 
 class NewDreamPage extends Component {
-
-  isNew = this.props.match.path === ROUTES.NEW_DREAM;
-
-  state = {
-    title: (this.props.location.state && this.props.location.state.title) || '',
-    content: (this.props.location.state && this.props.location.state.content) || '',
-    _id: (this.props.location.state && this.props.location.state._id) || '',
-    userId: this.props.firebase.auth.O,
-    imgUrlArr: (this.props.location.state && this.props.location.state.images) || [],
-    editing: false,
-    noKeyWordsInDream: false,
+  constructor(props){
+    super(props);
+    if(this.isNew){
+      this.state = {
+        title: '',
+        content: '',
+        _id: '',
+        imgUrlArr: [],
+        editing: false,
+        noKeyWordsInDream: false,
+      }
+    } else {
+      const { title, content, _id, images } = this.props.currentDream
+      this.state = {
+        title: title || '',
+        content: content || '',
+        _id: _id || '',
+        imgUrlArr: images || [],
+        editing: false,
+        noKeyWordsInDream: false,
+      }
+    }
   }
+  isNew = this.props.match.path === ROUTES.NEW_DREAM;
+  userId = this.props.firebase.auth.O;
+
 
   componentDidMount(){
+    //if Edit Dream
     if(!this.isNew && this.state.imgUrlArr.length){
       const imgUrlArr = this.state.imgUrlArr.map((image) => {
         return image;
       });
+      console.log("imgurlarr on CDM ", imgUrlArr)
       this.setState({imgUrlArr});
     }
   }
@@ -86,7 +113,7 @@ class NewDreamPage extends Component {
   // build pixabay search URL
   buildPromiseArr = (searchValue) => {
     const baseURL = 'https://pixabay.com/api/?key=11543969-d5ffb78383da99ab7336a1888';
-    const imageType = '&image_type=photo&pretty=true';
+    const imageType = '&image_type=photo&pretty=true&per_page=200';
     const searchTerm = '&q=' + searchValue;
     const completeURL = baseURL + searchTerm + imageType;
     return fetch(completeURL).then(res => {
@@ -100,13 +127,19 @@ class NewDreamPage extends Component {
   }
 
   promiseResolver = (arr) => {
+    // https://cdn.pixabay.com/photo/
     let thumbsArr = this.state.imgUrlArr.slice();
     Promise.all(arr).then((values) => {
       for (let i = 0; i < values.length; i++) {
         let oldUrls = thumbsArr.map( obj => obj.url)
+        let URLsList = [];
+        for (let j = 0; j < values[i].hits.length; j++) {
+          let debasedUrl = values[i].hits[j].previewURL.replace("https://cdn.pixabay.com/photo/", "")
+          URLsList.push(debasedUrl)
+        }
+        URLsList = URLsList.join(",")
         let newValue = {
-          url: values[i].hits[2].previewURL,
-
+          url: URLsList,
           keyword: values[i].keyword
         };
         if (!oldUrls.includes(newValue.url)) thumbsArr.push(newValue);
@@ -115,32 +148,35 @@ class NewDreamPage extends Component {
     });
   }
 
+  gatherSavedPlaces = (key, index) => {
+    const { imgUrlArr: _imgUrlArr} = this.state;
+    for (let i = 0; i < _imgUrlArr.length; i++) {
+      if (_imgUrlArr[i].keyword === key){
+        _imgUrlArr[i] = { ..._imgUrlArr[i], lastViewedIndex: index}
+      }
+    }
+    const images = _imgUrlArr
+      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
+    this.setState({imgUrlArr: images});
+  }
+
   addDream = (e) => {
     e.preventDefault();
-    const { _id, title, content, userId, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, imgUrlArr: thumbUrlObj} = this.state;
+    const { userId } = this;
     if (!title || !content) {
       return;
     }
     const images = thumbUrlObj
-      .map( obj => ({url: obj.url, caption: obj.caption, _id: obj._id}));
-
+      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
-
     // Post to DB
-    if(title){
-      fetch(`${REACT_APP_BACKEND_URL}/dreams`, {
-        method: this.isNew ? "POST" : "PUT",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => response.json())
-      .then((myJson) => {
-        this.props.history.push(ROUTES.DREAM_ARCHIVE);
-      });
-    }
+    console.log("body.images just before save to db", body.images)
+    const onSaveComplete = new Promise((resolve, reject) => {
+      this.props.saveDream(body, this.isNew, resolve);
+    });
+    onSaveComplete.then(() => this.props.history.push(ROUTES.DREAM_ARCHIVE));
   }
 
   deleteDream = (e) => {
@@ -156,36 +192,26 @@ class NewDreamPage extends Component {
       })
       .then(response => response.json())
       .then(() => {
+        this.props.deleteDream(_id);
         this.props.history.push(ROUTES.DREAM_ARCHIVE);
       })
     }
   }
 
-  toggleSelected = (e, url) => {
+  removeImage = (keyword) => {
     let indexToRemove;
     let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
-
-      if (obj.url === url){
+      if (obj.keyword === keyword){
         indexToRemove = this.state.imgUrlArr.indexOf(obj)
       }
       return obj;
     })
     thumbsUrlObjs.splice(indexToRemove, 1);
-    console.log(thumbsUrlObjs);
-    this.setState({imgUrlArr: thumbsUrlObjs})
-  }
-
-  saveCaption = (e, url) => {
-    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
-      if (obj.url === url){
-        obj.caption = e.target.value;
-      }
-      return obj;
-    })
     this.setState({imgUrlArr: thumbsUrlObjs})
   }
 
   render () {
+    console.log("render imgURLarr ", this.state.imgUrlArr)
     return(
       <PageStyle>
         <form
@@ -233,7 +259,7 @@ class NewDreamPage extends Component {
           <ArchetypesButton
               id="archButton"
               onClick={ (e) => {this.archButtonHandler(e)}}
-            >Generate <br/> Images
+            >Interpret <br/> Dream
           </ArchetypesButton>
         }
         <br />
@@ -246,10 +272,11 @@ class NewDreamPage extends Component {
                 <ImageContainer
                   id="image-subcontainer"
                   key={obj.url}
-                  url={obj.url}
-                  caption={obj.caption}
-                  toggleSelected={this.toggleSelected}
-                  saveCaption={this.saveCaption}
+                  url={obj.url.split(',')}
+                  keyword={obj.keyword}
+                  lastViewedIndex={obj.lastViewedIndex}
+                  removeImage={this.removeImage}
+                  gatherSavedPlaces={this.gatherSavedPlaces}
                 />
             )}
             </ThumbsDiv>
@@ -272,125 +299,6 @@ class NewDreamPage extends Component {
   }
 }
 
-const DeleteButton = styled.button`
-  color: gray;
-  padding: 15px;
-  border-radius: 1em 10em 10em 10em;
-  margin-bottom: 25px;
-  margin-left: 10px;
-  font-size: x-large;
-  font-family: serif;
-  border-style: double;
-  border-width: 4px;
-  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  &:hover{
-    transition: 1s ease-in-out;
-    background-color: turquoise;;
-  }
-`
-
-const ArchetypesButton = styled.button`
-  font-size: x-large;
-  padding: 15px;
-  line-height: 1.5rem;
-  color: gray;
-  border-radius: 1em 10em 10em 10em;
-  margin-top: 15px;
-  margin-bottom: 25px;
-  font-family: serif;
-  border-style: double;
-  border-width: 4px;
-  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  &:hover{
-    transition: 1s ease-in-out;
-    background-color: turquoise;;
-  }
-`
-
-const ThumbsDiv = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  margin-bottom: 5px;
-`
-
-const PageStyle = styled.div`
-  margin-left: 25px;
-  text-align: center;
-`
-
-const DreamInput = styled.input`
-  padding: 10px;
-  z-index: 20;
-  width: 350px;
-  font-family: serif;
-  color: gray;
-  font-size: x-large;
-  font-weight: 900;
-  border: white;
-  text-align: left;
-  margin-bottom: 2rem;
-  margin-top: 1.8rem;
-  position: relative;
-  background: rgba(255,255,255,0.3);
-  border-radius: 6px;
-  &::placeholder{
-    color: gray;
-    font-weight: 900;
-    font-size: x-large;
-  }
-  &:focus{
-    outline:none;
-  }
-`
-const DreamTextarea = styled.textarea`
-  z-index: 20;
-  font-family: serif;
-  color: gray;
-  font-size: large;
-  font-weight: 900;
-  border: white;
-  text-align: left;
-  overflow: scroll;
-  font-size: 2rem;
-  line-height: 1.5;
-  padding: 10px 0 0 10px;
-  position: relative;
-  background: rgba(255, 255, 255,.3);
-  resize: none;
-  &::placeholder{
-    color: gray;
-    font-weight: 900;
-  }
-  &:focus{
-    outline:none;
-  }
-`
-
-const SaveButton = styled.button`
-  font-size: x-large;
-  padding: 15px;
-  line-height: 1.5rem;
-  color: gray;
-  border-radius: 1em 10em 10em 10em;
-  margin-top: 15px;
-  margin-bottom: 25px;
-  font-family: serif;
-  border-style: double;
-  border-width: 4px;
-  -webkit-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  -moz-box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  box-shadow: 2px 2px 3px 1px rgba(181,181,181,0.26);
-  &:hover{
-    transition: 1s ease-in-out;
-    background-color: turquoise;;
-  }
-`
-
 // PropTypes
 
 NewDreamPage.propTypes = {
@@ -404,4 +312,21 @@ NewDreamPage.propTypes = {
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(NewDreamPage);
+const authWrap = withAuthorization(condition)(NewDreamPage);
+
+const mapStateToProps = state => {
+  return {
+    currentDream: state.currentDream
+  }
+};
+
+const mapDispatchToProps = dispatch => ({
+  addNewOrUpdateDream: (newDream) => dispatch(addNewOrUpdateDream(newDream)),
+  deleteDream: (id) => dispatch(deleteDream(id)),
+  saveDream: (dream, isNew, promise) => dispatch(saveDream(dream, isNew, promise))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(authWrap)
