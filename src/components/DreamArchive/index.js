@@ -32,7 +32,7 @@ class ArchivePage extends Component {
   }
 
   render() {
-    console.log("archive render dreams ", this.props.dreams)
+    console.log("archive render imgUrlArr: ", this.state.dreams)
     let baseURL = "https://cdn.pixabay.com/photo/"
     return(
       <PageStyle>

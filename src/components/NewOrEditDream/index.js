@@ -168,7 +168,7 @@ class NewDreamPage extends Component {
       return;
     }
     const images = thumbUrlObj
-      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, savedPlace: obj.savedPlace}));
+      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
     // Post to DB
