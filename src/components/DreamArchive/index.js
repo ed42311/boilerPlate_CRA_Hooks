@@ -1,31 +1,38 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import * as ROUTES from '../../Constants/routes';
+import { selectDream, fetchDreams } from '../../store/actions';
 import ColorBlob from '../ColorBlob';
 import { AuthUserContext, withAuthorization } from '../Session';
-
-const { REACT_APP_BACKEND_URL } = process.env;
 
 class ArchivePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userId: this.props.firebase.auth.O,
-      dreams: []
     };
+    
   }
 
   componentDidMount() {
     const { userId } = this.state;
-    fetch(`${REACT_APP_BACKEND_URL}/dreams/?userId=${userId}`)
-      .then(response => response.json())
-      .then((myJson) => {
-        this.setState({dreams: myJson});
-      })
+    this.props.fetchDreams(userId);
+  }
+
+  loadingOrNoDreams(){
+    if(this.props.isFetchingDreams){
+      return <p>Loading....</p>
+    } else if (!this.props.dreams.length){
+      return <p>{`Looks like you haven't journaled any dreams yet!
+      Click New Dream to get started!`}</p>
+    }
   }
 
   render() {
+    let baseURL = "https://cdn.pixabay.com/photo/"
     return(
       <PageStyle>
         <BlobInputContainerS>
@@ -38,24 +45,15 @@ class ArchivePage extends Component {
               <BlobInputContainerSS>
                 <ColorBlob/>
               </BlobInputContainerSS>
-              {!this.state.dreams.length &&
-                <p>Looks like you haven't journaled any dreams yet!
-                Click New Dream to get started!</p>
-              }
-              {this.state.dreams.map( (dream) =>
+              {this.loadingOrNoDreams()}
+              {this.props.dreams.map( (dream, index) =>
                 <DreamDiv key={dream._id} >
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
-                    <Link to={{
-                      pathname: './editDream',
-                      state: {
-                        title: dream.title,
-                        content: dream.content,
-                        _id: dream._id,
-                        userId: dream.userId,
-                        images: dream.images,
-                      }
-                    }}>Edit Dream</Link>
+                    <Link 
+                      to={ROUTES.EDIT_DREAM}
+                      onClick={() => this.props.selectDream(dream)}
+                    >Edit Dream</Link>
                   </TitleRowDiv>
                   <StyledHR />
                   <ContentRowDiv>
@@ -64,7 +62,13 @@ class ArchivePage extends Component {
                   <StyledHR />
                   <ImgRowDiv>
                     {!!dream.images.length &&
-                      dream.images.map( (image) => <StyledImg src={image.url} key={image._id}/>)
+                      dream.images.map( (image) =>
+                        <StyledImg 
+                          className={image.keyword+index}
+                          src={baseURL.concat(image.url.split(",")[image.lastViewedIndex])} 
+                          key={image._id}
+                          lastViewedIndex={image.lastViewedIndex}
+                        />)
                     }
                   </ImgRowDiv>
                 </DreamDiv>
@@ -172,4 +176,16 @@ const DreamDiv = styled.div`
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(ArchivePage);
+const authorizedArchivePage = withAuthorization(condition)(ArchivePage);
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = dispatch => ({
+  selectDream: (dream) => dispatch(selectDream(dream)),
+  fetchDreams: (userID) => dispatch(fetchDreams(userID)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(authorizedArchivePage)
