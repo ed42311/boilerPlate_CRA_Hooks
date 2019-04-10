@@ -50,7 +50,7 @@ describe('user signup test', () => {
     await page.waitForSelector('#DreamTitle');
     await page.type('#DreamTitle', 'puppeteer test');
     await page.click('#archButton');
-    await page.waitForSelector('.horse');
+    await page.waitForSelector('.horseImageGenerated');
     await page.waitForSelector('.horseSlideRight');
     await page.click('.horseSlideRight');
     await page.click('.horseSlideRight');

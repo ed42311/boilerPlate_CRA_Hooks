@@ -258,7 +258,7 @@ class NewDreamPage extends Component {
            <ThumbsDiv id='image-container'>
             {this.state.imgUrlArr.map( (obj) =>
                 <ImageContainer
-                  id={obj.keyword}
+                  id={`${obj.keyword}ImageContainer`}
                   key={obj.keyword}
                   url={obj.url.split(',')}
                   keyword={obj.keyword}
