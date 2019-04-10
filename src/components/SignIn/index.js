@@ -63,6 +63,7 @@ class SignInFormBase extends Component {
         </BlobInputContainerSS>
         <form onSubmit={this.onSubmit}>
           <SignInputS
+            id="test-input-email"
             name="email"
             value={email}
             onChange={this.onChange}
@@ -70,13 +71,17 @@ class SignInFormBase extends Component {
             placeholder="Email Address"
           />
           <SignInputS
+            id="test-input-password"
             name="password"
             value={password}
             onChange={this.onChange}
             type="password"
             placeholder="Password"
           />
-          <ButtonS disabled={isInvalid} type="submit">
+          <ButtonS
+            id="test-button-signin-submit"
+            disabled={isInvalid}
+            type="submit">
             Sign In
           </ButtonS>
           {error && <p>{error.message}</p>}

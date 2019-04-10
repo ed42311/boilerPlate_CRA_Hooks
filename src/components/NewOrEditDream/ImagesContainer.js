@@ -8,6 +8,7 @@ function ImageContainer({url, toggleSelected, saveCaption, caption}) {
     <ThumbDiv>
       <div>
         <ImageCaptioning
+        className="imageGenerated"
         src={url}
         alt="..."
         />
