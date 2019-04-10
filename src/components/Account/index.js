@@ -28,8 +28,7 @@ const PageStyle = styled.div`
   font-weight: 900;
 `
 const BlobInputContainerSS = styled.div`
-  z-index: -1;
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;

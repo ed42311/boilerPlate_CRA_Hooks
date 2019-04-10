@@ -14,7 +14,7 @@ class ArchivePage extends Component {
     this.state = {
       userId: this.props.firebase.auth.O,
     };
-    
+
   }
 
   componentDidMount() {
@@ -47,10 +47,10 @@ class ArchivePage extends Component {
               </BlobInputContainerSS>
               {this.loadingOrNoDreams()}
               {this.props.dreams.map( (dream, index) =>
-                <DreamDiv key={dream._id} >
+                <DreamDivS key={dream._id} >
                   <TitleRowDiv>
                     <DreamTitle>{dream.title}</DreamTitle>
-                    <Link 
+                    <Link
                       to={ROUTES.EDIT_DREAM}
                       onClick={() => this.props.selectDream(dream)}
                     >Edit Dream</Link>
@@ -63,15 +63,15 @@ class ArchivePage extends Component {
                   <ImgRowDiv>
                     {!!dream.images.length &&
                       dream.images.map( (image) =>
-                        <StyledImg 
+                        <StyledImg
                           className={image.keyword+index}
-                          src={baseURL.concat(image.url.split(",")[image.lastViewedIndex])} 
+                          src={baseURL.concat(image.url.split(",")[image.lastViewedIndex])}
                           key={image._id}
                           lastViewedIndex={image.lastViewedIndex}
                         />)
                     }
                   </ImgRowDiv>
-                </DreamDiv>
+                </DreamDivS>
               )}
             </ArchiveDivS>
           )}
@@ -107,8 +107,7 @@ const DreamTitle = styled.h2`
 `
 
 const BlobInputContainerSS = styled.div`
-  z-index: -1;
-  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,7 +157,8 @@ const PageStyle = styled.div`
   margin-left: 25px;
 `
 
-const DreamDiv = styled.div`
+const DreamDivS = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
