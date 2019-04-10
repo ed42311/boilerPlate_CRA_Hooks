@@ -161,13 +161,11 @@ class NewDreamPage extends Component {
 
   addDream = (e) => {
     e.preventDefault();
-    const { _id, title, content, imgUrlArr: thumbUrlObj} = this.state;
+    const { _id, title, content, imgUrlArr: images } = this.state;
     const { userId } = this;
     if (!title || !content) {
       return;
     }
-    const images = thumbUrlObj
-      .map( obj => ({url: obj.url, keyword: obj.keyword, _id: obj._id, lastViewedIndex: obj.lastViewedIndex}));
     const body = { title, content, userId, images };
     if(!this.isNew) body._id = _id;
     // Post to DB
@@ -197,14 +195,7 @@ class NewDreamPage extends Component {
   }
 
   removeImage = (keyword) => {
-    let indexToRemove;
-    let thumbsUrlObjs = this.state.imgUrlArr.slice().map((obj)=>{
-      if (obj.keyword === keyword){
-        indexToRemove = this.state.imgUrlArr.indexOf(obj)
-      }
-      return obj;
-    })
-    thumbsUrlObjs.splice(indexToRemove, 1);
+    let thumbsUrlObjs = this.state.imgUrlArr.filter( obj => obj.keyword !== keyword);
     this.setState({imgUrlArr: thumbsUrlObjs})
   }
 
@@ -267,8 +258,8 @@ class NewDreamPage extends Component {
            <ThumbsDiv id='image-container'>
             {this.state.imgUrlArr.map( (obj) =>
                 <ImageContainer
-                  id="image-subcontainer"
-                  key={obj.url}
+                  id={`${obj.keyword}ImageContainer`}
+                  key={obj.keyword}
                   url={obj.url.split(',')}
                   keyword={obj.keyword}
                   lastViewedIndex={obj.lastViewedIndex}
@@ -281,6 +272,7 @@ class NewDreamPage extends Component {
         }
         {(!!this.state.title && !!this.state.content) &&
           <SaveButton
+            className="savebutton"
             type="button"
             name="addDream"
             onClick={ (e) => {this.addDream(e)}}

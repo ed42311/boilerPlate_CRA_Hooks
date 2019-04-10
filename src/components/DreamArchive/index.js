@@ -14,7 +14,6 @@ class ArchivePage extends Component {
     this.state = {
       userId: this.props.firebase.auth.O,
     };
-
   }
 
   componentDidMount() {
