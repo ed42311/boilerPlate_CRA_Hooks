@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
@@ -20,7 +20,7 @@ const useExpStyles = makeStyles(theme => ({
   },
 }));
 
-function SimpleExpansionPanel( {data, deleteTest} : { data: Array<Object>, deleteTest: any } ) {
+function SimpleExpansionPanel ( {data, deleteTest} : { data: Array<Object>, deleteTest: any } ) {
   const classes = useExpStyles();
   
   return (
@@ -89,8 +89,6 @@ function TextFields({ sendTest } : { sendTest : any }) {
     </form>
   );
 }
-
-
 
 const OtherPage = () => {
   const [data, setData] = useState({ data: [] });
